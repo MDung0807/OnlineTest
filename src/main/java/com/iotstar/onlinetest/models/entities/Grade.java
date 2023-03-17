@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "grades")
@@ -28,5 +29,5 @@ public class Grade {
     @JoinTable(name = "subject_grade",
     joinColumns = @JoinColumn(name = "gradeId"),
     inverseJoinColumns = @JoinColumn(name = "subjectId"))
-    private List<Subject> subjects;
+    private Set<Subject> subjects;
 }

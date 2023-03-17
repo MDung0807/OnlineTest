@@ -27,4 +27,8 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     private Set<Answer> answers;
+
+    @OneToOne
+    @JoinColumn(name = "correct")
+    private Correct correct;
 }

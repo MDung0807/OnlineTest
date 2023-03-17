@@ -9,21 +9,19 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-@Data
 @Entity
-@Table
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+@NoArgsConstructor
+@Table(name = "corrects")
+public class Correct {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleId;
+    private int questionId;
 
-    @Column(nullable = false)
-    private String roleName;
+    @OneToOne(mappedBy = "correct")
+    private Question question;
 
-    @OneToMany(mappedBy = "role")
-    private Set<Account> accounts;
-
+    @OneToMany(mappedBy = "correct")
+    private Set<Answer> answers;
 }

@@ -41,5 +41,10 @@ public class Test {
     )
     private Set<Question>questions;
 
+    @ManyToOne
+    @JoinColumn(name = "subjectId")
+    private Subject subject;
+
+
 
 }

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "answers")
@@ -18,12 +20,18 @@ public class Answer {
     private int answerId;
 
     @Column(nullable = false)
-    private boolean correct;
-
-    @Column(nullable = false)
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "questionId")
     private Question question;
+
+    @ManyToMany(mappedBy = "answers")
+    private Set<Student> students;
+
+    @ManyToOne
+    @JoinColumn(name = "correctId")
+    private Correct correct;
+
+
 }

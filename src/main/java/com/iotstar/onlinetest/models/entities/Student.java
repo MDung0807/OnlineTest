@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.EnableMBeanExport;
 
 import java.util.Set;
 
@@ -31,6 +32,13 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     Set<Scores> scores;
+
+    @ManyToMany
+    @JoinTable(
+            name = "student_answer",
+            inverseJoinColumns = @JoinColumn(name="answerId"),
+            joinColumns = @JoinColumn(name = "studentId"))
+    private Set<Answer> answers;
 
 
 }

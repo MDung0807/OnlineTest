@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -23,13 +24,9 @@ public class Subject {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "subject_grade",
-    joinColumns = @JoinColumn(name = "subjectId"),
-    inverseJoinColumns = @JoinColumn(name = "gradeId"))
-    private List<Grade> grades;
+    @ManyToMany(mappedBy = "subjects")
+    private Set<Grade> grades;
 
-    @OneToMany
-    @JoinColumn(name = "subjectId")
+    @OneToMany(mappedBy = "subject")
     private List<Test> tests;
 }
