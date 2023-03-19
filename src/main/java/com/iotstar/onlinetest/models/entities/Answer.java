@@ -22,16 +22,14 @@ public class Answer {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private boolean correct;
+
     @ManyToOne
     @JoinColumn(name = "questionId")
     private Question question;
 
-    @ManyToMany(mappedBy = "answers")
-    private Set<Student> students;
-
-    @ManyToOne
-    @JoinColumn(name = "correctId")
-    private Correct correct;
-
+    @OneToMany(mappedBy = "answer")
+    private Set<Student_Answer> student_answers;
 
 }

@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 public class Student {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int StudentId;
 
     @Column(nullable = false)
@@ -33,12 +33,14 @@ public class Student {
     @OneToMany(mappedBy = "student")
     Set<Scores> scores;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_answer",
-            inverseJoinColumns = @JoinColumn(name="answerId"),
-            joinColumns = @JoinColumn(name = "studentId"))
-    private Set<Answer> answers;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "student_answer",
+//            inverseJoinColumns = @JoinColumn(name="answerId"),
+//            joinColumns = @JoinColumn(name = "studentId"))
+//    private Set<Answer> answers;
 
+    @OneToMany(mappedBy = "student")
+    private Set<Student_Answer> student_answers;
 
 }
