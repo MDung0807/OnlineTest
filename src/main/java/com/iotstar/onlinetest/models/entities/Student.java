@@ -1,12 +1,10 @@
 package com.iotstar.onlinetest.models.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.EnableMBeanExport;
 
 import java.util.Set;
 
@@ -42,5 +40,4 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private Set<Student_Answer> student_answers;
-
 }
