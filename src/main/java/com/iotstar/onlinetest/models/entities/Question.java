@@ -22,6 +22,9 @@ public class Question {
     @Column(nullable = false)
     private String question;
 
+    @Column(columnDefinition = "LongText")
+    private String questionImage;
+
     @ManyToMany(mappedBy = "questions")
     private Set<Test> tests;
 

@@ -2,6 +2,8 @@ package com.iotstar.onlinetest.models.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Scores {
     @EmbeddedId
@@ -18,4 +20,6 @@ public class Scores {
     Test test;
 
     private int scores;
+
+    private LocalDateTime dateTest;
 }

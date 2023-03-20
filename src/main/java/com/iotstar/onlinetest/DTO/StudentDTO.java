@@ -8,5 +8,9 @@ import lombok.Data;
 public class StudentDTO {
     private int studentId;
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String avatar;
+    private int status;
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -20,10 +21,25 @@ public class Student {
     private int StudentId;
 
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String avatar;
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private int status;
+
+    @Column(nullable = false)
+    private LocalDateTime dateCreate;
 
     @OneToMany (mappedBy = "student")
     private Set<Account> account;

@@ -22,6 +22,6 @@ public class test {
 
     @RequestMapping("/account")
     public void getAcc(){
-
+        accountService.update();
     }
 }

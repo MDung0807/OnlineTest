@@ -2,8 +2,6 @@ package com.iotstar.onlinetest.models.services.account;
 
 import com.iotstar.onlinetest.DTO.AccountDTO;
 import com.iotstar.onlinetest.models.entities.Account;
-import com.iotstar.onlinetest.models.entities.Role;
-import com.iotstar.onlinetest.models.entities.Student;
 import com.iotstar.onlinetest.models.repositories.AccountDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,25 +45,29 @@ public class AccountServiceImp implements AccountService{
     @Transactional
     public void createAccount(AccountDTO accountDTO){
         String err = null;
-        Student student = Student.builder()
-                .StudentId(4)
-                .email("dominhdung21082002@gmail.com")
-                .name("dominhdung").build();
-
-        Role role = Role.builder()
-                .roleId(1)
-                .roleName("admin").build();
-
         account = Account.builder()
-                .username("êrre")
-                .password("abcd")
-                .student(student)
-                .role(role).build();
+                .role(accountDTO.getRole())
+                .student(accountDTO.getStudent())
+                .password(accountDTO.getPassword())
+                .username(accountDTO.getUsername()).build();
         try {
             accountDAO.save(account);
         }
         catch (Exception ex){
            err = ex.getMessage();
         }
+    }
+
+    @Override
+    @Transactional
+    public void update(AccountDTO accountDTO){
+        account = Account.builder()
+                .accountId(accountDTO.getAccountId())
+                .role(accountDTO.getRole())
+                .student(accountDTO.getStudent())
+                .password(accountDTO.getPassword())
+                .username(accountDTO.getUsername()).build();
+
+        accountDAO.save(account);
     }
 }

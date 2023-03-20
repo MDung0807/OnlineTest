@@ -2,6 +2,9 @@ package com.iotstar.onlinetest.models.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,5 +24,8 @@ public class Student_Answer {
     @ManyToOne
     @JoinColumn(name = "studentId")
     private Student student;
+
+    @Column(nullable = false)
+    private LocalDateTime time;
 
 }
