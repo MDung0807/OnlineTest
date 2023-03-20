@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.models.entities;
+package com.iotstar.onlinetest.models;
 
 
 import jakarta.persistence.*;
@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Data

@@ -1,13 +1,11 @@
-package com.iotstar.onlinetest.models.entities;
+package com.iotstar.onlinetest.models;
 
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SelectBeforeUpdate;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity

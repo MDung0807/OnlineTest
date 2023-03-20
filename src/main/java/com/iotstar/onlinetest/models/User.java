@@ -1,6 +1,5 @@
-package com.iotstar.onlinetest.models.entities;
+package com.iotstar.onlinetest.models;
 
-import com.sun.security.auth.callback.TextCallbackHandler;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

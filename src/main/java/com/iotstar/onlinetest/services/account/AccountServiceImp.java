@@ -1,8 +1,8 @@
-package com.iotstar.onlinetest.models.services.account;
+package com.iotstar.onlinetest.services.account;
 
 import com.iotstar.onlinetest.DTO.AccountDTO;
-import com.iotstar.onlinetest.models.entities.Account;
-import com.iotstar.onlinetest.models.repositories.AccountDAO;
+import com.iotstar.onlinetest.models.Account;
+import com.iotstar.onlinetest.repositories.AccountDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

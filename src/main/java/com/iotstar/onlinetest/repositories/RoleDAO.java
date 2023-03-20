@@ -1,6 +1,6 @@
-package com.iotstar.onlinetest.models.repositories;
+package com.iotstar.onlinetest.repositories;
 
-import com.iotstar.onlinetest.models.entities.Role;
+import com.iotstar.onlinetest.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.iotstar.onlinetest.controllers.admin;
 
 import com.iotstar.onlinetest.DTO.RoleDTO;
-import com.iotstar.onlinetest.models.services.role.RoleService;
+import com.iotstar.onlinetest.services.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
