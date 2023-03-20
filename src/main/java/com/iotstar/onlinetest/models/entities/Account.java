@@ -28,9 +28,7 @@ public class Account {
     @JoinColumn(name = "studentId")
     private Student student;
 
-
     @ManyToOne
     @JoinColumn(name = "roleId")
     private Role role;
-
 }

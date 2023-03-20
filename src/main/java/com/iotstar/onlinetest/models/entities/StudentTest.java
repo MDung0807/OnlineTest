@@ -2,7 +2,6 @@ package com.iotstar.onlinetest.models.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
 import lombok.Data;
 
 import java.io.Serializable;

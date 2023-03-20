@@ -8,4 +8,6 @@ public interface AccountService{
     public AccountDTO getByStudentName(String name);
 
     public void createAccount(AccountDTO accountDTO);
+
+    public void update(AccountDTO accountDTO);
 }
