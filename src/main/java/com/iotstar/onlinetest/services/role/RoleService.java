@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.models.services.role;
+package com.iotstar.onlinetest.services.role;
 
 import com.iotstar.onlinetest.DTO.RoleDTO;
 

@@ -1,8 +1,8 @@
-package com.iotstar.onlinetest.models.services.role;
+package com.iotstar.onlinetest.services.role;
 
 import com.iotstar.onlinetest.DTO.RoleDTO;
-import com.iotstar.onlinetest.models.entities.Role;
-import com.iotstar.onlinetest.models.repositories.RoleDAO;
+import com.iotstar.onlinetest.models.Role;
+import com.iotstar.onlinetest.repositories.RoleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.models.entities;
+package com.iotstar.onlinetest.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

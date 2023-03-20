@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.models.services.user;
+package com.iotstar.onlinetest.services.user;
 
 import com.iotstar.onlinetest.DTO.UserDTO;
 

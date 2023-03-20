@@ -1,7 +1,7 @@
 package com.iotstar.onlinetest.DTO;
 
-import com.iotstar.onlinetest.models.entities.Role;
-import com.iotstar.onlinetest.models.entities.User;
+import com.iotstar.onlinetest.models.Role;
+import com.iotstar.onlinetest.models.User;
 import lombok.Builder;
 import lombok.Data;
 
