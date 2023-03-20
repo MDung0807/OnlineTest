@@ -24,6 +24,9 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private int status;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
