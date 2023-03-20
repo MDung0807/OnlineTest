@@ -29,6 +29,9 @@ public class Test {
     @Column(nullable = false)
     private int quantity;
 
+    @Column(nullable = false)
+    private int status;
+
 
     @OneToMany(mappedBy = "test")
     Set<Scores> scores;

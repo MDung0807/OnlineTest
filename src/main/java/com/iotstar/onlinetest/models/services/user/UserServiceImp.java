@@ -23,6 +23,7 @@ public class UserServiceImp implements UserService {
                 .phoneNumber(userDTO.getPhoneNumber())
                 .avatar(userDTO.getAvatar())
                 .email(userDTO.getEmail())
+                .dateCreate(userDTO.getDateCreate())
                 .status(userDTO.getStatus()).build();
 
         userDAO.save(user);
@@ -33,8 +34,21 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO getUser(int userId) {
-        return null;
+
+        user = userDAO.getReferenceById(userId);
+
+        return UserDTO.builder()
+                .userId(user.getUserId())
+                .avatar(user.getAvatar())
+                .dateCreate(user.getDateCreate())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .phoneNumber(user.getPhoneNumber())
+                .status(user.getStatus())
+                .build();
     }
 
     @Override

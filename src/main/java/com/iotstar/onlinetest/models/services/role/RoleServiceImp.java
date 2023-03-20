@@ -26,6 +26,16 @@ public class RoleServiceImp implements RoleService{
     }
 
     @Override
+    public RoleDTO getAllRole() {
+        return null;
+    }
+
+    @Override
+    public RoleDTO getRoleByRoleName(String roleName) {
+        return null;
+    }
+
+    @Override
     public void deleteRole(int roleId) {
 
     }
