@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.models.entities;
 
+import com.sun.security.auth.callback.TextCallbackHandler;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,4 +51,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<User_Answer> user_answers;
+
+    @OneToOne(mappedBy = "user")
+    private Teacher teacher;
+
 }

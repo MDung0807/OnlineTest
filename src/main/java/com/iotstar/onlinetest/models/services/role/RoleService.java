@@ -8,4 +8,8 @@ public interface RoleService {
     public void updateRole(RoleDTO roleDTO);
 
     public void deleteRole(int roleId);
+
+    public RoleDTO getAllRole();
+
+    public RoleDTO getRoleByRoleName(String roleName);
 }

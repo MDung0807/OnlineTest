@@ -25,6 +25,9 @@ public class Question {
     @Column(columnDefinition = "LongText")
     private String questionImage;
 
+    @Column
+    private int status;
+
     @ManyToMany(mappedBy = "questions")
     private Set<Test> tests;
 
@@ -34,4 +37,8 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     private Set<User_Answer> user_answers;
+
+    @ManyToOne
+    @JoinColumn(name = "subjectId")
+    private Subject subject;
 }

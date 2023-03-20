@@ -16,21 +16,23 @@ public class AccountServiceImp implements AccountService{
     private Account account;
 
     @Override
-    public AccountDTO getAccByUsername(String username) {
-        account = accountDAO.getByUsername(username);
-        accountDTO = AccountDTO.builder()
-                .accountId(account.getAccountId())
-                .username(account.getUsername())
-                .password(account.getPassword())
-                .role(account.getRole())
-                .user(account.getUser())
-                .build();
-        return accountDTO;
+    @Transactional
+    public void delAcc(AccountDTO accountDTO){
+        account = Account.builder()
+                .status(0)
+                .accountId(accountDTO.getAccountId())
+                .username(accountDTO.getUsername())
+                .password(accountDTO.getPassword())
+                .role(accountDTO.getRole())
+                .user(accountDTO.getUser()).build();
+
+
+        accountDAO.save(account);
     }
 
     @Override
-    public AccountDTO getByUserName(String name) {
-        account = accountDAO.getByUsername(name);
+    public AccountDTO getAccByUsername(String username) {
+        account = accountDAO.getByUsername(username);
         accountDTO = AccountDTO.builder()
                 .accountId(account.getAccountId())
                 .username(account.getUsername())
