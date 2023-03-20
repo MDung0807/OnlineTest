@@ -31,9 +31,7 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private Set<Answer> answers;
 
-//    @ManyToMany(mappedBy = "answers")
-//    private Set<Student> students;
 
     @OneToMany(mappedBy = "question")
-    private Set<Student_Answer> student_answers;
+    private Set<User_Answer> user_answers;
 }

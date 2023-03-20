@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Builder
 @Data
-public class StudentDTO {
-    private int studentId;
+public class UserDTO {
+    private int userId;
     private String email;
     private String firstName;
     private String lastName;

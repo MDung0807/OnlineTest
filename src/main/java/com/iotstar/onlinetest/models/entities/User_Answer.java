@@ -2,13 +2,12 @@ package com.iotstar.onlinetest.models.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Student_Answer {
+public class User_Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,8 +21,8 @@ public class Student_Answer {
     private Answer answer;
 
     @ManyToOne
-    @JoinColumn(name = "studentId")
-    private Student student;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Column(nullable = false)
     private LocalDateTime time;

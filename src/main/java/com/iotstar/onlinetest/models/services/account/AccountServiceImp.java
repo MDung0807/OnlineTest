@@ -23,20 +23,20 @@ public class AccountServiceImp implements AccountService{
                 .username(account.getUsername())
                 .password(account.getPassword())
                 .role(account.getRole())
-                .student(account.getStudent())
+                .user(account.getUser())
                 .build();
         return accountDTO;
     }
 
     @Override
-    public AccountDTO getByStudentName(String name) {
+    public AccountDTO getByUserName(String name) {
         account = accountDAO.getByUsername(name);
         accountDTO = AccountDTO.builder()
                 .accountId(account.getAccountId())
                 .username(account.getUsername())
                 .password(account.getPassword())
                 .role(account.getRole())
-                .student(account.getStudent())
+                .user(account.getUser())
                 .build();
         return accountDTO;
     }
@@ -47,7 +47,7 @@ public class AccountServiceImp implements AccountService{
         String err = null;
         account = Account.builder()
                 .role(accountDTO.getRole())
-                .student(accountDTO.getStudent())
+                .user(accountDTO.getUser())
                 .password(accountDTO.getPassword())
                 .username(accountDTO.getUsername()).build();
         try {
@@ -64,7 +64,7 @@ public class AccountServiceImp implements AccountService{
         account = Account.builder()
                 .accountId(accountDTO.getAccountId())
                 .role(accountDTO.getRole())
-                .student(accountDTO.getStudent())
+                .user(accountDTO.getUser())
                 .password(accountDTO.getPassword())
                 .username(accountDTO.getUsername()).build();
 

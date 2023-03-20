@@ -5,7 +5,7 @@ import com.iotstar.onlinetest.DTO.AccountDTO;
 public interface AccountService{
     public AccountDTO getAccByUsername(String username);
 
-    public AccountDTO getByStudentName(String name);
+    public AccountDTO getByUserName(String name);
 
     public void createAccount(AccountDTO accountDTO);
 
