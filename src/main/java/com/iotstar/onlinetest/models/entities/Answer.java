@@ -30,6 +30,6 @@ public class Answer {
     private Question question;
 
     @OneToMany(mappedBy = "answer")
-    private Set<Student_Answer> student_answers;
+    private Set<User_Answer> user_answers;
 
 }

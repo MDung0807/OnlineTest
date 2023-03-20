@@ -1,10 +1,10 @@
 package com.iotstar.onlinetest.models.repositories;
 
-import com.iotstar.onlinetest.models.entities.Student;
+import com.iotstar.onlinetest.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StudentDAO extends JpaRepository<Student, Integer> {
-    public Student getByName(String name);
+public interface UserDAO extends JpaRepository<User, Integer> {
+    public User getByName(String name);
 }

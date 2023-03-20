@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 @Entity
 public class Scores {
     @EmbeddedId
-    private StudentTest id;
+    private UserTest id;
 
     @ManyToOne
-    @MapsId("studentId")
-    @JoinColumn(name = "studentId")
-    Student student;
+    @MapsId("userId")
+    @JoinColumn(name = "userId")
+    User user;
 
     @ManyToOne
     @MapsId("testId")

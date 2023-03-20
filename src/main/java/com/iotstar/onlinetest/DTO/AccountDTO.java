@@ -1,7 +1,7 @@
 package com.iotstar.onlinetest.DTO;
 
 import com.iotstar.onlinetest.models.entities.Role;
-import com.iotstar.onlinetest.models.entities.Student;
+import com.iotstar.onlinetest.models.entities.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,5 +13,5 @@ public class AccountDTO {
     private String password;
     private String username;
     private Role role;
-    private Student student;
+    private User user;
 }

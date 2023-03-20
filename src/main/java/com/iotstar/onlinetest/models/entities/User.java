@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "students")
+@Table(name = "users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Student {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int StudentId;
+    private int userId;
 
     @Column(nullable = false)
     private String firstName;
@@ -41,19 +41,13 @@ public class Student {
     @Column(nullable = false)
     private LocalDateTime dateCreate;
 
-    @OneToMany (mappedBy = "student")
+    @OneToMany (mappedBy = "user")
     private Set<Account> account;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "user")
     Set<Scores> scores;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "student_answer",
-//            inverseJoinColumns = @JoinColumn(name="answerId"),
-//            joinColumns = @JoinColumn(name = "studentId"))
-//    private Set<Answer> answers;
 
-    @OneToMany(mappedBy = "student")
-    private Set<Student_Answer> student_answers;
+    @OneToMany(mappedBy = "user")
+    private Set<User_Answer> user_answers;
 }

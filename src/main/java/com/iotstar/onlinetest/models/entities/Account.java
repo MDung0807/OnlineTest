@@ -25,8 +25,8 @@ public class Account {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "studentId")
-    private Student student;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "roleId")

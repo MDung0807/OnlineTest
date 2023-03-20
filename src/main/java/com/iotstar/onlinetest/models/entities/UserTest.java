@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
-public class StudentTest implements Serializable {
+public class UserTest implements Serializable {
     @Column(nullable = false)
-    private int studentId;
+    private int userId;
 
 
     @Column(nullable = false)

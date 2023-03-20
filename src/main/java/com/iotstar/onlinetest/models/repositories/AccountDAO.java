@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountDAO extends JpaRepository<Account, Integer> {
     public Account getByUsername(String username);
-    public Account getByStudent_Name(String name);
 
 
 }
