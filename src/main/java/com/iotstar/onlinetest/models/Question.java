@@ -39,6 +39,10 @@ public class Question {
     private Set<User_Answer> user_answers;
 
     @ManyToOne
-    @JoinColumn(name = "subjectId")
-    private Subject subject;
+    @JoinColumn(name = "subjectMatterId")
+    private SubjectMatter subjectMatter;
+
+    @ManyToOne
+    @JoinColumn(name = "techerId")
+    private Teacher teacher;
 }

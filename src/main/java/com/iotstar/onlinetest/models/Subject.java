@@ -32,7 +32,11 @@ public class Subject {
     @OneToMany(mappedBy = "subject")
     private Set<Teacher> teachers;
 
+
+
     @OneToMany(mappedBy = "subject")
-    private Set<Question> questions;
+    private Set<SubjectMatter> subjectMatters;
+
+
 
 }

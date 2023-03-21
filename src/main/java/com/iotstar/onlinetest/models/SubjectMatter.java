@@ -1,6 +1,5 @@
 package com.iotstar.onlinetest.models;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,25 +10,21 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "teachers")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Teacher {
+public class SubjectMatter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-    @JoinColumn(name = "userId")
-    @OneToOne
-    private User user;
+    @Column(nullable = false)
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "subjectId")
+    @JoinColumn( name = "subjectId")
     private Subject subject;
 
-    @OneToMany(mappedBy = "teacher")
+    @OneToMany(mappedBy = "subjectMatter")
     private Set<Question> questions;
-
 }
