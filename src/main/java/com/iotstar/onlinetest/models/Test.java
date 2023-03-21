@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,8 @@ public class Test {
     @Column(nullable = false)
     private int status;
 
+    @Column(nullable = false)
+    private LocalDateTime dateCreate;
 
     @OneToMany(mappedBy = "test")
     Set<Scores> scores;
@@ -45,7 +48,5 @@ public class Test {
     @ManyToOne
     @JoinColumn(name = "subjectId")
     private Subject subject;
-
-
 
 }
