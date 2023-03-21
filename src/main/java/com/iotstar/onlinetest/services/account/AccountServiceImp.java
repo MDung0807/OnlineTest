@@ -1,6 +1,6 @@
 package com.iotstar.onlinetest.services.account;
 
-import com.iotstar.onlinetest.DTO.AccountDTO;
+import com.iotstar.onlinetest.DTO.RegisterForm.AccountDTO;
 import com.iotstar.onlinetest.models.Account;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import org.springframework.beans.factory.annotation.Autowired;

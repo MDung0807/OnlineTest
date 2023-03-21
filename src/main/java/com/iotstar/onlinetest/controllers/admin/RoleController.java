@@ -18,12 +18,12 @@ public class RoleController {
     }
 
     @PostMapping({"", "/"})
-    public RoleDTO getRoleByRoleName(@RequestParam String roleName){
+    public RoleDTO getRoleByRoleName(@RequestBody String roleName){
         return roleService.getRoleByRoleName(roleName);
     }
 
     @PostMapping("/add")
-    public void addRole(@RequestBody RoleDTO roleDTO){
+    public void addRole(@RequestBody RoleDTO roleDTO) throws Exception{
         roleService.createRole(roleDTO);
     }
 

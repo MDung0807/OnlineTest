@@ -1,6 +1,6 @@
 package com.iotstar.onlinetest.services.account;
 
-import com.iotstar.onlinetest.DTO.AccountDTO;
+import com.iotstar.onlinetest.DTO.RegisterForm.AccountDTO;
 
 public interface AccountService{
     public AccountDTO getAccByUsername(String username);

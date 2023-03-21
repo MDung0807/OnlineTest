@@ -41,8 +41,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime dateCreate;
 
-    @OneToMany (mappedBy = "user")
-    private Set<Account> account;
+    @OneToOne
+    @JoinColumn(name = "accountId")
+    private Account account;
 
     @OneToMany(mappedBy = "user")
     Set<Scores> scores;

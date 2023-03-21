@@ -1,12 +1,11 @@
 package com.iotstar.onlinetest.controllers.client;
 
 
-import com.iotstar.onlinetest.DTO.UserDTO;
+import com.iotstar.onlinetest.DTO.RegisterForm;
 import com.iotstar.onlinetest.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import com.iotstar.onlinetest.DTO.RegisterForm.*;
 
 @RestController
 public class UserController {
@@ -17,5 +16,11 @@ public class UserController {
     @GetMapping("/profile")
     public UserDTO getUser(@RequestParam int userId){
         return userService.getUser(userId);
+    }
+
+    @RequestMapping("/register")
+    public void createUser(@RequestBody RegisterForm registerForm)throws Exception{
+
+
     }
 }
