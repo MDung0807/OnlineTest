@@ -1,12 +1,15 @@
 package com.iotstar.onlinetest.services.user;
 
 
-import com.iotstar.onlinetest.DTO.UserDTO;
+import com.iotstar.onlinetest.DTO.RegisterForm.*;
+import com.iotstar.onlinetest.models.Account;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
 
 @Service
 public class UserServiceImp implements UserService {
@@ -16,7 +19,10 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void createUser(UserDTO userDTO) {
+    public void createUser(UserDTO userDTO, AccountDTO accountDTO) {
+        Account account = Account.builder()
+                .build();
+
         user= User.builder()
                 .firstName(userDTO.getFirstName())
                 .lastName(userDTO.getLastName())
@@ -24,7 +30,8 @@ public class UserServiceImp implements UserService {
                 .avatar(userDTO.getAvatar())
                 .email(userDTO.getEmail())
                 .dateCreate(userDTO.getDateCreate())
-                .status(userDTO.getStatus()).build();
+                .status(userDTO.getStatus())
+                .build();
 
         userDAO.save(user);
     }

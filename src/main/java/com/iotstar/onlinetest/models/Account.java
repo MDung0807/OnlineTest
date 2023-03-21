@@ -27,8 +27,7 @@ public class Account {
     @Column(nullable = false)
     private int status;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
+    @OneToOne(mappedBy = "account")
     private User user;
 
     @ManyToOne
