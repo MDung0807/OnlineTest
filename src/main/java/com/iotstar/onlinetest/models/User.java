@@ -1,10 +1,7 @@
 package com.iotstar.onlinetest.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -41,8 +38,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime dateCreate;
 
-    @OneToOne
-    @JoinColumn(name = "accountId")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Account account;
 
     @OneToMany(mappedBy = "user")

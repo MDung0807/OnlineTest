@@ -1,13 +1,13 @@
 package com.iotstar.onlinetest.services.user;
 
-import com.iotstar.onlinetest.DTO.RegisterForm.*;
+import com.iotstar.onlinetest.DTOs.RegisterForm.*;
 
 public interface UserService {
-    public void createUser(UserDTO userDTO, AccountDTO accountDTO);
+    public UserDTO createUser(UserDTO userDTO);
 
-    public void deleteUser(int userId);
+    public void deleteUser(UserDTO userDTO);
 
     public UserDTO getUser(int userId);
 
-    public UserDTO updateUser(UserDTO userDTO);
+    public void updateUser(UserDTO userDTO);
 }

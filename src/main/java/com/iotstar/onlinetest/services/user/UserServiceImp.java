@@ -1,50 +1,53 @@
 package com.iotstar.onlinetest.services.user;
 
 
-import com.iotstar.onlinetest.DTO.RegisterForm.*;
-import com.iotstar.onlinetest.models.Account;
+import com.iotstar.onlinetest.DTOs.RegisterForm.*;
 import com.iotstar.onlinetest.models.User;
+import com.iotstar.onlinetest.repositories.AccountDAO;
+import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
+import com.iotstar.onlinetest.utils.transferToDTO.ToDTO;
+import com.iotstar.onlinetest.utils.transferToModel.ToModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 
 
 @Service
 public class UserServiceImp implements UserService {
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private RoleDAO roleDAO;
+
+    @Autowired
+    private AccountDAO accountDAO;
     private User user;
 
     @Override
     @Transactional
-    public void createUser(UserDTO userDTO, AccountDTO accountDTO) {
-        Account account = Account.builder()
-                .build();
-
-        user= User.builder()
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
-                .phoneNumber(userDTO.getPhoneNumber())
-                .avatar(userDTO.getAvatar())
-                .email(userDTO.getEmail())
-                .dateCreate(userDTO.getDateCreate())
-                .status(userDTO.getStatus())
-                .build();
-
-        userDAO.save(user);
+    public UserDTO createUser(UserDTO userDTO) {
+        user = ToModel.toUser(userDTO);
+        user.setDateCreate(LocalDateTime.now());
+        user.setStatus(1);
+        user = userDAO.save(user);
+        return ToDTO.toUserDTO(user);
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(UserDTO userDTO) {
+        userDTO.setStatus(0);
+        updateUser(userDTO);
     }
 
     @Override
     @Transactional
     public UserDTO getUser(int userId) {
 
-        user = userDAO.getReferenceById(userId);
+        user = userDAO.getUserByUserId(userId);
 
         return UserDTO.builder()
                 .userId(user.getUserId())
@@ -59,7 +62,18 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserDTO userDTO) {
-        return null;
+    public void updateUser(UserDTO userDTO) {
+        user= User.builder()
+                .userId(userDTO.getUserId())
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
+                .phoneNumber(userDTO.getPhoneNumber())
+                .avatar(userDTO.getAvatar())
+                .email(userDTO.getEmail())
+                .dateCreate(LocalDateTime.now())
+                .status(1)
+                .build();
+
+        userDAO.save(user);
     }
 }
