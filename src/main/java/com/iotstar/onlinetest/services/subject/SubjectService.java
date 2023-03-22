@@ -1,6 +1,6 @@
 package com.iotstar.onlinetest.services.subject;
 
-import com.iotstar.onlinetest.DTO.SubjectDTO;
+import com.iotstar.onlinetest.DTOs.SubjectDTO;
 
 import java.util.List;
 

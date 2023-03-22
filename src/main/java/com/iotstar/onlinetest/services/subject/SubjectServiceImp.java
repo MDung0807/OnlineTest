@@ -1,7 +1,7 @@
 package com.iotstar.onlinetest.services.subject;
 
 
-import com.iotstar.onlinetest.DTO.SubjectDTO;
+import com.iotstar.onlinetest.DTOs.SubjectDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

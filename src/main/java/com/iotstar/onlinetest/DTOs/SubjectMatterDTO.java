@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.DTO;
+package com.iotstar.onlinetest.DTOs;
 
 import com.iotstar.onlinetest.models.Subject;
 import lombok.AllArgsConstructor;

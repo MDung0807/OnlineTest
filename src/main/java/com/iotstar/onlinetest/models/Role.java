@@ -2,10 +2,7 @@ package com.iotstar.onlinetest.models;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
@@ -23,7 +20,9 @@ public class Role {
     @Column(nullable = false)
     private String roleName;
 
-    @OneToMany(mappedBy = "role")
+    @Column(nullable = false)
+    private int status;
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Account> accounts;
 
 }
