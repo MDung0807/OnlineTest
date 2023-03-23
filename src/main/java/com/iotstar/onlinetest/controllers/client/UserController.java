@@ -6,8 +6,7 @@ import com.iotstar.onlinetest.DTOs.RoleDTO;
 import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.role.RoleService;
 import com.iotstar.onlinetest.services.user.UserService;
-import com.iotstar.onlinetest.utils.transferToDTO.ToDTO;
-import com.iotstar.onlinetest.utils.transferToModel.ToModel;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.iotstar.onlinetest.DTOs.RegisterForm.*;
@@ -21,6 +20,8 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private ModelMapper mapper;
 
     private RoleDTO roleDTO;
     private AccountDTO accountDTO;

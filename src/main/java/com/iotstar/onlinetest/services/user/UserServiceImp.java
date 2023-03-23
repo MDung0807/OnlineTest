@@ -6,8 +6,7 @@ import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
-import com.iotstar.onlinetest.utils.transferToDTO.ToDTO;
-import com.iotstar.onlinetest.utils.transferToModel.ToModel;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,16 +24,19 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private AccountDAO accountDAO;
+    @Autowired
+    private ModelMapper mapper;
     private User user;
 
     @Override
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
-        user = ToModel.toUser(userDTO);
+
+        user = mapper.map(userDTO, User.class);
         user.setDateCreate(LocalDateTime.now());
         user.setStatus(1);
         user = userDAO.save(user);
-        return ToDTO.toUserDTO(user);
+        return mapper.map(user, UserDTO.class);
     }
 
     @Override

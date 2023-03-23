@@ -6,8 +6,7 @@ import com.iotstar.onlinetest.models.Account;
 import com.iotstar.onlinetest.models.Role;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
-import com.iotstar.onlinetest.utils.transferToDTO.ToDTO;
-import com.iotstar.onlinetest.utils.transferToModel.ToModel;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +19,13 @@ public class AccountServiceImp implements AccountService{
     @Autowired
     private AccountDAO accountDAO;
 
+    @Autowired
+    private ModelMapper mapper;
+
     private AccountDTO accountDTO;
     private Account account;
     private Role role;
+    private User user;
 
 
     @Override
@@ -46,7 +49,7 @@ public class AccountServiceImp implements AccountService{
         List<Account> accounts = accountDAO.findAll();
         List<AccountDTO> accountDTOS = new ArrayList<>();
         for (Account i: accounts) {
-            accountDTOS.add(ToDTO.toAccDTO(i));
+            accountDTOS.add(mapper.map(i, AccountDTO.class));
         }
         return accountDTOS;
     }
@@ -55,7 +58,7 @@ public class AccountServiceImp implements AccountService{
     public AccountDTO getAccByUsername(String username) {
         account = accountDAO.getByUsername(username);
         accountDTO = AccountDTO.builder()
-//                .user(account.getUser())
+                .user(account.getUser())
                 .accountId(account.getAccountId())
                 .username(account.getUsername())
                 .password(account.getPassword())
@@ -68,16 +71,16 @@ public class AccountServiceImp implements AccountService{
     @Override
     @Transactional
     public void createAccount(AccountDTO accountDTO, UserDTO userDTO, RoleDTO roleDTO){
+        role = Role.builder().build();
+        user = User.builder().build();
+        mapper.map(roleDTO, role);
+        mapper.map(userDTO, user);
 
-        role = ToModel.toRole(roleDTO);
-        User user = ToModel.toUser(userDTO);
+        accountDTO.setStatus(1);
+        accountDTO.setRole(role);
+        accountDTO.setUser(user);
         String err = null;
-        account = Account.builder()
-                .password(accountDTO.getPassword())
-                .username(accountDTO.getUsername())
-                .status(1)
-                .user(user)
-                .role(role).build();
+        account = mapper.map(accountDTO, Account.class);
         try {
             accountDAO.save(account);
         }
