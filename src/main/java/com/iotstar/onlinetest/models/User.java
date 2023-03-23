@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,7 +39,8 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime dateCreate;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Account account;
 
     @OneToMany(mappedBy = "user")
@@ -51,4 +53,7 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Teacher teacher;
 
+    public Account getAccount() {
+        return account;
+    }
 }

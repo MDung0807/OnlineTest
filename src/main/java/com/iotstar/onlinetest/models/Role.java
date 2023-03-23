@@ -1,9 +1,12 @@
 package com.iotstar.onlinetest.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.util.Lazy;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,7 +25,8 @@ public class Role {
 
     @Column(nullable = false)
     private int status;
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Account> accounts;
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Account> accounts;
 
 }

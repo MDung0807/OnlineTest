@@ -3,6 +3,7 @@ package com.iotstar.onlinetest.services.role;
 import com.iotstar.onlinetest.DTOs.RoleDTO;
 import com.iotstar.onlinetest.models.Role;
 import com.iotstar.onlinetest.repositories.RoleDAO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,25 +15,21 @@ public class RoleServiceImp implements RoleService{
 
     @Autowired
     private RoleDAO roleDAO;
+    @Autowired
+    private ModelMapper mapper;
 
     private Role role;
 
     @Override
     public void createRole(RoleDTO roleDTO) {
-        role = Role.builder()
-                .status(1)
-                .roleName(roleDTO.getRoleName())
-                .build();
-
+        role = mapper.map(roleDTO, Role.class);
+        role.setStatus(1);
         roleDAO.save(role);
     }
 
     @Override
     public void updateRole(RoleDTO roleDTO) {
-        role = Role.builder()
-                .status(roleDTO.getStatus())
-                .roleId(roleDTO.getRoleId())
-                .roleName(roleDTO.getRoleName()).build();
+        mapper.map(roleDTO, role);
         roleDAO.save(role);
 
     }
@@ -43,13 +40,7 @@ public class RoleServiceImp implements RoleService{
         RoleDTO roleDTO;
         List<Role> roles = roleDAO.findAll();
         for (Role i: roles) {
-            roleDTO = RoleDTO.builder()
-                    .roleId(i.getRoleId())
-                    .roleName(i.getRoleName())
-                    .status(i.getStatus())
-                    .accounts(i.getAccounts().stream().toList())
-                    .build();
-            roleDTOS.add(roleDTO);
+            roleDTOS.add(mapper.map(i, RoleDTO.class));
         }
         return roleDTOS;
     }
@@ -57,12 +48,7 @@ public class RoleServiceImp implements RoleService{
     @Override
     public RoleDTO getRoleByRoleName(String roleName) {
         role = roleDAO.getByRoleName(roleName);
-        return RoleDTO.builder()
-                .roleId(role.getRoleId())
-                .status(role.getStatus())
-                .roleName(role.getRoleName())
-                .accounts(role.getAccounts().stream().toList())
-                .build();
+        return mapper.map(role, RoleDTO.class);
     }
 
     @Override
