@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class User_Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "questionId")

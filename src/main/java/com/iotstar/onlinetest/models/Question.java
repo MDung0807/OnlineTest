@@ -17,7 +17,7 @@ import java.util.Set;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int questionId;
+    private Long questionId;
 
     @Column(nullable = false)
     private String question;
@@ -40,7 +40,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "subjectMatterId")
-    private SubjectMatter subjectMatter;
+    private Topic topic;
 
     @ManyToOne
     @JoinColumn(name = "techerId")

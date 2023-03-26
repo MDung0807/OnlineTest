@@ -1,11 +1,14 @@
 package com.iotstar.onlinetest.services.role;
 
-import com.iotstar.onlinetest.DTOs.RoleDTO;
+import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
+import com.iotstar.onlinetest.DTOs.responses.RoleResponse;
 import com.iotstar.onlinetest.models.Role;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.ranges.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,39 +24,38 @@ public class RoleServiceImp implements RoleService{
     private Role role;
 
     @Override
-    public void createRole(RoleDTO roleDTO) {
-        role = mapper.map(roleDTO, Role.class);
+    public void createRole(RoleRequest roleRequest) {
+        role = mapper.map(roleRequest, Role.class);
         role.setStatus(1);
         roleDAO.save(role);
     }
 
     @Override
-    public void updateRole(RoleDTO roleDTO) {
-        mapper.map(roleDTO, role);
+    public void updateRole(RoleRequest roleRequest) {
+        role = roleDAO.getByRoleName(roleRequest.getRoleName());
         roleDAO.save(role);
-
     }
 
     @Override
-    public List<RoleDTO> getAllRole() {
-        List<RoleDTO> roleDTOS = new ArrayList<>();
-        RoleDTO roleDTO;
+    public List<RoleResponse> getAllRole() {
+        List<RoleResponse> roleResponses = new ArrayList<>();
         List<Role> roles = roleDAO.findAll();
         for (Role i: roles) {
-            roleDTOS.add(mapper.map(i, RoleDTO.class));
+            roleResponses.add(mapper.map(i, RoleResponse.class));
         }
-        return roleDTOS;
+        return roleResponses;
     }
 
     @Override
-    public RoleDTO getRoleByRoleName(String roleName) {
+    public RoleResponse getRoleByRoleName(String roleName) {
         role = roleDAO.getByRoleName(roleName);
-        return mapper.map(role, RoleDTO.class);
+        return mapper.map(role, RoleResponse.class);
     }
 
     @Override
-    public void deleteRole(RoleDTO roleDTO) {
-        roleDTO.setStatus(0);
-        updateRole(roleDTO);
+    public void deleteRole(RoleRequest roleRequest) {
+        role = roleDAO.getByRoleName(roleRequest.getRoleName());
+        role.setStatus(0);
+        roleDAO.save(role);
     }
 }

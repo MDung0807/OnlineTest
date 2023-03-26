@@ -1,12 +1,12 @@
 package com.iotstar.onlinetest.controllers.admin;
 
-import com.iotstar.onlinetest.DTOs.RegisterForm;
+import com.iotstar.onlinetest.DTOs.AccountDTO;
+import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
 import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.role.RoleService;
 import com.iotstar.onlinetest.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.iotstar.onlinetest.DTOs.RegisterForm.*;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class AccountController {
     private UserService userService;
 
     @PostMapping("")
-    public void updateRole(@RequestBody RegisterForm registerForm)throws Exception{
+    public void updateRole(@RequestBody RoleRequest roleRequest) throws Exception{
 
     }
 

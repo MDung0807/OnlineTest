@@ -18,7 +18,7 @@ import java.util.Set;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int subjectId;
+    private Long subjectId;
 
     @Column(nullable = false)
     private String name;
@@ -35,7 +35,7 @@ public class Subject {
 
 
     @OneToMany(mappedBy = "subject")
-    private Set<SubjectMatter> subjectMatters;
+    private Set<Topic> topics;
 
 
 
