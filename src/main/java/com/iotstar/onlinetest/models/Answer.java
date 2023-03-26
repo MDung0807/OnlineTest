@@ -17,7 +17,7 @@ import java.util.Set;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int answerId;
+    private Long answerId;
 
     @Column(nullable = false)
     private String content;

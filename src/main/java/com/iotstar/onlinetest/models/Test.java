@@ -17,7 +17,7 @@ import java.util.Set;
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int testId;
+    private Long testId;
 
     @Column(nullable = false)
     private String testName;

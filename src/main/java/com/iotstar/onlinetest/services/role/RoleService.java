@@ -1,17 +1,18 @@
 package com.iotstar.onlinetest.services.role;
 
-import com.iotstar.onlinetest.DTOs.RoleDTO;
+import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
+import com.iotstar.onlinetest.DTOs.responses.RoleResponse;
 
 import java.util.List;
 
 public interface RoleService {
-    public void createRole(RoleDTO roleDTO);
+    public void createRole(RoleRequest roleRequest);
 
-    public void updateRole(RoleDTO roleDTO);
+    public void updateRole(RoleRequest roleRequest);
 
-    public void deleteRole(RoleDTO roleDTO);
+    public void deleteRole(RoleRequest roleRequest);
 
-    public List<RoleDTO> getAllRole();
+    public List<RoleResponse> getAllRole();
 
-    public RoleDTO getRoleByRoleName(String roleName);
+    public RoleResponse getRoleByRoleName(String roleName);
 }

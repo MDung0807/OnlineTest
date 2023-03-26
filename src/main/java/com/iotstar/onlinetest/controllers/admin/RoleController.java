@@ -1,6 +1,7 @@
 package com.iotstar.onlinetest.controllers.admin;
 
-import com.iotstar.onlinetest.DTOs.RoleDTO;
+import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
+import com.iotstar.onlinetest.DTOs.responses.RoleResponse;
 import com.iotstar.onlinetest.services.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,28 +16,27 @@ public class RoleController {
 
 
     @GetMapping({"/", ""})
-    public List<RoleDTO> getRole(){
+    public List<RoleResponse> getRole(){
         return roleService.getAllRole();
     }
 
     @PostMapping({"", "/"})
-    public RoleDTO getRoleByRoleName(@RequestBody RoleDTO roleDTO){
-        return roleService.getRoleByRoleName(roleDTO.getRoleName());
+    public RoleResponse getRoleByRoleName(@RequestBody RoleRequest roleRequest){
+        return roleService.getRoleByRoleName(roleRequest.getRoleName());
     }
 
     @PostMapping("/add")
-    public void addRole(@RequestBody RoleDTO roleDTO) throws Exception{
-        roleService.createRole(roleDTO);
+    public void addRole(@RequestBody RoleRequest roleRequest) {
+        roleService.createRole(roleRequest);
     }
 
     @PostMapping("/del")
-    public void delRole(@RequestBody RoleDTO roleDTO){
-        roleDTO = roleService.getRoleByRoleName(roleDTO.getRoleName());
-        roleService.deleteRole(roleDTO);
+    public void delRole(@RequestBody RoleRequest roleRequest){
+        roleService.deleteRole(roleRequest);
     }
 
     @PostMapping("/update")
-    public void updateRole(@RequestBody RoleDTO roleDTO){
-        roleService.updateRole(roleDTO);
+    public void updateRole(@RequestBody RoleRequest roleRequest){
+        roleService.updateRole(roleRequest);
     }
 }

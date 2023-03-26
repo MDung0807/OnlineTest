@@ -1,11 +1,16 @@
 package com.iotstar.onlinetest.services.user;
 
 
-import com.iotstar.onlinetest.DTOs.RegisterForm.*;
+import com.iotstar.onlinetest.DTOs.AccountDTO;
+import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
+import com.iotstar.onlinetest.DTOs.requests.UserRequest;
+import com.iotstar.onlinetest.DTOs.responses.UserResponse;
+import com.iotstar.onlinetest.models.Account;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
+import com.iotstar.onlinetest.services.account.AccountService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,64 +23,61 @@ import java.time.LocalDateTime;
 public class UserServiceImp implements UserService {
     @Autowired
     private UserDAO userDAO;
-
     @Autowired
-    private RoleDAO roleDAO;
-
+    private AccountService accountService;
     @Autowired
     private AccountDAO accountDAO;
     @Autowired
     private ModelMapper mapper;
     private User user;
-
+    private AccountDTO accountDTO;
     @Override
     @Transactional
-    public UserDTO createUser(UserDTO userDTO) {
-
-        user = mapper.map(userDTO, User.class);
+    public void createUser(UserRequest userRequest) {
+        //Get username and password
+        accountDTO = mapper.map(userRequest, AccountDTO.class);
+        accountDTO.setRoleName("user");
+        //Get user
+        user = mapper.map(userRequest, User.class);
+        //Create user
         user.setDateCreate(LocalDateTime.now());
         user.setStatus(1);
         user = userDAO.save(user);
-        return mapper.map(user, UserDTO.class);
+
+        //Create acc
+        accountDTO.setUser(user);
+        accountService.createAccount(accountDTO);
     }
 
     @Override
-    public void deleteUser(UserDTO userDTO) {
-        userDTO.setStatus(0);
-        updateUser(userDTO);
+    public void deleteUser(UserProfileRequest userProfileRequest) {
+        user = userDAO.findById(userProfileRequest.getUserId()).get();
+        user.setStatus(0);
+        user.getAccount().setStatus(0);
+        userDAO.save(user);
     }
 
     @Override
     @Transactional
-    public UserDTO getUser(int userId) {
+    public UserResponse getUser(Long userId) {
 
         user = userDAO.getUserByUserId(userId);
-
-        return UserDTO.builder()
-                .userId(user.getUserId())
-                .avatar(user.getAvatar())
-                .dateCreate(user.getDateCreate())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phoneNumber(user.getPhoneNumber())
-                .status(user.getStatus())
-                .build();
+        return mapper.map(user, UserResponse.class);
     }
 
-    @Override
-    public void updateUser(UserDTO userDTO) {
-        user= User.builder()
-                .userId(userDTO.getUserId())
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
-                .phoneNumber(userDTO.getPhoneNumber())
-                .avatar(userDTO.getAvatar())
-                .email(userDTO.getEmail())
-                .dateCreate(LocalDateTime.now())
-                .status(1)
-                .build();
-
-        userDAO.save(user);
-    }
+//    @Override
+//    public void updateUser(UserDTO userDTO) {
+//        user= User.builder()
+//                .userId(userDTO.getUserId())
+//                .firstName(userDTO.getFirstName())
+//                .lastName(userDTO.getLastName())
+//                .phoneNumber(userDTO.getPhoneNumber())
+//                .avatar(userDTO.getAvatar())
+//                .email(userDTO.getEmail())
+//                .dateCreate(LocalDateTime.now())
+//                .status(1)
+//                .build();
+//
+//        userDAO.save(user);
+//    }
 }

@@ -13,10 +13,10 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubjectMatter {
+public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -25,6 +25,6 @@ public class SubjectMatter {
     @JoinColumn( name = "subjectId")
     private Subject subject;
 
-    @OneToMany(mappedBy = "subjectMatter")
+    @OneToMany(mappedBy = "topic")
     private Set<Question> questions;
 }

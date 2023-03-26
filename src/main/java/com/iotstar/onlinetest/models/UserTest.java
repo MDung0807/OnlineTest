@@ -10,9 +10,9 @@ import java.io.Serializable;
 @Data
 public class UserTest implements Serializable {
     @Column(nullable = false)
-    private int userId;
+    private Long userId;
 
 
     @Column(nullable = false)
-    private int testId;
+    private Long testId;
 }

@@ -1,11 +1,13 @@
 package com.iotstar.onlinetest.services.account;
 
-import com.iotstar.onlinetest.DTOs.RegisterForm.*;
-import com.iotstar.onlinetest.DTOs.RoleDTO;
+import com.iotstar.onlinetest.DTOs.AccountDTO;
+import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
 import com.iotstar.onlinetest.models.Account;
 import com.iotstar.onlinetest.models.Role;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
+import com.iotstar.onlinetest.repositories.RoleDAO;
+import com.iotstar.onlinetest.repositories.UserDAO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,22 +28,16 @@ public class AccountServiceImp implements AccountService{
     private Account account;
     private Role role;
     private User user;
+    @Autowired
+    private RoleDAO roleDAO;
+    @Autowired
+    private UserDAO userDAO;
 
 
     @Override
     @Transactional
     public void delAcc(AccountDTO accountDTO){
-        account = Account.builder()
-                .status(0)
-                .accountId(accountDTO.getAccountId())
-                .username(accountDTO.getUsername())
-                .password(accountDTO.getPassword())
-                .role(accountDTO.getRole())
-//                .user(accountDTO.getUser())
-                .build();
 
-
-        accountDAO.save(account);
     }
 
     @Override
@@ -56,31 +52,17 @@ public class AccountServiceImp implements AccountService{
 
     @Override
     public AccountDTO getAccByUsername(String username) {
-        account = accountDAO.getByUsername(username);
-        accountDTO = AccountDTO.builder()
-                .user(account.getUser())
-                .accountId(account.getAccountId())
-                .username(account.getUsername())
-                .password(account.getPassword())
-                .role(account.getRole())
-                .status(account.getStatus())
-                .build();
-        return accountDTO;
+      return null;
     }
 
     @Override
     @Transactional
-    public void createAccount(AccountDTO accountDTO, UserDTO userDTO, RoleDTO roleDTO){
-        role = Role.builder().build();
-        user = User.builder().build();
-        mapper.map(roleDTO, role);
-        mapper.map(userDTO, user);
-
-        accountDTO.setStatus(1);
-        accountDTO.setRole(role);
-        accountDTO.setUser(user);
-        String err = null;
+    public void createAccount(AccountDTO accountDTO){
         account = mapper.map(accountDTO, Account.class);
+        account.setStatus(1);
+        role = roleDAO.getByRoleName(accountDTO.getRoleName());
+        account.setRole(role);
+        String err = null;
         try {
             accountDAO.save(account);
         }
@@ -91,14 +73,9 @@ public class AccountServiceImp implements AccountService{
 
     @Override
     @Transactional
-    public void update(AccountDTO accountDTO){
-        account = Account.builder()
-                .accountId(accountDTO.getAccountId())
-                .role(accountDTO.getRole())
-//                .user(accountDTO.getUser())
-                .password(accountDTO.getPassword())
-                .username(accountDTO.getUsername()).build();
-
+    public void update(AccountRequest accountRequest){
+        account = accountDAO.getByUsername(accountRequest.getUserName());
+        account.setPassword(accountRequest.getPassword());
         accountDAO.save(account);
     }
 }
