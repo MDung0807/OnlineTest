@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,21 +29,15 @@ public class Question {
     @Column
     private int status;
 
-    @ManyToMany(mappedBy = "questions")
-    private Set<Test> tests;
-
     @OneToMany(mappedBy = "question")
-    private Set<Answer> answers;
+    private List<Answer> answers;
 
-
-    @OneToMany(mappedBy = "question")
-    private Set<User_Answer> user_answers;
 
     @ManyToOne
-    @JoinColumn(name = "subjectMatterId")
+    @JoinColumn(name = "topicId")
     private Topic topic;
 
     @ManyToOne
     @JoinColumn(name = "techerId")
-    private Teacher teacher;
+    private User user;
 }

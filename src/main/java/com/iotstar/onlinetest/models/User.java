@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -44,16 +44,16 @@ public class User {
     private Account account;
 
     @OneToMany(mappedBy = "user")
-    Set<Scores> scores;
+    private List<Scores> scores;
 
 
     @OneToMany(mappedBy = "user")
-    private Set<User_Answer> user_answers;
+    private List<History> histories;
 
-    @OneToOne(mappedBy = "user")
-    private Teacher teacher;
+    @ManyToOne
+    @JoinColumn(name = "subjectId")
+    private Subject subject;
 
-    public Account getAccount() {
-        return account;
-    }
+    @OneToMany(mappedBy = "user")
+    private List<Question> questions;
 }

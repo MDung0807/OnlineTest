@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,18 +36,10 @@ public class Test {
     private LocalDateTime dateCreate;
 
     @OneToMany(mappedBy = "test")
-    Set<Scores> scores;
-
-    @ManyToMany
-    @JoinTable(
-            name = "test_question",
-            joinColumns = @JoinColumn(name = "testId"),
-            inverseJoinColumns = @JoinColumn(name = "questionId")
-    )
-    private Set<Question>questions;
+    List<Scores> scores;
 
     @ManyToOne
-    @JoinColumn(name = "subjectId")
-    private Subject subject;
+    @JoinColumn(name = "topicId")
+    private Topic topic;
 
 }
