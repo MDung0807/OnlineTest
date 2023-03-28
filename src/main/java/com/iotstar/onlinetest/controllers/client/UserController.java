@@ -2,6 +2,7 @@ package com.iotstar.onlinetest.controllers.client;
 
 
 import com.iotstar.onlinetest.DTOs.AccountDTO;
+import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
 import com.iotstar.onlinetest.DTOs.requests.LoginRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
@@ -46,6 +47,11 @@ public class UserController {
     @PostMapping("/delAcc")
     public void delAcc(@RequestBody UserProfileRequest userProfileRequest){
         userService.deleteUser(userProfileRequest);
+    }
+
+    @PostMapping("/upacc")
+    public void uploadAcc(@RequestBody AccountRequest accountRequest){
+        accountService.update(accountRequest);
     }
 
 

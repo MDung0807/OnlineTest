@@ -4,6 +4,7 @@ import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
 import com.iotstar.onlinetest.DTOs.responses.RoleResponse;
 import com.iotstar.onlinetest.services.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class RoleController {
 
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('user')")
     public List<RoleResponse> getRole(){
         return roleService.getAllRole();
     }

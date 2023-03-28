@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImp implements AccountService{
@@ -56,8 +57,8 @@ public class AccountServiceImp implements AccountService{
     }
 
     @Override
-    public AccountDTO getAccByUsername(String username) {
-      return null;
+    public Optional <AccountDTO>getAccByUsername(String username) {
+     return null;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class AccountServiceImp implements AccountService{
     @Override
     @Transactional
     public void update(AccountRequest accountRequest){
-        account = accountDAO.getByUsername(accountRequest.getUserName()).get();
+        account = accountDAO.findByUsername(accountRequest.getUsername()).get();
         account.setPassword(accountRequest.getPassword());
         accountDAO.save(account);
     }
