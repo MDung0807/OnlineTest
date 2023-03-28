@@ -10,6 +10,7 @@ import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,10 @@ public class AccountServiceImp implements AccountService{
     private RoleDAO roleDAO;
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private PasswordEncoder encoder;
+
 
 
     @Override
@@ -58,10 +63,13 @@ public class AccountServiceImp implements AccountService{
     @Override
     @Transactional
     public void createAccount(AccountDTO accountDTO){
+
         account = mapper.map(accountDTO, Account.class);
-        account.setStatus(1);
         role = roleDAO.getByRoleName(accountDTO.getRoleName());
         account.setRole(role);
+        account.setPassword(encoder.encode(accountDTO.getPassword()));
+        account.setStatus(1);
+
         String err = null;
         try {
             accountDAO.save(account);
@@ -74,7 +82,7 @@ public class AccountServiceImp implements AccountService{
     @Override
     @Transactional
     public void update(AccountRequest accountRequest){
-        account = accountDAO.getByUsername(accountRequest.getUserName());
+        account = accountDAO.getByUsername(accountRequest.getUserName()).get();
         account.setPassword(accountRequest.getPassword());
         accountDAO.save(account);
     }

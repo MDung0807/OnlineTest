@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,5 +27,8 @@ public class Topic {
     private Subject subject;
 
     @OneToMany(mappedBy = "topic")
-    private Set<Question> questions;
+    private List<Question> questions;
+
+    @OneToMany(mappedBy = "topic")
+    private List<Test> tests;
 }

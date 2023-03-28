@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -26,16 +27,14 @@ public class Subject {
     @Column(nullable = false)
     private int status;
 
-    @OneToMany(mappedBy = "subject")
-    private Set<Test> tests;
 
     @OneToMany(mappedBy = "subject")
-    private Set<Teacher> teachers;
+    private List<User> users;
 
 
 
     @OneToMany(mappedBy = "subject")
-    private Set<Topic> topics;
+    private List<Topic> topics;
 
 
 

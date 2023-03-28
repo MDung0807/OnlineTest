@@ -7,10 +7,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class User_Answer {
+public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "testId")
+    private Test test;
 
     @ManyToOne
     @JoinColumn(name = "questionId")
