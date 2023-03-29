@@ -19,10 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
     String[] allowURL = {
-        "/home"
+        "/**"
     };
 
 //    @Bean
@@ -65,12 +65,12 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-//                .requestMatchers(HttpMethod.GET,allowURL)
-//                .permitAll()
+                .requestMatchers(HttpMethod.GET,allowURL)
+                .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
-//                .requestMatchers(HttpMethod.POST,allowURL)
-//                .permitAll()
+                .requestMatchers(HttpMethod.POST,allowURL)
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
