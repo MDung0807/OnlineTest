@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.DTOs;
+package com.iotstar.onlinetest.DTOs.responses;
 
 import com.iotstar.onlinetest.models.Subject;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class SubjectMatterDTO {
+public class TopicResponse {
     private int id;
     private String name;
     private Subject subject;

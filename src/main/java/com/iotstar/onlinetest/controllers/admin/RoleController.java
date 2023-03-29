@@ -17,7 +17,7 @@ public class RoleController {
 
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasRole('admin')")
     public List<RoleResponse> getRole(){
         return roleService.getAllRole();
     }
