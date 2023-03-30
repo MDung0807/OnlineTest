@@ -1,6 +1,7 @@
 package com.iotstar.onlinetest.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,10 +37,12 @@ public class Test {
     private LocalDateTime dateCreate;
 
     @OneToMany(mappedBy = "test")
+    @JsonIgnore
     List<Scores> scores;
 
     @ManyToOne
     @JoinColumn(name = "topicId")
+    @JsonIgnore
     private Topic topic;
 
 }

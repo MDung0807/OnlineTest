@@ -1,6 +1,7 @@
 package com.iotstar.onlinetest.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subjectId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -29,11 +30,13 @@ public class Subject {
 
 
     @OneToMany(mappedBy = "subject")
+    @JsonIgnore
     private List<User> users;
 
 
 
     @OneToMany(mappedBy = "subject")
+    @JsonIgnore
     private List<Topic> topics;
 
 

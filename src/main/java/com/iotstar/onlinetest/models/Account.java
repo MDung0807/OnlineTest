@@ -34,7 +34,7 @@ public class Account {
     @JsonIgnore
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "roleId")
     @JsonIgnore
     private Role role;
