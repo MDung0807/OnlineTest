@@ -27,15 +27,13 @@ import java.io.IOException;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-//        JwtUtils jwtUtils = new JwtUtils();
-//        AccountDetailsServiceImpl accountDetailsService = new AccountDetailsServiceImpl();
         try {
             String token = jwtUtils.parseJwt(request);
             if(jwtUtils.validateJwtToken(token) && StringUtils.hasText(token)) {
 
                 String username = jwtUtils.getUserNameFromJwtToken(token);
                 AccountDetailsImpl accountDetails = (AccountDetailsImpl) accountDetailsService.loadUserByUsername(username);
-//                log.error(accountDetails.getEmail());
+                log.error(accountDetails.getEmail());
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 accountDetails,

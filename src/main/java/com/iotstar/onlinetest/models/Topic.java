@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +25,14 @@ public class Topic {
 
     @ManyToOne
     @JoinColumn( name = "subjectId")
+    @JsonIgnore
     private Subject subject;
 
     @OneToMany(mappedBy = "topic")
+    @JsonIgnore
     private List<Question> questions;
 
     @OneToMany(mappedBy = "topic")
+    @JsonIgnore
     private List<Test> tests;
 }

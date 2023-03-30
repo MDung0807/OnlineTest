@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,9 +36,11 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "topicId")
+    @JsonIgnore
     private Topic topic;
 
     @ManyToOne
     @JoinColumn(name = "techerId")
+    @JsonIgnore
     private User user;
 }

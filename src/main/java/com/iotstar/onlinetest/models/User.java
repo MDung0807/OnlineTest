@@ -24,13 +24,13 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -44,16 +44,20 @@ public class User {
     private Account account;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Scores> scores;
 
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<History> histories;
 
     @ManyToOne
     @JoinColumn(name = "subjectId")
+    @JsonIgnore
     private Subject subject;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Question> questions;
 }
