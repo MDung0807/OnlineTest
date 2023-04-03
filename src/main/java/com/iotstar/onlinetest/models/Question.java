@@ -24,8 +24,8 @@ public class Question {
     @Column(nullable = false)
     private String question;
 
-    @Column(columnDefinition = "LongText")
-    private String questionImage;
+    @Column
+    private String image;
 
     @Column
     private int status;

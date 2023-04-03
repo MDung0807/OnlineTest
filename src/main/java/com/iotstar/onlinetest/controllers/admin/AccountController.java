@@ -6,6 +6,7 @@ import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.role.RoleService;
 import com.iotstar.onlinetest.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +23,13 @@ public class AccountController {
     private UserService userService;
 
     @PostMapping("")
+    @PreAuthorize("hasRole('admin')")
     public void updateRole(@RequestBody RoleRequest roleRequest) throws Exception{
 
     }
 
     @GetMapping({"/", ""})
+    @PreAuthorize("hasRole('admin')")
     public List<AccountDTO> getAllAcc (){
         return accountService.getAllAcc();
     }

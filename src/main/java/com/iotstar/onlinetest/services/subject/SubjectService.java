@@ -12,9 +12,9 @@ public interface SubjectService {
 
     public void updateSubject(SubjectRequest subjectDTO);
 
-    public void delSubject(int id);
-
     public SubjectResponse getSubject(Long id);
 
     public List<SubjectResponse> getAllSubject();
+
+    void delSubject(Long id);
 }

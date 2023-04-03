@@ -1,24 +1,22 @@
 package com.iotstar.onlinetest.controllers.client;
 
-
 import com.iotstar.onlinetest.DTOs.AccountDTO;
-import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
-import com.iotstar.onlinetest.DTOs.requests.LoginRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
-import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.role.RoleService;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 
 @RestController
@@ -36,6 +34,8 @@ public class UserController {
     private AccountService accountService;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private FileUtils fileUtil;
 
     private AccountDTO accountDTO;
     @PostMapping("/profile")
@@ -49,10 +49,9 @@ public class UserController {
         userService.deleteUser(userProfileRequest);
     }
 
-    @PostMapping("/upacc")
-    public void uploadAcc(@RequestBody AccountRequest accountRequest){
-        accountService.update(accountRequest);
+    @PostMapping("/updateProfile")
+    public void updateProfile(@RequestBody MultipartFile avatar) throws IOException, GeneralSecurityException {
+        String url = fileUtil.upload(avatar, "avatar");
     }
-
 
 }

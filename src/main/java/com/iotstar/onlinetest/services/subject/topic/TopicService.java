@@ -3,6 +3,8 @@ package com.iotstar.onlinetest.services.subject.topic;
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
 
+import java.util.List;
+
 public interface TopicService {
     public void create(TopicRequest topicResponse);
 
@@ -10,5 +12,5 @@ public interface TopicService {
 
     public void update(TopicRequest topicResponse);
 
-    public TopicResponse getAllBySubject(int subjectId);
+    public List<TopicResponse> getAllBySubject(Long subjectId);
 }
