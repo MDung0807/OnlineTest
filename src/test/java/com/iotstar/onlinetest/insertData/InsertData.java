@@ -3,12 +3,14 @@ package com.iotstar.onlinetest.insertData;
 
 
 import com.iotstar.onlinetest.controllers.admin.RoleController;
+import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.*;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.repositories.subject.SubjectDAO;
 import com.iotstar.onlinetest.repositories.subject.TopicDAO;
+import com.iotstar.onlinetest.utils.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
@@ -108,8 +110,10 @@ public class InsertData {
         userDAO.save(user);
     }
     private void testAccount(){
-        Role roleTeacher = roleDAO.getByRoleName("teacher");
-        Role roleUser = roleDAO.getByRoleName("student");
+        Role roleTeacher = roleDAO.getByRoleName("teacher").orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND));
+        Role roleUser = roleDAO.getByRoleName("student").orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND));
 
         User user1 = userDAO.findById(1L).get();
         account = Account.builder()

@@ -25,6 +25,9 @@ public class Subject {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column
+    private String image;
+
     @Column(nullable = false)
     private int status;
 

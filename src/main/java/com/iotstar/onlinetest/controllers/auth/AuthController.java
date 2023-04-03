@@ -1,22 +1,24 @@
 package com.iotstar.onlinetest.controllers.auth;
 
+import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
 import com.iotstar.onlinetest.DTOs.requests.LoginRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.JwtResponse;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.security.jwt.JwtUtils;
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
+import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.utils.AuthUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +32,17 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
+    private AuthUtils authUtils;
+
+    @Autowired
+    private AccountService accountService;
 
     @PostMapping("auth/register")
-    public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest)throws Exception{
-        ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    public ResponseEntity<?> createUser(@Valid @ModelAttribute UserRequest userRequest, BindingResult result)throws Exception{
+        if(result.hasErrors()){
+            return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
+        }
         userService.createUser(userRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
@@ -60,5 +69,15 @@ public class AuthController {
                 roles)
         );
     }
+
+    @PostMapping("/auth/reset")
+    public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest, BindingResult result) throws Exception{
+        if(result.hasErrors()){
+            return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
+        }
+        accountService.update(accountRequest);
+        return ResponseEntity.ok("Success");
+    }
+
 
 }

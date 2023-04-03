@@ -5,12 +5,13 @@ import com.iotstar.onlinetest.DTOs.AccountDTO;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
-import com.iotstar.onlinetest.models.Account;
+import com.iotstar.onlinetest.exceptions.UserNotFoundException;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
-import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.account.AccountService;
+import com.iotstar.onlinetest.utils.AppConstant;
+import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,22 +29,28 @@ public class UserServiceImp implements UserService {
     @Autowired
     private AccountDAO accountDAO;
     @Autowired
+    private FileUtils fileUtils;
+    @Autowired
     private ModelMapper mapper;
     private User user;
     private AccountDTO accountDTO;
     @Override
     @Transactional
     public void createUser(UserRequest userRequest) {
-        //Get username and password
-        accountDTO = mapper.map(userRequest, AccountDTO.class);
-        accountDTO.setRoleName("user");
-        //Get user
+        // skip map avatar
+        mapper.typeMap(UserRequest.class, User.class).addMappings(mapper-> mapper.skip(User::setAvatar));
+        // Get user
         user = mapper.map(userRequest, User.class);
         //Create user
+        String urlImage = fileUtils.upload(userRequest.getAvatar(), userRequest.getUsername());
+        user.setAvatar(urlImage);
         user.setDateCreate(LocalDateTime.now());
         user.setStatus(1);
         user = userDAO.save(user);
 
+        //Get username and password
+        accountDTO = mapper.map(userRequest, AccountDTO.class);
+        accountDTO.setRoleName("user");
         //Create acc
         accountDTO.setUser(user);
         accountService.createAccount(accountDTO);
@@ -61,7 +68,8 @@ public class UserServiceImp implements UserService {
     @Transactional
     public UserResponse getUser(Long userId) {
 
-        user = userDAO.getUserByUserId(userId);
+        user = userDAO.getUserByUserId(userId).orElseThrow(()->
+                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
         return mapper.map(user, UserResponse.class);
     }
 
