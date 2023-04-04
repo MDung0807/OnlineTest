@@ -1,7 +1,9 @@
 package com.iotstar.onlinetest.services.question;
 
 import com.iotstar.onlinetest.DTOs.AnswerDTO;
+import com.iotstar.onlinetest.DTOs.requests.QuestionImageRequest;
 import com.iotstar.onlinetest.DTOs.requests.QuestionRequest;
+import com.iotstar.onlinetest.DTOs.responses.QuestionResponse;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.User;
@@ -18,10 +20,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class QuestionServiceImp implements QuestionService{
+    @Override
+    public QuestionResponse getQuestionById(Long id) {
+        question = questionDAO.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+id));
+        return mapper.map(question, QuestionResponse.class);
+    }
+
+    @Override
+    public List<QuestionResponse> getQuestionByTopicId(Long id) {
+        List<Question> questions = questionDAO.findByTopicId(id).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+
+        List<QuestionResponse> questionResponses = new ArrayList<>();
+        for (Question i: questions){
+            questionResponses.add(mapper.map(i, QuestionResponse.class));
+        }
+        return questionResponses;
+    }
+
+    @Override
+    public List<QuestionResponse>  getQuestionByUserId(Long id) {
+        List<Question> questions = questionDAO.findByUserUserId(id).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+
+        List<QuestionResponse> questionResponses = new ArrayList<>();
+        for (Question i: questions){
+            questionResponses.add(mapper.map(i, QuestionResponse.class));
+        }
+        return questionResponses;
+    }
+
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -50,6 +84,11 @@ public class QuestionServiceImp implements QuestionService{
     }
 
     @Override
+    public Question updateImg(QuestionImageRequest questionImageRequest){
+        return uploadImage(questionImageRequest.getImage(), questionImageRequest.getQuestionId());
+    }
+
+    @Override
     public Question createQuestion(QuestionRequest questionRequest, Long userId) {
         mapper.typeMap(QuestionRequest.class, Question.class).addMappings(mapper->mapper.skip(Question::setImage));
 
@@ -61,9 +100,8 @@ public class QuestionServiceImp implements QuestionService{
 
         question.setUser(user);
         question = questionDAO.save(question);
-        question = uploadImage(questionRequest.getImage(), questionRequest.getQuestionId());
 
-        answerService.createAnswers(questionRequest.getAnswerDTOs());
+        answerService.createAnswers(questionRequest.getAnswers(), question);
         return question;
     }
 }
