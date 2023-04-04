@@ -24,4 +24,7 @@ public class AppConstant {
     //QUESTION
     public static final String IMG_NAME_QUESTION="question_img_";
     public static final String QUESTION_NOTFOUND = "Not found question: ";
+
+    //TEST
+    public static final String TEST_NOTFOUND="Not found test: ";
 }

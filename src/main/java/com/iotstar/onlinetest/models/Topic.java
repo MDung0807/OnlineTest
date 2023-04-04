@@ -35,7 +35,7 @@ public class Topic {
     @JsonIgnore
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "topic")
+    @ManyToMany(mappedBy = "topics")
     @JsonIgnore
     private List<Test> tests;
 }

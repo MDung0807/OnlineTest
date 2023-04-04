@@ -43,4 +43,8 @@ public class Question {
     @JoinColumn(name = "techerId")
     @JsonIgnore
     private User user;
+
+    @ManyToMany(mappedBy = "questions")
+    @JsonIgnore
+    private List<Test> tests;
 }

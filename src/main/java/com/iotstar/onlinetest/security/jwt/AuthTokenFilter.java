@@ -33,7 +33,7 @@ import java.io.IOException;
 
                 String username = jwtUtils.getUserNameFromJwtToken(token);
                 AccountDetailsImpl accountDetails = (AccountDetailsImpl) accountDetailsService.loadUserByUsername(username);
-                log.error(accountDetails.getEmail());
+//                log.error(accountDetails.getEmail());
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 accountDetails,

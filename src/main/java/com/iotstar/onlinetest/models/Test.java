@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -40,9 +42,22 @@ public class Test {
     @JsonIgnore
     List<Scores> scores;
 
-    @ManyToOne
-    @JoinColumn(name = "topicId")
+    @ManyToMany
+    @JoinTable(
+            name = "TestTopic",
+            joinColumns = @JoinColumn(name = "testId"),
+            inverseJoinColumns = @JoinColumn(name = "topicId")
+    )
     @JsonIgnore
-    private Topic topic;
+    private List<Topic> topics;
+
+    @ManyToMany
+    @JoinTable(
+            name = "TestQuestion",
+            joinColumns = @JoinColumn(name = "testId"),
+            inverseJoinColumns = @JoinColumn(name = "questionId")
+    )
+    @JsonIgnore
+    private List<Question> questions;
 
 }

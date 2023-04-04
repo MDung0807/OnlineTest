@@ -84,4 +84,10 @@ public class TopicServiceImp implements TopicService{
         }
         return topicResponses;
     }
+
+    @Override
+    public Topic findTopicById(Long id){
+        return topicDAO.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+    }
 }

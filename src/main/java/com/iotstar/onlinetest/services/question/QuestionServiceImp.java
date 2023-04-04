@@ -70,6 +70,7 @@ public class QuestionServiceImp implements QuestionService{
     private UserDAO userDAO;
 
 
+    @Override
     public Question findById(Long id){
         question = questionDAO.findById(id).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+id));
