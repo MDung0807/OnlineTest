@@ -39,9 +39,7 @@ public class SubjectController {
 
     @RequestMapping("/add/topic")
     public ResponseEntity<?> addTopic (@RequestBody TopicRequest topicRequest){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AccountDetailsImpl accountDetails = mapper.map(authentication.getPrincipal(), AccountDetailsImpl.class);
-        Long userId = accountDetails.getUserId();
+        Long userId = authUtils.getAccountDetail().getUserId();
         if (subjectService.existByUserId(topicRequest.getSubjectId(), userId)){
             topicService.create(topicRequest);
             return ResponseEntity.ok( new MessageResponse("Topic is created success"));

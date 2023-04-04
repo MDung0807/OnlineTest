@@ -19,6 +19,7 @@ public class FileUtils {
             fileInput.transferTo(file);
 
             getCloudinary.uploader().upload(file, ObjectUtils.asMap("public_id", fileName));
+
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
         }
@@ -26,5 +27,13 @@ public class FileUtils {
 // Transform
         String url = getCloudinary.url().generate(fileName);
         return url;
+    }
+    public void destroyFile(String fileName) {
+        try{
+            getCloudinary.uploader().destroy(fileName, ObjectUtils.emptyMap());
+        }
+        catch (Exception ex){
+
+        }
     }
 }

@@ -16,7 +16,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.channels.MulticastChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +36,11 @@ public class SubjectServiceImp implements SubjectService{
     private FileUtils fileUtils;
 
     private Subject subject;
+
+    private Subject uploadImage(MultipartFile fileInput, Subject subject){
+        subject.setImage(fileUtils.upload(fileInput, AppConstant.IMG_NAME_SUBJECT+subject.getSubjectId()));
+        return subjectDAO.save(subject);
+    }
 
     @Override
     public SubjectResponse getSubject(Long subjectId) {
@@ -72,6 +79,9 @@ public class SubjectServiceImp implements SubjectService{
         subject = mapper.map(subjectRequest, Subject.class);
         subject.setStatus(1);
         subject = subjectDAO.save(subject);
+        if (subjectRequest.getImage() != null){
+            subject = uploadImage(subjectRequest.getImage(), subject);
+        }
 
         User user = userDAO.getUserByUserId(userId).orElseThrow(()->
                 new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
@@ -95,5 +105,7 @@ public class SubjectServiceImp implements SubjectService{
     public void delSubject(Long id) {
         subject = subjectDAO.findById(id).orElseThrow(()->
                 new UserNotFoundException(AppConstant.SUBJECT_NOTFOUND+id));
+        subject.setStatus(0);
+        subjectDAO.save(subject);
     }
 }

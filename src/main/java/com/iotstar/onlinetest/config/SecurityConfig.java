@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 //@EnableMethodSecurity
 public class SecurityConfig {
     String[] allowURL = {
-        "/**"
+            "/**"
     };
 
 //    @Bean
@@ -64,12 +64,12 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET,allowURL)
-                .permitAll()
+//                .requestMatchers(HttpMethod.GET,allowURL)
+//                .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
-                .requestMatchers(HttpMethod.POST,allowURL)
-                .permitAll()
+//                .requestMatchers(HttpMethod.POST,allowURL)
+//                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
