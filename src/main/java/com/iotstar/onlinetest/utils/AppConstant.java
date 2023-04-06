@@ -13,6 +13,9 @@ public class AppConstant {
     //ROLE
     public static final String ROLE_EXIST = "Role already exists";
     public static final String ROLE_NOTFOUND= "Not found role: ";
+    public static final String ROLE_USER = "user";
+    public static final String ROLE_TEACHER="teacher";
+    public static final String ROLE_ADMIN = "admin";
 
     //USER
     public static final String USER_NOTFOUND="Not found userId: ";

@@ -29,7 +29,9 @@ import java.io.IOException;
             throws ServletException, IOException {
         try {
             String token = jwtUtils.parseJwt(request);
-            if(jwtUtils.validateJwtToken(token) && StringUtils.hasText(token)) {
+            if(jwtUtils.validateJwtToken(token) &&
+                    StringUtils.hasText(token) &&
+                    !jwtUtils.inBlackList(token)) {
 
                 String username = jwtUtils.getUserNameFromJwtToken(token);
                 AccountDetailsImpl accountDetails = (AccountDetailsImpl) accountDetailsService.loadUserByUsername(username);

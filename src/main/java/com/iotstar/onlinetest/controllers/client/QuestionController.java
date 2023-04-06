@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +36,13 @@ public class QuestionController {
     }
 
     @GetMapping("/inUser")
+    @PreAuthorize("hasAnyRole(${ROLE_USER}, ${ROLE_TEACHER}, ${ROLE_ADMIN})")
     public ResponseEntity<List<QuestionResponse>> getQuestionByUser(){
         Long userId= authUtils.getAccountDetail().getUserId();
         List<QuestionResponse> questionResponses = questionService.getQuestionByUserId(userId);
         return new ResponseEntity<>(questionResponses, HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('${ROLE_TEACHER}')")
     @RequestMapping("/add")
     public ResponseEntity<?> addQuestion(@Valid @RequestBody QuestionRequest questionRequest, BindingResult result){
         if (result.hasErrors()){
@@ -51,6 +54,7 @@ public class QuestionController {
     }
 
     @RequestMapping("/addImg")
+    @PreAuthorize("hasRole('${ROLE_TEACHER}')")
     public ResponseEntity<?> addImg(@RequestBody @Valid @ModelAttribute QuestionImageRequest questionImageRequest,
                                          BindingResult result){
         if (result.hasErrors()){

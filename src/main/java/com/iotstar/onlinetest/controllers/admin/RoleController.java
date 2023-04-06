@@ -21,7 +21,7 @@ public class RoleController {
 
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('user', 'admin')")
     public ResponseEntity<?> getRoles(){
         return ResponseEntity.ok(roleService.getAllRole());
     }
@@ -48,7 +48,7 @@ public class RoleController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('admin')")
+//    @PreAuthorize("hasRole('admin')")
     public void updateRole(@RequestBody RoleRequest roleRequest){
         roleService.updateRole(roleRequest);
     }
