@@ -1,8 +1,11 @@
 package com.iotstar.onlinetest.security.jwt;
 
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
+import com.iotstar.onlinetest.services.blackList.BackListServiceImp;
+import com.iotstar.onlinetest.services.blackList.BlackListService;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -15,11 +18,14 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-//    @Value("${test.app.jwtSecret}")
-    private String secret = "supersecurityandsucurityandsucurityandsucurityandsupersupersecurity";
 
-//    @Value("${test.app.jwtExpirationMs}")
-    private Long jwtExpirationMs = Long.valueOf(7200000);
+    @Autowired
+    private BlackListService blackListService;
+   @Value("${test.app.jwtSecret}")
+    private String secret ;
+
+  @Value("${test.app.jwtExpirationMs}")
+    private Long jwtExpirationMs;
 
     public JwtUtils() {
     }
@@ -70,6 +76,10 @@ public class JwtUtils {
             return false;
         }
 
+    }
+
+    public boolean inBlackList(String token){
+        return blackListService.exitByJWT(token);
     }
 
 

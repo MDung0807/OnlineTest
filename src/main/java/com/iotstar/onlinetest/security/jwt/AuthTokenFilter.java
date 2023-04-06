@@ -29,11 +29,13 @@ import java.io.IOException;
             throws ServletException, IOException {
         try {
             String token = jwtUtils.parseJwt(request);
-            if(jwtUtils.validateJwtToken(token) && StringUtils.hasText(token)) {
+            if(jwtUtils.validateJwtToken(token) &&
+                    StringUtils.hasText(token) &&
+                    !jwtUtils.inBlackList(token)) {
 
                 String username = jwtUtils.getUserNameFromJwtToken(token);
                 AccountDetailsImpl accountDetails = (AccountDetailsImpl) accountDetailsService.loadUserByUsername(username);
-                log.error(accountDetails.getEmail());
+//                log.error(accountDetails.getEmail());
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 accountDetails,

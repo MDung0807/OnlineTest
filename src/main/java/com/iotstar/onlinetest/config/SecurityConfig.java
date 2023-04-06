@@ -5,9 +5,9 @@ import com.iotstar.onlinetest.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,10 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     String[] allowURL = {
-        "/**"
+            "/**"
     };
 
 //    @Bean
@@ -34,6 +34,7 @@ public class SecurityConfig {
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
 
     @Bean
     AuthTokenFilter authTokenFilter() {
@@ -64,12 +65,12 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET,allowURL)
-                .permitAll()
+//                .requestMatchers(HttpMethod.GET,allowURL)
+//                .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
-                .requestMatchers(HttpMethod.POST,allowURL)
-                .permitAll()
+//                .requestMatchers(HttpMethod.POST,allowURL)
+//                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

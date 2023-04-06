@@ -42,8 +42,9 @@ public class UserServiceImp implements UserService {
         // Get user
         user = mapper.map(userRequest, User.class);
         //Create user
-        String urlImage = fileUtils.upload(userRequest.getAvatar(), userRequest.getUsername());
+        String urlImage = fileUtils.upload(userRequest.getAvatar(), AppConstant.IMG_NAME_USER+userRequest.getUsername());
         user.setAvatar(urlImage);
+
         user.setDateCreate(LocalDateTime.now());
         user.setStatus(1);
         user = userDAO.save(user);

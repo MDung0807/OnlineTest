@@ -11,6 +11,7 @@ import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.utils.AppConstant;
+import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -41,7 +42,8 @@ public class AccountServiceImp implements AccountService{
 
     @Autowired
     private PasswordEncoder encoder;
-
+    @Autowired
+    private FileUtils fileUtils;
 
 
     @Override
@@ -76,9 +78,10 @@ public class AccountServiceImp implements AccountService{
         account.setStatus(1);
         String err = null;
         try {
-            accountDAO.save(account);
+            account = accountDAO.save(account);
         }
         catch (Exception ex){
+
           throw new ResourceExistException(AppConstant.ACCOUNT_EXIST);
         }
     }
