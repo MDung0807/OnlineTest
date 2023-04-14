@@ -93,4 +93,12 @@ public class UserServiceImp implements UserService {
         user = userDAO.save(user);
         return mapper.map(user, UserResponse.class);
     }
+
+    @Override
+    @Transactional
+    public UserResponse updateUser(UserProfileRequest profileRequest){
+        user = mapper.map(profileRequest, User.class);
+        user = userDAO.save(user);
+        return mapper.map(user, UserResponse.class);
+    }
 }

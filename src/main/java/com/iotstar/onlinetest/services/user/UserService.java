@@ -14,5 +14,5 @@ public interface UserService {
 
     public UserResponse updateAvatar(Long id, MultipartFile avatar);
 
-//    public void updateUser(UserDTO userDTO);
+    public UserResponse updateUser(UserProfileRequest userProfileRequest);
 }

@@ -66,9 +66,8 @@ public class UserController {
     }
 
     @PostMapping("/updateProfile")
-    public void updateProfile(@ModelAttribute MultipartFile avatar) throws IOException, GeneralSecurityException {
+    public void updateProfile(@ModelAttribute UserProfileRequest avatar) throws IOException, GeneralSecurityException {
 
-        String url = fileUtil.upload(avatar, "avatar");
     }
 
     @PostMapping("/updateAvatar")

@@ -36,6 +36,9 @@ public class User {
     @Column(nullable = false)
     private int status;
 
+    @Column
+    private String gender;
+
     @Column(nullable = false)
     private LocalDateTime dateCreate;
 
