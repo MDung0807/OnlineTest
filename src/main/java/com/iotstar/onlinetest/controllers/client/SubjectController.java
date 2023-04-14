@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/subject")
@@ -48,5 +45,11 @@ public class SubjectController {
         }
 
         return ResponseEntity.ok( new MessageResponse("Teacher is denied"));
+    }
+
+    @RequestMapping("")
+    public ResponseEntity<SubjectResponse> getSubject (@RequestParam Long idSubject){
+        subjectResponse = subjectService.getSubject(idSubject);
+        return ResponseEntity.ok(subjectResponse);
     }
 }
