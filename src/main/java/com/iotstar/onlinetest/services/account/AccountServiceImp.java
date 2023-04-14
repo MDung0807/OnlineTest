@@ -94,6 +94,7 @@ public class AccountServiceImp implements AccountService{
 
         if (account.getUser().getEmail().equals(accountRequest.getEmail())
         && account.getUser().getPhoneNumber().equals(accountRequest.getPhoneNumber())) {
+            account.setPassword(accountRequest.getPassword());
             accountDAO.save(account);
         }
     }

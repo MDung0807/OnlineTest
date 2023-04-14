@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.plaf.multi.MultiInternalFrameUI;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -59,13 +60,21 @@ public class UserController {
 
     @PostMapping("/delAcc")
     public void delAcc(@RequestBody UserProfileRequest userProfileRequest){
+        Long id = authUtils.getAccountDetail().getAccountId();
+        userProfileRequest.setUserId(id);
         userService.deleteUser(userProfileRequest);
     }
 
     @PostMapping("/updateProfile")
-    public void updateProfile(@RequestBody MultipartFile avatar) throws IOException, GeneralSecurityException {
+    public void updateProfile(@ModelAttribute MultipartFile avatar) throws IOException, GeneralSecurityException {
 
         String url = fileUtil.upload(avatar, "avatar");
+    }
+
+    @PostMapping("/updateAvatar")
+    public void updateAvatar(@ModelAttribute MultipartFile avatar) throws IOException, GeneralSecurityException{
+        Long id = authUtils.getAccountDetail().getAccountId();
+        userService.updateAvatar(id, avatar);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
