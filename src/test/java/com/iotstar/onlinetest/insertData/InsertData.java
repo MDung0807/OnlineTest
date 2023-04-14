@@ -68,7 +68,7 @@ public class InsertData {
         subject = subjectDAO.getReferenceById(1L);
         user = User.builder()
                 .email("dominhdung@gmail.com")
-                .phoneNumber("031254547")
+                .phoneNumber("0121458759")
                 .status(1)
                 .subject(subject)
                 .dateCreate(LocalDateTime.now())
@@ -80,7 +80,7 @@ public class InsertData {
         subject = subjectDAO.getReferenceById(2L);
         user = User.builder()
                 .email("tan@gmail.com")
-                .phoneNumber("67332234523")
+                .phoneNumber("01254789568")
                 .status(1)
                 .dateCreate(LocalDateTime.now())
                 .firstName("Nguyễn Thái Ngọc")
@@ -91,7 +91,7 @@ public class InsertData {
 
         user = User.builder()
                 .email("huyen@gmail.com")
-                .phoneNumber("66773345")
+                .phoneNumber("0125478541")
                 .status(1)
                 .dateCreate(LocalDateTime.now())
                 .firstName("Nguyễn TTH")
@@ -101,7 +101,7 @@ public class InsertData {
 
         user = User.builder()
                 .email("Ka@gmail.com")
-                .phoneNumber("673322323")
+                .phoneNumber("0321456897")
                 .status(1)
                 .dateCreate(LocalDateTime.now())
                 .firstName("Phan Van")
@@ -117,8 +117,8 @@ public class InsertData {
 
         User user1 = userDAO.findById(1L).get();
         account = Account.builder()
-                .username("minhdung")
-                .password("$2a$10$VGEuv56GaeaEMGKCIDCC7u0ZWswG0wq1trpaMLxzGGnV/zplolGKu")
+                .username("minhdung123")
+                .password("$2a$10$QdV044BmOtOWjDCDn.BIkOEa5R2SCAZgshW8fikwsE2f0sPPq33Vq")
                 .status(1)
                 .user(user1)
                 .role(roleTeacher)
@@ -127,8 +127,8 @@ public class InsertData {
 
         User user2 = userDAO.findById(2L).get();
         account = Account.builder()
-                .username("tan")
-                .password("$2a$10$VGEuv56GaeaEMGKCIDCC7u0ZWswG0wq1trpaMLxzGGnV/zplolGKu")
+                .username("tan123")
+                .password("$2a$10$QdV044BmOtOWjDCDn.BIkOEa5R2SCAZgshW8fikwsE2f0sPPq33Vq")
                 .status(1)
                 .user(user2)
                 .role(roleTeacher)
@@ -137,8 +137,8 @@ public class InsertData {
 
         User user3 = userDAO.findById(3L).get();
         account = Account.builder()
-                .username("huyen")
-                .password("$2a$10$VGEuv56GaeaEMGKCIDCC7u0ZWswG0wq1trpaMLxzGGnV/zplolGKu")
+                .username("huyen123")
+                .password("$2a$10$QdV044BmOtOWjDCDn.BIkOEa5R2SCAZgshW8fikwsE2f0sPPq33Vq")
                 .status(1)
                 .user(user3)
                 .role(roleUser)

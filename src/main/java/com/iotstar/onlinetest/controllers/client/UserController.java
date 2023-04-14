@@ -8,6 +8,7 @@ import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.blackList.BlackListService;
 import com.iotstar.onlinetest.services.role.RoleService;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.utils.AuthUtils;
 import com.iotstar.onlinetest.utils.FileUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -46,6 +47,8 @@ public class UserController {
     private BlackListService blackListService;
     @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
+    private AuthUtils authUtils;
 
     private AccountDTO accountDTO;
     @PostMapping("/profile")
@@ -61,6 +64,7 @@ public class UserController {
 
     @PostMapping("/updateProfile")
     public void updateProfile(@RequestBody MultipartFile avatar) throws IOException, GeneralSecurityException {
+
         String url = fileUtil.upload(avatar, "avatar");
     }
 
