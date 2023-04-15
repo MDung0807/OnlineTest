@@ -8,11 +8,13 @@ import com.iotstar.onlinetest.services.test.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/test")
+@PreAuthorize("hasRole('teacher')")
 public class TestController {
 
     @Autowired
@@ -27,7 +29,8 @@ public class TestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> createTest (@RequestParam Long testId){
+    @PreAuthorize("hasRole('user')")
+    public ResponseEntity<?> getTest (@RequestParam Long testId){
         TestResponse testResponse = testService.getById(testId);
         return new ResponseEntity<>(testResponse, HttpStatus.OK);
     }

@@ -16,19 +16,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/role")
+@PreAuthorize("hasRole('admin')")
 public class RoleController {
     @Autowired
     private RoleService roleService;
 
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasAnyRole('user', 'admin')")
     public ResponseEntity<?> getRoles(){
         return ResponseEntity.ok(roleService.getAllRole());
     }
 
     @PostMapping({"", "/"})
-    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> getRoleByRoleName(@RequestBody RoleRequest roleRequest, BindingResult result){
         if (result.hasErrors()){
             return ResponseEntity.ok(new MessageResponse(result.getObjectName()));
@@ -37,19 +36,16 @@ public class RoleController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('admin')")
     public void addRole(@RequestBody RoleRequest roleRequest) {
         roleService.createRole(roleRequest);
     }
 
     @PostMapping("/del")
-    @PreAuthorize("hasRole('admin')")
     public void delRole(@RequestBody RoleRequest roleRequest){
         roleService.deleteRole(roleRequest);
     }
 
     @PostMapping("/update")
-//    @PreAuthorize("hasRole('admin')")
     public void updateRole(@RequestBody RoleRequest roleRequest){
         roleService.updateRole(roleRequest);
     }

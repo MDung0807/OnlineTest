@@ -16,18 +16,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.plaf.multi.MultiInternalFrameUI;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 
 @RestController
 @CrossOrigin
-@RequestMapping("/user")
+@RequestMapping("")
+@PreAuthorize("hasRole('user')")
 public class UserController {
 
     @Autowired
@@ -51,21 +54,29 @@ public class UserController {
     private AuthUtils authUtils;
 
     private AccountDTO accountDTO;
-    @PostMapping("/profile")
-    public ResponseEntity<UserResponse> getUser(@RequestBody UserProfileRequest userProfileRequest){
-        return new ResponseEntity<>(userService.getUser(userProfileRequest.getUserId()), HttpStatus.OK);
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> getUser(){
+        return new ResponseEntity<>(
+                userService.getUser(authUtils.getAccountDetail().getUserId()), HttpStatus.OK);
     }
 
 
     @PostMapping("/delAcc")
     public void delAcc(@RequestBody UserProfileRequest userProfileRequest){
+        Long id = authUtils.getAccountDetail().getAccountId();
+        userProfileRequest.setUserId(id);
         userService.deleteUser(userProfileRequest);
     }
 
     @PostMapping("/updateProfile")
-    public void updateProfile(@RequestBody MultipartFile avatar) throws IOException, GeneralSecurityException {
+    public void updateProfile(@ModelAttribute UserProfileRequest avatar) throws IOException, GeneralSecurityException {
 
-        String url = fileUtil.upload(avatar, "avatar");
+    }
+
+    @PostMapping("/updateAvatar")
+    public void updateAvatar(@ModelAttribute MultipartFile avatar) throws IOException, GeneralSecurityException{
+        Long id = authUtils.getAccountDetail().getAccountId();
+        userService.updateAvatar(id, avatar);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)

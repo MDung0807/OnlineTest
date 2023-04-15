@@ -22,6 +22,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/question")
+@PreAuthorize("hasRole('teacher')")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -30,19 +31,18 @@ public class QuestionController {
 
 
     @GetMapping("/inTopic")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<List<QuestionResponse>> getQuestionByTopic(@RequestParam Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
         return new ResponseEntity<>(questionResponses, HttpStatus.OK);
     }
 
     @GetMapping("/inUser")
-    @PreAuthorize("hasAnyRole(${ROLE_USER}, ${ROLE_TEACHER}, ${ROLE_ADMIN})")
     public ResponseEntity<List<QuestionResponse>> getQuestionByUser(){
         Long userId= authUtils.getAccountDetail().getUserId();
         List<QuestionResponse> questionResponses = questionService.getQuestionByUserId(userId);
         return new ResponseEntity<>(questionResponses, HttpStatus.OK);
     }
-    @PreAuthorize("hasRole('${ROLE_TEACHER}')")
     @RequestMapping("/add")
     public ResponseEntity<?> addQuestion(@Valid @RequestBody QuestionRequest questionRequest, BindingResult result){
         if (result.hasErrors()){
@@ -54,7 +54,6 @@ public class QuestionController {
     }
 
     @RequestMapping("/addImg")
-    @PreAuthorize("hasRole('${ROLE_TEACHER}')")
     public ResponseEntity<?> addImg(@RequestBody @Valid @ModelAttribute QuestionImageRequest questionImageRequest,
                                          BindingResult result){
         if (result.hasErrors()){
