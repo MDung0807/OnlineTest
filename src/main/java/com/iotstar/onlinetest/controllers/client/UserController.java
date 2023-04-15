@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,8 @@ import java.security.GeneralSecurityException;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/user")
+@RequestMapping("")
+@PreAuthorize("hasRole('user')")
 public class UserController {
 
     @Autowired
@@ -52,9 +54,10 @@ public class UserController {
     private AuthUtils authUtils;
 
     private AccountDTO accountDTO;
-    @PostMapping("/profile")
-    public ResponseEntity<UserResponse> getUser(@RequestBody UserProfileRequest userProfileRequest){
-        return new ResponseEntity<>(userService.getUser(userProfileRequest.getUserId()), HttpStatus.OK);
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> getUser(){
+        return new ResponseEntity<>(
+                userService.getUser(authUtils.getAccountDetail().getUserId()), HttpStatus.OK);
     }
 
 

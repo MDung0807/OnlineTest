@@ -39,7 +39,7 @@ public class UserServiceImp implements UserService {
 
     private String uploadImage(MultipartFile fileImage, String fileName){
         String urlImage = null;
-        if(fileImage!= null){
+        if(fileImage.getSize()!= 0){
             urlImage = fileUtils.upload(fileImage, AppConstant.IMG_NAME_USER+fileName);
         }
         return urlImage;

@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/account")
+@PreAuthorize("hasRole('admin')")
 public class AccountController {
 
     @Autowired
@@ -23,13 +24,11 @@ public class AccountController {
     private UserService userService;
 
     @PostMapping("")
-    @PreAuthorize("hasRole('admin')")
     public void updateRole(@RequestBody RoleRequest roleRequest) throws Exception{
 
     }
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole('admin')")
     public List<AccountDTO> getAllAcc (){
         return accountService.getAllAcc();
     }
