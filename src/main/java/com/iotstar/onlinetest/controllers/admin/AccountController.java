@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/account")
-@PreAuthorize("hasRole('admin')")
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
 public class AccountController {
 
     @Autowired

@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,17 +33,18 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtUtils jwtUtils;
-    @Autowired
-    private AuthUtils authUtils;
 
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("auth/register")
-    public ResponseEntity<?> createUser(@Valid @ModelAttribute UserRequest userRequest, BindingResult result)throws Exception{
+    @RequestMapping(value = "auth/register")
+    public ResponseEntity<?> createUser(@RequestPart("user") UserRequest userRequest,
+                                        @ModelAttribute MultipartFile avatar,
+                                        BindingResult result)throws Exception {
         if(result.hasErrors()){
             return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
         }
+        userRequest.setAvatar(avatar);
         userService.createUser(userRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

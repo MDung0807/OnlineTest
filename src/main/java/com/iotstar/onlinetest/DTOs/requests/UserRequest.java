@@ -3,15 +3,16 @@ package com.iotstar.onlinetest.DTOs.requests;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 @Data
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRequest {
-    private MultipartFile avatar;
     @Email
     private String email;
     @Size(max = 30, message = "username have length greater 6")
@@ -26,4 +27,5 @@ public class UserRequest {
     private String password;
     @Size(max = 10, message = "gender have length greater 10")
     private String gender;
+    private MultipartFile avatar;
 }
