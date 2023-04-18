@@ -5,6 +5,7 @@ import com.iotstar.onlinetest.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -21,7 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
     String[] allowURL = {
-            "/**"
+            "/subject",
+            "/subject/id",
+            "/subject/",
+            "/subject/topicid",
     };
 
 //    @Bean
@@ -65,8 +69,8 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-//                .requestMatchers(HttpMethod.GET,allowURL)
-//                .permitAll()
+                .requestMatchers(HttpMethod.GET,allowURL)
+                .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
 //                .requestMatchers(HttpMethod.POST,allowURL)

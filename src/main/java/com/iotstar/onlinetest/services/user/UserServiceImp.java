@@ -15,6 +15,7 @@ import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,8 @@ public class UserServiceImp implements UserService {
     private ModelMapper mapper;
     private User user;
     private AccountDTO accountDTO;
+    @Value("${ROLE_STUDENT}")
+    private String roleStudent;
 
     private String uploadImage(MultipartFile fileImage, String fileName){
         String urlImage = null;
@@ -61,7 +64,7 @@ public class UserServiceImp implements UserService {
 
         //Get username and password
         accountDTO = mapper.map(userRequest, AccountDTO.class);
-        accountDTO.setRoleName("student");
+        accountDTO.setRoleName(roleStudent);
         //Create acc
         accountDTO.setUser(user);
         accountService.createAccount(accountDTO);

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/test")
-@PreAuthorize("hasRole('teacher')")
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public class TestController {
 
     @Autowired
@@ -28,8 +28,8 @@ public class TestController {
         return ResponseEntity.ok(new MessageResponse("Success"));
     }
 
-    @GetMapping("/")
-    @PreAuthorize("hasRole('user')")
+    @GetMapping({"/", ""})
+    @PreAuthorize("hasRole(@environment.getProperty('ROLE_STUDENT'))")
     public ResponseEntity<?> getTest (@RequestParam Long testId){
         TestResponse testResponse = testService.getById(testId);
         return new ResponseEntity<>(testResponse, HttpStatus.OK);

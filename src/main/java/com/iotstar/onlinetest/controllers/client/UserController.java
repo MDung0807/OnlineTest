@@ -30,7 +30,7 @@ import java.security.GeneralSecurityException;
 @RestController
 @CrossOrigin
 @RequestMapping("")
-@PreAuthorize("hasRole('user')")
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_STUDENT'))")
 public class UserController {
 
     @Autowired

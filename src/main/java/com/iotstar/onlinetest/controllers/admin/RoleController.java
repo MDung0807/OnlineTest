@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/role")
-@PreAuthorize("hasRole('admin')")
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
 public class RoleController {
     @Autowired
     private RoleService roleService;

@@ -22,7 +22,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/question")
-@PreAuthorize("hasRole('teacher')")
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -31,7 +31,7 @@ public class QuestionController {
 
 
     @GetMapping("/inTopic")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasRole('student')")
     public ResponseEntity<List<QuestionResponse>> getQuestionByTopic(@RequestParam Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
         return new ResponseEntity<>(questionResponses, HttpStatus.OK);
