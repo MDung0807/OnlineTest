@@ -24,7 +24,8 @@ public class SecurityConfig {
     String[] allowURL = {
             "/subject",
             "/subject/id",
-            "subject/",
+            "/subject/",
+            "/subject/topicid",
     };
 
 //    @Bean

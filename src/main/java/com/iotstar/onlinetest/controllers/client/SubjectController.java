@@ -53,8 +53,8 @@ public class SubjectController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<SubjectResponse> getSubject (@RequestParam Long idSubject){
-        SubjectResponse subjectResponse = subjectService.getSubject(idSubject);
+    public ResponseEntity<SubjectResponse> getSubject (@RequestParam Long subjectId){
+        SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
         return ResponseEntity.ok(subjectResponse);
     }
 
@@ -62,5 +62,11 @@ public class SubjectController {
     public ResponseEntity<List<SubjectResponse>> getAllSubject(){
         List<SubjectResponse> subjectResponses = subjectService.getAllSubject();
         return ResponseEntity.ok(subjectResponses);
+    }
+
+    @GetMapping("/topicid")
+    public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId){
+        SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
+        return ResponseEntity.ok(subjectResponse.getTopics());
     }
 }
