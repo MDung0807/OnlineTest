@@ -1,10 +1,12 @@
 package com.iotstar.onlinetest.controllers.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
 import com.iotstar.onlinetest.DTOs.requests.LoginRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.JwtResponse;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
+import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.security.jwt.JwtUtils;
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
 import com.iotstar.onlinetest.services.account.AccountService;
@@ -12,6 +14,8 @@ import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AuthUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,15 +41,25 @@ public class AuthController {
     @Autowired
     private AccountService accountService;
 
+    private UserResponse userResponse;
+
     @RequestMapping(value = "auth/register")
-    public ResponseEntity<?> createUser(@RequestPart("user") UserRequest userRequest,
+    public ResponseEntity<?> createUser(@Valid @ModelAttribute("user")  UserRequest userParam1,
                                         @ModelAttribute MultipartFile avatar,
-                                        BindingResult result)throws Exception {
+                                        @Valid @RequestPart(value = "user", required = false)UserRequest userParam2,
+                                        BindingResult result) {
         if(result.hasErrors()){
             return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
         }
-        userRequest.setAvatar(avatar);
-        userService.createUser(userRequest);
+
+        if(userParam2 ==null){
+            userService.createUser(userParam1);
+        }
+        else {
+            userParam2.setAvatar(avatar);
+            userService.createUser(userParam2);
+
+        }
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
