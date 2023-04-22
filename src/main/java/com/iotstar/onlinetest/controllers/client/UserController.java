@@ -2,27 +2,25 @@ package com.iotstar.onlinetest.controllers.client;
 
 import com.iotstar.onlinetest.DTOs.AccountDTO;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
+import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
+import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.security.jwt.JwtUtils;
-import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.blackList.BlackListService;
-import com.iotstar.onlinetest.services.role.RoleService;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.AuthUtils;
-import com.iotstar.onlinetest.utils.FileUtils;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.modelmapper.ModelMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.plaf.multi.MultiInternalFrameUI;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -39,44 +37,62 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private RoleService roleService;
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private ModelMapper mapper;
-    @Autowired
-    private FileUtils fileUtil;
-    @Autowired
     private BlackListService blackListService;
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
     private AuthUtils authUtils;
 
-    private AccountDTO accountDTO;
+    private UserResponse userResponse;
     @GetMapping("/profile")
-    public ResponseEntity<UserResponse> getUser(){
+    public ResponseEntity<Response> getUser(){
+        Long userId = authUtils.getAccountDetail().getUserId();
+        userResponse = userService.getUser(userId);
         return new ResponseEntity<>(
-                userService.getUser(authUtils.getAccountDetail().getUserId()), HttpStatus.OK);
+                new Response(false, userResponse),
+                HttpStatus.OK);
     }
 
 
     @PostMapping("/delAcc")
-    public void delAcc(@RequestBody UserProfileRequest userProfileRequest){
+    public ResponseEntity<Response> delAcc(@RequestBody UserProfileRequest userProfileRequest){
         Long id = authUtils.getAccountDetail().getAccountId();
+        if (!id.equals(userProfileRequest.getUserId()))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         userProfileRequest.setUserId(id);
         userService.deleteUser(userProfileRequest);
+        return new ResponseEntity<>(
+                new Response(false, new MessageResponse(AppConstant.SUCCESS)),
+                HttpStatus.OK);
     }
 
     @PostMapping("/updateProfile")
-    public void updateProfile(@ModelAttribute UserProfileRequest avatar) throws IOException, GeneralSecurityException {
+    public ResponseEntity<Response> updateProfile(@Valid @ModelAttribute UserProfileRequest userParam1,
+                              @Valid @RequestPart(value = "user", required = false)UserProfileRequest userParam2) {
+        Long userId = authUtils.getAccountDetail().getUserId();
 
+        if(userParam2== null){
+            if (!userId.equals(userParam1.getUserId()))
+                throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+            userResponse = userService.updateUser(userParam1);
+            return new ResponseEntity<>(
+                    new Response(false, userResponse),
+                    HttpStatus.OK);
+        }
+        if (!userId.equals(userParam2.getUserId()))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        userResponse = userService.updateUser(userParam2);
+        return new ResponseEntity<>(
+                new Response(false, userResponse),
+                HttpStatus.OK);
     }
 
     @PostMapping("/updateAvatar")
-    public void updateAvatar(@ModelAttribute MultipartFile avatar) throws IOException, GeneralSecurityException{
+    public ResponseEntity<Response> updateAvatar(@ModelAttribute MultipartFile avatar){
         Long id = authUtils.getAccountDetail().getAccountId();
-        userService.updateAvatar(id, avatar);
+        userResponse = userService.updateAvatar(id, avatar);
+        return ResponseEntity.ok(new Response(false, userResponse));
+
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
@@ -85,6 +101,6 @@ public class UserController {
         if (token != null){
             blackListService.save(token);
         }
-        return ResponseEntity.ok("Successfully logged out");
+        return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));
     }
 }

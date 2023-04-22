@@ -3,16 +3,19 @@ package com.iotstar.onlinetest.controllers.client;
 import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
+import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
 import com.iotstar.onlinetest.services.subject.SubjectService;
 import com.iotstar.onlinetest.services.subject.topic.TopicService;
+import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.AuthUtils;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +40,10 @@ public class SubjectController {
     public ResponseEntity<?> addSubject(@Valid @ModelAttribute SubjectRequest subjectRequest){
         Long userId = authUtils.getAccountDetail().getUserId();
         subjectService.createSubject(subjectRequest, userId);
-        return ResponseEntity.ok(new MessageResponse("successfully"));
+        return ResponseEntity.ok(
+                new Response(false,
+                        new MessageResponse(AppConstant.SUCCESS))
+        );
     }
 
     @RequestMapping("/add/topic")
@@ -46,27 +52,36 @@ public class SubjectController {
         Long userId = authUtils.getAccountDetail().getUserId();
         if (subjectService.existByUserId(topicRequest.getSubjectId(), userId)){
             topicService.create(topicRequest);
-            return ResponseEntity.ok( new MessageResponse("Topic is created success"));
+            return ResponseEntity.ok(
+                    new Response(false,
+                            new MessageResponse(AppConstant.SUCCESS))
+            );
         }
 
-        return ResponseEntity.ok( new MessageResponse("Teacher is denied"));
+         throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
     }
 
     @GetMapping("/id")
-    public ResponseEntity<SubjectResponse> getSubject (@RequestParam Long subjectId){
+    public ResponseEntity<Response> getSubject (@RequestParam Long subjectId){
         SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
-        return ResponseEntity.ok(subjectResponse);
+        return ResponseEntity.ok(
+                new Response(false, subjectResponse)
+        );
     }
 
     @GetMapping({"/", ""})
-    public ResponseEntity<List<SubjectResponse>> getAllSubject(){
+    public ResponseEntity<Response> getAllSubject(){
         List<SubjectResponse> subjectResponses = subjectService.getAllSubject();
-        return ResponseEntity.ok(subjectResponses);
+        return ResponseEntity.ok(
+                new Response(false, subjectResponses)
+        );
     }
 
     @GetMapping("/topicid")
     public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId){
         SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
-        return ResponseEntity.ok(subjectResponse.getTopics());
+        return ResponseEntity.ok(
+                new Response(false, subjectResponse.getTopics())
+        );
     }
 }

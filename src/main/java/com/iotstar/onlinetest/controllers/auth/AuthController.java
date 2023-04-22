@@ -5,11 +5,13 @@ import com.iotstar.onlinetest.DTOs.requests.LoginRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.JwtResponse;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
+import com.iotstar.onlinetest.DTOs.responses.Response;
+import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.security.jwt.JwtUtils;
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
 import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.user.UserService;
-import com.iotstar.onlinetest.utils.AuthUtils;
+import com.iotstar.onlinetest.utils.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +39,27 @@ public class AuthController {
     @Autowired
     private AccountService accountService;
 
+    private UserResponse userResponse;
+
     @RequestMapping(value = "auth/register")
-    public ResponseEntity<?> createUser(@RequestPart("user") UserRequest userRequest,
+    public ResponseEntity<?> createUser(@Valid @ModelAttribute("user")  UserRequest userParam1,
                                         @ModelAttribute MultipartFile avatar,
-                                        BindingResult result)throws Exception {
+                                        @Valid @RequestPart(value = "user", required = false)UserRequest userParam2,
+                                        BindingResult result) {
         if(result.hasErrors()){
             return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
         }
-        userRequest.setAvatar(avatar);
-        userService.createUser(userRequest);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
+        if(userParam2 ==null){
+            userService.createUser(userParam1);
+        }
+        else {
+            userParam2.setAvatar(avatar);
+            userService.createUser(userParam2);
+
+        }
+        MessageResponse messageResponse = new MessageResponse(AppConstant.USER_REGISTER_SUCCESS);
+        return ResponseEntity.ok(new Response(false, messageResponse));
     }
 
     @PostMapping("auth/login")
@@ -62,13 +75,13 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(
+        return ResponseEntity.ok( new Response(false, new JwtResponse(
                 accountDetails.getAccountId(),
                 jwt,
                 accountDetails.getEmail(),
                 accountDetails.getPhoneNumber(),
                 accountDetails.getUsername(),
-                roles)
+                roles))
         );
     }
 
@@ -78,7 +91,8 @@ public class AuthController {
             return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
         }
         accountService.update(accountRequest);
-        return ResponseEntity.ok("Success");
+        MessageResponse messageResponse = new MessageResponse( AppConstant.RESET_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(new Response(false, messageResponse));
     }
 
 
