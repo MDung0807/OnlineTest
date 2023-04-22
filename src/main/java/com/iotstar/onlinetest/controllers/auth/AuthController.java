@@ -1,21 +1,19 @@
 package com.iotstar.onlinetest.controllers.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
 import com.iotstar.onlinetest.DTOs.requests.LoginRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.JwtResponse;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
+import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.security.jwt.JwtUtils;
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
 import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.user.UserService;
-import com.iotstar.onlinetest.utils.AuthUtils;
+import com.iotstar.onlinetest.utils.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -60,7 +58,8 @@ public class AuthController {
             userService.createUser(userParam2);
 
         }
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        MessageResponse messageResponse = new MessageResponse(AppConstant.USER_REGISTER_SUCCESS);
+        return ResponseEntity.ok(new Response(false, messageResponse));
     }
 
     @PostMapping("auth/login")
@@ -76,13 +75,13 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(
+        return ResponseEntity.ok( new Response(false, new JwtResponse(
                 accountDetails.getAccountId(),
                 jwt,
                 accountDetails.getEmail(),
                 accountDetails.getPhoneNumber(),
                 accountDetails.getUsername(),
-                roles)
+                roles))
         );
     }
 
@@ -92,7 +91,8 @@ public class AuthController {
             return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
         }
         accountService.update(accountRequest);
-        return ResponseEntity.ok("Success");
+        MessageResponse messageResponse = new MessageResponse( AppConstant.RESET_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(new Response(false, messageResponse));
     }
 
 

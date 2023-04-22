@@ -42,10 +42,10 @@ public class RoleServiceImp implements RoleService{
     }
 
     @Override
-    public void updateRole(RoleRequest roleRequest) {
+    public RoleResponse updateRole(RoleRequest roleRequest) {
         role = roleDAO.getByRoleName(roleRequest.getRoleName()).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND+roleRequest.getRoleName()));
-        roleDAO.save(role);
+        return mapper.map(roleDAO.save(role), RoleResponse.class);
     }
 
     @Override

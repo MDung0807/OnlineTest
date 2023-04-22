@@ -100,7 +100,11 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public UserResponse updateUser(UserProfileRequest profileRequest){
+        User userOld = userDAO.findById(profileRequest.getUserId()).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+profileRequest.getUserId()));
+        mapper.typeMap(UserRequest.class, User.class).addMappings(mapper-> mapper.skip(User::setAvatar));
         user = mapper.map(profileRequest, User.class);
+        user.setAvatar(userOld.getAvatar());
         user = userDAO.save(user);
         return mapper.map(user, UserResponse.class);
     }

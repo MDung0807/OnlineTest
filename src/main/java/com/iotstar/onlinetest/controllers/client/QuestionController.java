@@ -4,7 +4,9 @@ import com.iotstar.onlinetest.DTOs.requests.QuestionImageRequest;
 import com.iotstar.onlinetest.DTOs.requests.QuestionRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.QuestionResponse;
+import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.services.question.QuestionService;
+import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.AuthUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,35 +34,49 @@ public class QuestionController {
 
     @GetMapping("/inTopic")
     @PreAuthorize("hasRole('student')")
-    public ResponseEntity<List<QuestionResponse>> getQuestionByTopic(@RequestParam Long topicId){
+    public ResponseEntity<Response> getQuestionByTopic(@RequestParam Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
-        return new ResponseEntity<>(questionResponses, HttpStatus.OK);
+        return new ResponseEntity<>(
+                new Response(false, questionResponses),
+                HttpStatus.OK);
     }
 
     @GetMapping("/inUser")
-    public ResponseEntity<List<QuestionResponse>> getQuestionByUser(){
+    public ResponseEntity<Response> getQuestionByUser(){
         Long userId= authUtils.getAccountDetail().getUserId();
         List<QuestionResponse> questionResponses = questionService.getQuestionByUserId(userId);
-        return new ResponseEntity<>(questionResponses, HttpStatus.OK);
+        return new ResponseEntity<>(
+                new Response(false, questionResponses),
+                HttpStatus.OK
+        );
     }
     @RequestMapping("/add")
     public ResponseEntity<?> addQuestion(@Valid @RequestBody QuestionRequest questionRequest, BindingResult result){
         if (result.hasErrors()){
-             result.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(
+                    new Response(true,
+                            new MessageResponse(result.getFieldError().getDefaultMessage())
+                    ), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         Long userId = authUtils.getAccountDetail().getUserId();
         questionService.createQuestion(questionRequest, userId);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(
+                new Response(false,
+                        new MessageResponse(AppConstant.SUCCESS))
+        );
     }
 
     @RequestMapping("/addImg")
     public ResponseEntity<?> addImg(@RequestBody @Valid @ModelAttribute QuestionImageRequest questionImageRequest,
                                          BindingResult result){
         if (result.hasErrors()){
-            return new ResponseEntity<>(HttpStatusCode.valueOf(400));
+            return new ResponseEntity<>(
+                    new Response(true,
+                            new MessageResponse(result.getFieldError().getDefaultMessage())
+            ), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         questionService.updateImg(questionImageRequest);
-        return ResponseEntity.ok(new MessageResponse("Success"));
+        return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));
     }
 }

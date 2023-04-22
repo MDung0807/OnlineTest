@@ -1,6 +1,7 @@
 package com.iotstar.onlinetest.DTOs.requests;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
