@@ -1,6 +1,10 @@
 package com.iotstar.onlinetest.utils;
 
 public class AppConstant {
+
+    public static final String SQL_EXCEPTION = "Error";
+    public static final String INVALID_REQUEST = "Invalid Request";
+    public static final String INTERNAL_VALID = "Internal error";
     public static  final String ACCESS_DENIED = "Access denied";
 
     //SUCCESS

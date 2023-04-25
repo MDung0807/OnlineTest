@@ -2,6 +2,7 @@ package com.iotstar.onlinetest.exceptions;
 
 import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.utils.AppConstant;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -10,9 +11,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -31,7 +34,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Response> invalidRequest(
             InvalidRequestException e, WebRequest request){
         ExceptionDetails details = new ExceptionDetails(
-                e.getMessage(),
+                AppConstant.INVALID_REQUEST,
                 LocalDateTime.now());
         return new ResponseEntity<>(new Response(true, details),HttpStatus.BAD_REQUEST);
     }
@@ -80,5 +83,23 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.ok(new Response(true, details));
+    }
+
+    @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
+    public ResponseEntity<Response> internalException (){
+        ExceptionDetails details = new ExceptionDetails(AppConstant.INTERNAL_VALID, LocalDateTime.now());
+        return new ResponseEntity<>(
+                new Response(true, details),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<Response> internalError(){
+        ExceptionDetails details = new ExceptionDetails(AppConstant.SQL_EXCEPTION, LocalDateTime.now());
+        return new ResponseEntity<>(
+                new Response(true, details),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
