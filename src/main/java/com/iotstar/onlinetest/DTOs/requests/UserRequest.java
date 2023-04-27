@@ -19,9 +19,9 @@ public class UserRequest {
     private String firstName;
     @Size(max = 30, message = "username have length greater 6")
     private String lastName;
-    @Pattern(regexp = "^(0)(?=.*[0-9]).{9}$")
+    @Pattern(regexp = "^(0)(?=.*[0-9]).{9}$", message = "Phone number incorrect format")
     private String phoneNumber;
-    @Size(min = 6, max = 15, message = "username have length greater 6")
+    @Size(min = 5, max = 15, message = "username have length greater 6")
     private String username;
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,30}$", message = "password not strong")
     private String password;

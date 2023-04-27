@@ -7,11 +7,12 @@ import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Topic;
 import com.iotstar.onlinetest.repositories.subject.SubjectDAO;
 import com.iotstar.onlinetest.repositories.subject.TopicDAO;
-import com.iotstar.onlinetest.services.subject.SubjectService;
+import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,15 +28,23 @@ public class TopicServiceImp implements TopicService{
     @Autowired
     private SubjectDAO subjectDAO;
     @Autowired
-    private SubjectService subjectService;
+    private UserService userService;
 
     @Autowired
     private FileUtils fileUtils;
     private Topic topic;
     private Subject subject;
 
+    private String uploadImage(MultipartFile fileImage, String fileName){
+        String urlImage = null;
+        if(fileImage !=  null){
+            urlImage = fileUtils.upload(fileImage, AppConstant.IMG_NAME_TOPIC+fileName);
+        }
+        return urlImage;
+    }
+
     private Topic uploadImage(MultipartFile fileInput, Topic topic){
-        topic.setImage(fileUtils.upload(fileInput, AppConstant.IMG_NAME_TOPIC+topic.getId()));
+        topic.setImage(uploadImage(fileInput, topic.getName()));
         return topicDAO.save(topic);
     }
     @Override
@@ -44,10 +53,12 @@ public class TopicServiceImp implements TopicService{
         subject =subjectDAO.findById(topicRequest.getSubjectId()).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.SUBJECT_NOTFOUND+topicRequest.getSubjectId()));
 
+        mapper.typeMap(TopicRequest.class, Topic.class).addMappings(mapper -> mapper.skip(Topic::setImage));
         topic = mapper.map(topicRequest, Topic.class);
 
 
         topic.setSubject(subject);
+        topic.setStatus(1);
         topic =topicDAO.save(topic);
         if(topicRequest.getImage()!=null){
             topic = uploadImage(topicRequest.getImage(), topic);
@@ -56,9 +67,11 @@ public class TopicServiceImp implements TopicService{
 
 
     @Override
-    public void del(Long id) {
-        topic = topicDAO.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+    public void del(Long topicId, Long userId) {
+        topic = topicDAO.findById(topicId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
+        if (!userService.existsSubjectById(1L, topic.getSubject().getSubjectId()))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         topic.setStatus(0);
         topic=topicDAO.save(topic);
     }

@@ -1,7 +1,9 @@
 package com.iotstar.onlinetest.utils;
 
-public class AppConstant {
+import org.springframework.security.core.parameters.P;
 
+public class AppConstant {
+    public static final String BAD_REQUEST = "Bad Request";
     public static final String SQL_EXCEPTION = "Error";
     public static final String INVALID_REQUEST = "Invalid Request";
     public static final String INTERNAL_VALID = "Internal error";
@@ -17,6 +19,7 @@ public class AppConstant {
     public static final String RESET_PASSWORD_SUCCESS = "password reset success";
     public static final String INFO_ACC_NOTFOUND = "Not found information account: ";
     public static final String ACCOUNT_EXIST= "Account already exists";
+    public static final String USERNAME_EXISTS = "Username already exists";
 
     //SUBJECT
     public static final String SUBJECT_EXIST="Subject already exists";
@@ -34,6 +37,9 @@ public class AppConstant {
     public static final String USER_REGISTER_SUCCESS = "User register success";
     public static final String USER_NOTFOUND="Not found userId: ";
     public static final String IMG_NAME_USER = "user_image";
+    public static final String EMAIL_EXISTS = "Email already exists";
+    public static final String PHONE_NUMBER_EXISTS = "Phone Number already exists";
+    public static final String USER_HAVEN_SUBJECT = "User haven subject";
     //TOPIC
     public static final String TOPIC_NOTFOUND="Not found topicId: ";
     public static final String IMG_NAME_TOPIC="topic_img_";

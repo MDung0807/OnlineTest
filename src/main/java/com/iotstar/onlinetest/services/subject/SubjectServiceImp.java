@@ -10,6 +10,7 @@ import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.repositories.subject.SubjectDAO;
+import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,8 @@ public class SubjectServiceImp implements SubjectService{
 
     @Autowired
     private SubjectDAO subjectDAO;
+    @Autowired
+    private UserService userService;
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -58,6 +61,8 @@ public class SubjectServiceImp implements SubjectService{
             }
         }
         return false;
+
+
     }
 
     @Override

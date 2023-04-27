@@ -42,22 +42,20 @@ public class AuthController {
     private UserResponse userResponse;
 
     @RequestMapping(value = "auth/register")
-    public ResponseEntity<?> createUser(@Valid @ModelAttribute("user")  UserRequest userParam1,
+    public ResponseEntity<?> createUser(@Valid @ModelAttribute  UserRequest userParam1,
                                         @ModelAttribute MultipartFile avatar,
-                                        @Valid @RequestPart(value = "user", required = false)UserRequest userParam2,
-                                        BindingResult result) {
-        if(result.hasErrors()){
-            return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
-        }
+                                        @Valid @RequestPart(value = "user", required = false)UserRequest userParam2) {
 
+        UserRequest userRequest;
         if(userParam2 ==null){
-            userService.createUser(userParam1);
+            userRequest = userParam1;
         }
         else {
-            userParam2.setAvatar(avatar);
-            userService.createUser(userParam2);
+            userRequest = userParam2;
 
         }
+        userRequest.setAvatar(avatar);
+        userService.createUser(userRequest);
         MessageResponse messageResponse = new MessageResponse(AppConstant.USER_REGISTER_SUCCESS);
         return ResponseEntity.ok(new Response(false, messageResponse));
     }

@@ -16,5 +16,5 @@ public interface SubjectService {
 
     public List<SubjectResponse> getAllSubject();
 
-    void delSubject(Long id);
+    public void delSubject(Long id);
 }

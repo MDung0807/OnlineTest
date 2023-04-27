@@ -2,6 +2,7 @@ package com.iotstar.onlinetest.services.account;
 
 import com.iotstar.onlinetest.DTOs.AccountDTO;
 import com.iotstar.onlinetest.DTOs.requests.AccountRequest;
+import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.models.User;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface AccountService{
     public void update(AccountRequest accountRequest);
 
     public void delAcc(AccountDTO accountDTO);
+    public AccountDTO updateRole(Long userId, String roleName);
+    public Boolean existsByUsername(String username);
 }

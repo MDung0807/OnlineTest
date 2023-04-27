@@ -9,7 +9,7 @@ import java.util.List;
 public interface TopicService {
     public void create(TopicRequest topicResponse);
 
-    public void del(Long id);
+    void del(Long topicId, Long userId);
 
     public void update(TopicRequest topicResponse);
 

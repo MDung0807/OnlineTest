@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class Response {
     private Boolean error;
-    Object data;
+    private Object data;
 }

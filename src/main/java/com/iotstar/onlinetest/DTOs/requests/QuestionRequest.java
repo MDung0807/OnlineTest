@@ -12,7 +12,7 @@ import java.util.List;
 public class QuestionRequest {
     private Long questionId;
     private String question;
-    private int status;
+    private MultipartFile image;
     private Long topicId;
     private Long userId;
     private List<AnswerDTO> answers;

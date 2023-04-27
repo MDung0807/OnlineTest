@@ -70,6 +70,8 @@ public class AccountServiceImp implements AccountService{
     @Override
     @Transactional
     public void createAccount(AccountDTO accountDTO){
+        if (existsByUsername(accountDTO.getUsername()))
+            throw new ResourceExistException(AppConstant.USERNAME_EXISTS);
         account = mapper.map(accountDTO, Account.class);
         role = roleDAO.getByRoleName(accountDTO.getRoleName()).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND + accountDTO.getRoleName()));
@@ -94,8 +96,33 @@ public class AccountServiceImp implements AccountService{
 
         if (account.getUser().getEmail().equals(accountRequest.getEmail())
         && account.getUser().getPhoneNumber().equals(accountRequest.getPhoneNumber())) {
-            account.setPassword(accountRequest.getPassword());
+            account.setPassword(encoder.encode(accountRequest.getPassword()));
             accountDAO.save(account);
         }
+    }
+
+    @Override
+    public AccountDTO updateRole(Long userId, String roleName){
+        user = userDAO.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        account = accountDAO.findByUser_UserId(userId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
+
+        role = roleDAO.getByRoleName(roleName).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND+roleName));
+        account.setRole(role);
+        account = accountDAO.save(account);
+        accountDTO = new AccountDTO();
+        accountDTO.setAccountId(account.getAccountId());
+        accountDTO.setRoleName(account.getRole().getRoleName());
+        accountDTO.setUsername(account.getUsername());
+        accountDTO.setUser(account.getUser());
+        accountDTO.setPassword(account.getPassword());
+        return accountDTO;
+    }
+
+    @Override
+    public Boolean existsByUsername(String username) {
+        return accountDAO.existsByUsername(username);
     }
 }

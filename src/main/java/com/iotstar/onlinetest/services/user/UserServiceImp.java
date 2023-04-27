@@ -5,6 +5,7 @@ import com.iotstar.onlinetest.DTOs.AccountDTO;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
+import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.exceptions.UserNotFoundException;
 import com.iotstar.onlinetest.models.User;
@@ -16,11 +17,13 @@ import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Service
@@ -47,9 +50,23 @@ public class UserServiceImp implements UserService {
         }
         return urlImage;
     }
+
+    @Override
+    public Boolean existsEmail(String emailInput){
+        return userDAO.existsByEmail(emailInput);
+    }
+    @Override
+    public Boolean existsPhoneNumber(String phoneNumber){
+        return userDAO.existsByPhoneNumber(phoneNumber);
+    }
     @Override
     @Transactional
     public void createUser(UserRequest userRequest) {
+        if (existsEmail(userRequest.getEmail()))
+            throw new ResourceExistException(AppConstant.EMAIL_EXISTS);
+        if(existsPhoneNumber(userRequest.getPhoneNumber()))
+            throw new ResourceExistException(AppConstant.PHONE_NUMBER_EXISTS);
+
         // skip map avatar
         mapper.typeMap(UserRequest.class, User.class).addMappings(mapper-> mapper.skip(User::setAvatar));
         // Get user
@@ -107,5 +124,22 @@ public class UserServiceImp implements UserService {
         user.setAvatar(userOld.getAvatar());
         user = userDAO.save(user);
         return mapper.map(user, UserResponse.class);
+    }
+
+    @Override
+    public Boolean existsSubject(Long userId) {
+        user = userDAO.findById(userId).orElseThrow(()->
+                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        return user.getSubject() != null;
+    }
+
+    @Override
+    public Boolean existsSubjectById(Long userId, Long subjectId){
+        user = userDAO.findById(userId).orElseThrow(()->
+                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        if (user.getSubject()!= null){
+            return Objects.equals(user.getSubject().getSubjectId(), subjectId);
+        }
+        return false;
     }
 }

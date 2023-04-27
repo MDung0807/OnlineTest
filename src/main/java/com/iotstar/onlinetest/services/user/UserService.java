@@ -15,4 +15,8 @@ public interface UserService {
     public UserResponse updateAvatar(Long id, MultipartFile avatar);
 
     public UserResponse updateUser(UserProfileRequest userProfileRequest);
+    public Boolean existsEmail (String email);
+    public Boolean existsPhoneNumber(String PhoneNumber);
+    public Boolean existsSubject(Long userId);
+    public Boolean existsSubjectById(Long userId, Long subjectId);
 }

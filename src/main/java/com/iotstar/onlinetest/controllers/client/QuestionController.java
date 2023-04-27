@@ -51,13 +51,7 @@ public class QuestionController {
         );
     }
     @RequestMapping("/add")
-    public ResponseEntity<?> addQuestion(@Valid @RequestBody QuestionRequest questionRequest, BindingResult result){
-        if (result.hasErrors()){
-            return new ResponseEntity<>(
-                    new Response(true,
-                            new MessageResponse(result.getFieldError().getDefaultMessage())
-                    ), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<?> addQuestion(@Valid @RequestBody QuestionRequest questionRequest){
         Long userId = authUtils.getAccountDetail().getUserId();
         questionService.createQuestion(questionRequest, userId);
         return ResponseEntity.ok(
