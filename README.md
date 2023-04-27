@@ -1,6 +1,6 @@
 # API Online Test
-**API use spring boot, has the function of authorization, authentication user**
-### Build by MDung0807 and group
+**API use spring boot, has the function of authorization, authentication user and handling exception**
+### Build by MDung0807
 
 ### Description
 1. API used by student and teacher
