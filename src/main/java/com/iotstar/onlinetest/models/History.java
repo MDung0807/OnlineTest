@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
+@Table(name = "historis")
 public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,15 +20,15 @@ public class History {
     @JsonIgnore
     private Test test;
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "questionId")
     @JsonIgnore
-    private Question question;
+    private List<Question> question;
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "answerId")
     @JsonIgnore
-    private Answer answer;
+    private List<Answer> answer;
 
     @ManyToOne
     @JoinColumn(name = "userId")

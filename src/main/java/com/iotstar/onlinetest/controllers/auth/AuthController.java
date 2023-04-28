@@ -14,11 +14,14 @@ import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +47,11 @@ public class AuthController {
     @RequestMapping(value = "auth/register")
     public ResponseEntity<?> createUser(@Valid @ModelAttribute  UserRequest userParam1,
                                         @ModelAttribute MultipartFile avatar,
-                                        @Valid @RequestPart(value = "user", required = false)UserRequest userParam2) {
+                                        @RequestPart(value = "user", required = false) @Valid UserRequest userParam2,
+                                        BindingResult result) throws BindException {
+        if (result.hasErrors()){
+            throw new BindException(result);
+        }
 
         UserRequest userRequest;
         if(userParam2 ==null){

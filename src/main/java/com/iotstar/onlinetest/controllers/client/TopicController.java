@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/subject")
+@RequestMapping("/topic")
 public class TopicController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class TopicController {
     @Autowired
     private AuthUtils authUtils;
 
-    @RequestMapping("/add/topic")
+    @RequestMapping("/add")
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     public ResponseEntity<?> addTopic (@ModelAttribute TopicRequest param1,
                                        @ModelAttribute MultipartFile image,
@@ -56,7 +56,7 @@ public class TopicController {
     }
 
 
-    @GetMapping("/topicid")
+    @GetMapping({"", "/"})
     public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId){
         SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
         return ResponseEntity.ok(
@@ -64,7 +64,7 @@ public class TopicController {
         );
     }
 
-    @GetMapping("/topic/del")
+    @GetMapping("/del")
     public ResponseEntity<Response> delTopicById(@RequestParam Long topicId){
         Long userId = authUtils.getAccountDetail().getUserId();
         topicService.del(topicId, userId);

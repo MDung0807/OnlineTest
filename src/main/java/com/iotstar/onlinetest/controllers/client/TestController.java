@@ -13,18 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/test")
-@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+
 public class TestController {
 
     @Autowired
     private TestService testService;
 
-
-
-    @RequestMapping("/add")
+    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    @PostMapping("/add")
     public ResponseEntity<?> createTest (@RequestBody TestRequest testRequest){
         testService.create(testRequest);
         return ResponseEntity.ok(
@@ -33,7 +34,6 @@ public class TestController {
     }
 
     @GetMapping({"/", ""})
-    @PreAuthorize("hasRole(@environment.getProperty('ROLE_STUDENT'))")
     public ResponseEntity<?> getTest (@RequestParam Long testId){
         TestResponse testResponse = testService.getById(testId);
         return new ResponseEntity<>(
@@ -41,5 +41,13 @@ public class TestController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/testInTopic")
+    public ResponseEntity<Response> getTestInTopic(@RequestParam("topicId") Long topicId){
+        List<TestResponse> testResponses = testService.getByTopicId(topicId);
+        return new ResponseEntity<>(
+                new Response(false, testResponses),
+                HttpStatus.OK
+        );
+    }
 
 }

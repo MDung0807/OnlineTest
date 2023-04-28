@@ -33,15 +33,12 @@ public class SubjectController {
     @Autowired
     private SubjectService subjectService;
     @Autowired
-    private TopicService topicService;
-    @Autowired
     private UserService userService;
     @Autowired
     private AuthUtils authUtils;
-    @Autowired
-    private ModelMapper mapper;
 
-    @RequestMapping("/add/subject")
+
+    @RequestMapping("/add")
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     public ResponseEntity<?> addSubject(@Valid @ModelAttribute SubjectRequest subjectRequest){
         Long userId = authUtils.getAccountDetail().getUserId();

@@ -1,6 +1,5 @@
 package com.iotstar.onlinetest.controllers.client;
 
-import com.iotstar.onlinetest.DTOs.AccountDTO;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
@@ -20,10 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 
 @RestController
 @CrossOrigin
@@ -57,37 +52,39 @@ public class UserController {
     }
 
 
-    @PostMapping("/delAcc")
-    public ResponseEntity<Response> delAcc(@RequestBody UserProfileRequest userProfileRequest){
+    @GetMapping("/delAcc")
+    public ResponseEntity<Response> delAcc(@RequestParam("userId") Long userId){
         Long id = authUtils.getAccountDetail().getAccountId();
-        if (!id.equals(userProfileRequest.getUserId()))
+        if (!id.equals(userId))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
-        userProfileRequest.setUserId(id);
-        userService.deleteUser(userProfileRequest);
+
+        userService.deleteUser(userId);
         return new ResponseEntity<>(
                 new Response(false, new MessageResponse(AppConstant.SUCCESS)),
                 HttpStatus.OK);
     }
 
     @PostMapping("/updateProfile")
-    public ResponseEntity<Response> updateProfile(@Valid @ModelAttribute UserProfileRequest userParam1,
+    public ResponseEntity<Response> updateProfile(@Valid @RequestBody UserProfileRequest userParam1,
                               @Valid @RequestPart(value = "user", required = false)UserProfileRequest userParam2) {
         Long userId = authUtils.getAccountDetail().getUserId();
-
+        UserProfileRequest userProfileRequest = null;
         if(userParam2== null){
             if (!userId.equals(userParam1.getUserId()))
                 throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
-            userResponse = userService.updateUser(userParam1);
-            return new ResponseEntity<>(
-                    new Response(false, userResponse),
-                    HttpStatus.OK);
+            userProfileRequest = userParam1;
         }
-        if (!userId.equals(userParam2.getUserId()))
-            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
-        userResponse = userService.updateUser(userParam2);
+        else {
+            if (!userId.equals(userParam2.getUserId()))
+                throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+            userProfileRequest = userParam2;
+        }
+        userResponse = userService.updateUser(userProfileRequest);
         return new ResponseEntity<>(
                 new Response(false, userResponse),
-                HttpStatus.OK);
+                HttpStatus.OK
+        );
+
     }
 
     @PostMapping("/updateAvatar")

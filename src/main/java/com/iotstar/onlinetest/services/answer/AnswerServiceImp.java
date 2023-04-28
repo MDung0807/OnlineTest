@@ -1,9 +1,11 @@
 package com.iotstar.onlinetest.services.answer;
 
 import com.iotstar.onlinetest.DTOs.AnswerDTO;
+import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Answer;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.repositories.AnswerDAO;
+import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,11 @@ public class AnswerServiceImp implements AnswerService{
     private AnswerDAO answerDAO;
 
     private Answer answer;
+
+    public Answer getAnswerReturnAnswer(Long answerId){
+        return answerDAO.findById(answerId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.NOT_FOUND));
+    }
     @Override
     public void createAnswers(List<AnswerDTO> answerDTOs, Question question) {
         List<Answer> answers = new ArrayList<>();

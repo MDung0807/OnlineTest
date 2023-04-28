@@ -51,6 +51,8 @@ public class SubjectServiceImp implements SubjectService{
         return mapper.map(subject, SubjectResponse.class);
     }
 
+
+    //deprecated
     @Override
     public boolean existByUserId(Long subjectId, Long userId){
         subject = subjectDAO.findById(subjectId).orElseThrow(()->
@@ -79,22 +81,20 @@ public class SubjectServiceImp implements SubjectService{
     @Transactional
     public void createSubject(SubjectRequest subjectRequest, Long userId) {
         if (subjectDAO.existsByName(subjectRequest.getName())){
-            throw new ResourceExistException(AppConstant.SUBJECT_EXIST);
+            userService.addSubjectInUser(userId, subjectDAO.findByName(subjectRequest.getName()));
+            return;
         }
+
+        mapper.typeMap(SubjectRequest.class, Subject.class).addMappings(mapper -> mapper.skip(Subject::setImage));
         subject = mapper.map(subjectRequest, Subject.class);
         subject.setStatus(1);
         subject = subjectDAO.save(subject);
-        if (subjectRequest.getImage() != null){
-            subject = uploadImage(subjectRequest.getImage(), subject);
-        }
-
-        User user = userDAO.getUserByUserId(userId).orElseThrow(()->
-                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
-        user.setSubject(subject);
-        userDAO.save(user);
+        subject = uploadImage(subjectRequest.getImage(), subject);
+        userService.addSubjectInUser(userId, subject);
     }
 
     @Override
+    @Transactional
     public void updateSubject(SubjectRequest subjectRequest) {
         subject = subjectDAO.findById(subjectRequest.getSubjectId()).orElseThrow(()->
                 new UserNotFoundException(AppConstant.SUBJECT_NOTFOUND+subjectRequest.getSubjectId()));
@@ -107,6 +107,7 @@ public class SubjectServiceImp implements SubjectService{
     }
 
     @Override
+    @Transactional
     public void delSubject(Long id) {
         subject = subjectDAO.findById(id).orElseThrow(()->
                 new UserNotFoundException(AppConstant.SUBJECT_NOTFOUND+id));

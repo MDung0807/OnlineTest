@@ -25,10 +25,29 @@ import java.util.List;
 
 @Service
 public class QuestionServiceImp implements QuestionService{
+
+
+    @Autowired
+    private ModelMapper mapper;
+    @Autowired
+    private QuestionDAO questionDAO;
+    @Autowired
+    private FileUtils fileUtils;
+    @Autowired
+    private AnswerService answerService;
+    @Autowired
+    private UserDAO userDAO;
+
+    private Question question;
+
+    public Question getQuestionReturnQuestion(Long questionId){
+        return questionDAO.findById(questionId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+questionId));
+    }
+
     @Override
     public QuestionResponse getQuestionById(Long id) {
-        question = questionDAO.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+id));
+        question = getQuestionReturnQuestion(id);
         return mapper.map(question, QuestionResponse.class);
     }
 
@@ -47,7 +66,7 @@ public class QuestionServiceImp implements QuestionService{
     @Override
     public List<QuestionResponse>  getQuestionByUserId(Long id) {
         List<Question> questions = questionDAO.findByUserUserId(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+id));
 
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question i: questions){
@@ -56,37 +75,23 @@ public class QuestionServiceImp implements QuestionService{
         return questionResponses;
     }
 
-    @Autowired
-    private ModelMapper mapper;
-    @Autowired
-    private QuestionDAO questionDAO;
-    @Autowired
-    private FileUtils fileUtils;
-    @Autowired
-    private AnswerService answerService;
-
-    private Question question;
-    @Autowired
-    private UserDAO userDAO;
-
 
     @Override
     public Question findById(Long id){
-        question = questionDAO.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+id));
+        question = getQuestionReturnQuestion(id);
         return question;
     }
 
-    private Question uploadImage(MultipartFile fileInput, Long id){
-        question = findById(id);
-        question.setImage(fileUtils.upload(fileInput, AppConstant.IMG_NAME_QUESTION+id));
-        question =questionDAO.save(question);
-        return question;
+    private String getUrlImage(MultipartFile fileInput, Long id){
+
+        return fileUtils.upload(fileInput, AppConstant.IMG_NAME_QUESTION+id);
     }
 
     @Override
     public Question updateImg(QuestionImageRequest questionImageRequest){
-        return uploadImage(questionImageRequest.getImage(), questionImageRequest.getQuestionId());
+        question = findById(question.getQuestionId());
+        question.setImage(getUrlImage(questionImageRequest.getImage(), questionImageRequest.getQuestionId()));
+        return questionDAO.save(question);
     }
 
     @Override
@@ -98,10 +103,10 @@ public class QuestionServiceImp implements QuestionService{
                 new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
         question = mapper.map(questionRequest, Question.class);
         question.setStatus(1);
-
         question.setUser(user);
         question = questionDAO.save(question);
-
+        question.setImage(getUrlImage(questionRequest.getImage(), question.getQuestionId()));
+        question = questionDAO.save(question);
         answerService.createAnswers(questionRequest.getAnswers(), question);
         return question;
     }

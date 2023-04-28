@@ -34,6 +34,11 @@ public class TestServiceImp implements TestService{
     private QuestionService questionService;
 
     private Test test;
+
+    public Test getTestReturnTest(Long testId){
+        return testDAO.findById(testId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TEST_NOTFOUND+testId));
+    }
     @Override
     public Test create(TestRequest testRequest) {
         List<Question> questions = new ArrayList<>();
@@ -65,5 +70,18 @@ public class TestServiceImp implements TestService{
         TestResponse testResponse = mapper.map(test, TestResponse.class);
 
         return testResponse;
+    }
+
+    @Override
+    public List<TestResponse> getByTopicId(Long topicId){
+        Topic topic = topicService.findTopicById(topicId);
+        List<Topic> topics = new ArrayList<>();
+        topics.add(topic);
+       List<Test> tests= testDAO.findByTopics(topic);
+        List<TestResponse> responses = new ArrayList<>();
+        for (Test i: tests){
+            responses.add(mapper.map(i, TestResponse.class));
+        }
+        return responses;
     }
 }

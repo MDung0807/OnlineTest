@@ -11,7 +11,6 @@ public class TestRequest {
     private String testName;
     private int time;
     private int quantity;
-    private int status;
     private List<Long> questionIds;
     private List<Long> topicIds;
 }

@@ -50,7 +50,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<Scores> scores;
+    private List<Score> scores;
 
 
     @OneToMany(mappedBy = "user")

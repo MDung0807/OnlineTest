@@ -1,8 +1,10 @@
 package com.iotstar.onlinetest.utils;
 
 import org.springframework.security.core.parameters.P;
+import org.springframework.web.multipart.MultipartFile;
 
 public class AppConstant {
+    public static final String NOT_FOUND = "Not Found";
     public static final String BAD_REQUEST = "Bad Request";
     public static final String SQL_EXCEPTION = "Error";
     public static final String INVALID_REQUEST = "Invalid Request";
@@ -16,6 +18,7 @@ public class AppConstant {
     public static final String UNAUTHORIZED_ERROR= "The login session has expired, please login again";
 
     // ACCOUNT
+    public static final String ACCOUNT_LOCKED= "Account has been locked";
     public static final String RESET_PASSWORD_SUCCESS = "password reset success";
     public static final String INFO_ACC_NOTFOUND = "Not found information account: ";
     public static final String ACCOUNT_EXIST= "Account already exists";

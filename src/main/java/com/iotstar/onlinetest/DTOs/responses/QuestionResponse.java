@@ -15,6 +15,5 @@ public class QuestionResponse {
     private Long questionId;
     private String question;
     private String image;
-    private int status;
     private List<AnswerResponse> answers;
 }

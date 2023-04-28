@@ -14,6 +14,5 @@ public class QuestionRequest {
     private String question;
     private MultipartFile image;
     private Long topicId;
-    private Long userId;
     private List<AnswerDTO> answers;
 }

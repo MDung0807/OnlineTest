@@ -8,6 +8,7 @@ import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.exceptions.UserNotFoundException;
+import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
@@ -51,6 +52,10 @@ public class UserServiceImp implements UserService {
         return urlImage;
     }
 
+    public User getUserReturnUser(Long userId){
+        return userDAO.findById(userId).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
+    }
+
     @Override
     public Boolean existsEmail(String emailInput){
         return userDAO.existsByEmail(emailInput);
@@ -88,8 +93,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void deleteUser(UserProfileRequest userProfileRequest) {
-        user = userDAO.findById(userProfileRequest.getUserId()).get();
+    public void deleteUser(Long userId) {
+        user = getUserReturnUser(userId);
         user.setStatus(0);
         user.getAccount().setStatus(0);
         userDAO.save(user);
@@ -99,15 +104,14 @@ public class UserServiceImp implements UserService {
     @Transactional
     public UserResponse getUser(Long userId) {
 
-        user = userDAO.getUserByUserId(userId).orElseThrow(()->
-                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        user = getUserReturnUser(userId);
         return mapper.map(user, UserResponse.class);
     }
 
     @Override
     @Transactional
     public UserResponse updateAvatar(Long id, MultipartFile avatar){
-        user = userDAO.findById(id).orElseThrow(()-> new ResourceNotFoundException(AppConstant.USER_NOTFOUND+id));
+        user = getUserReturnUser(id);
         String url = uploadImage(avatar, AppConstant.IMG_NAME_USER+id);
         user.setAvatar(url);
         user = userDAO.save(user);
@@ -116,30 +120,48 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public UserResponse updateUser(UserProfileRequest profileRequest){
-        User userOld = userDAO.findById(profileRequest.getUserId()).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+profileRequest.getUserId()));
-        mapper.typeMap(UserRequest.class, User.class).addMappings(mapper-> mapper.skip(User::setAvatar));
-        user = mapper.map(profileRequest, User.class);
-        user.setAvatar(userOld.getAvatar());
+    public UserResponse updateUser(UserProfileRequest userProfileRequest){
+        user = getUserReturnUser(userProfileRequest.getUserId());
+
+        //email input != email old => check email input exists??
+        if(!user.getEmail().equals(userProfileRequest.getEmail()))
+            if (existsEmail(userProfileRequest.getEmail()))
+                throw new ResourceExistException(AppConstant.EMAIL_EXISTS);
+
+        if (!user.getPhoneNumber().equals(userProfileRequest.getPhoneNumber()))
+            if(existsPhoneNumber(userProfileRequest.getPhoneNumber()))
+                throw new ResourceExistException(AppConstant.PHONE_NUMBER_EXISTS);
+        // change data
+        user.setGender(userProfileRequest.getGender());
+        user.setFirstName(userProfileRequest.getFirstName());
+        user.setLastName(userProfileRequest.getLastName());
+        user.setEmail(userProfileRequest.getEmail());
+        user.setPhoneNumber(userProfileRequest.getPhoneNumber());
+
         user = userDAO.save(user);
         return mapper.map(user, UserResponse.class);
     }
 
     @Override
     public Boolean existsSubject(Long userId) {
-        user = userDAO.findById(userId).orElseThrow(()->
-                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        user = getUserReturnUser(userId);
         return user.getSubject() != null;
     }
 
     @Override
     public Boolean existsSubjectById(Long userId, Long subjectId){
-        user = userDAO.findById(userId).orElseThrow(()->
-                new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        user = getUserReturnUser(userId);
         if (user.getSubject()!= null){
             return Objects.equals(user.getSubject().getSubjectId(), subjectId);
         }
         return false;
+    }
+
+    //Insert into user value subject
+    @Override
+    public void addSubjectInUser(Long userId, Subject subject){
+        user = getUserReturnUser(userId);
+        user.setSubject(subject);
+        userDAO.save(user);
     }
 }

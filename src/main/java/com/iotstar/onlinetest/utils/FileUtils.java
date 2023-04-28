@@ -14,6 +14,9 @@ public class FileUtils {
     @Autowired
     Cloudinary getCloudinary;
     public String upload(MultipartFile fileInput, String fileName) {
+        String url = null;
+        if (fileInput == null)
+            return url;
         try {
             java.io.File file = new java.io.File(System.getProperty("java.io.tmpdir")+"/"+fileName);
             fileInput.transferTo(file);
@@ -25,7 +28,7 @@ public class FileUtils {
         }
 
 // Transform
-        String url = getCloudinary.url().generate(fileName);
+        url = getCloudinary.url().generate(fileName);
         return url;
     }
     public void destroyFile(String fileName) {

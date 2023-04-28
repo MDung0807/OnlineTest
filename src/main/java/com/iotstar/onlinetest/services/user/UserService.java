@@ -3,12 +3,14 @@ package com.iotstar.onlinetest.services.user;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
+import com.iotstar.onlinetest.models.Subject;
+import com.iotstar.onlinetest.models.User;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     public void createUser(UserRequest userRequest);
 
-    public void deleteUser(UserProfileRequest userProfileRequest);
+    public void deleteUser(Long userId);
 
     public UserResponse getUser(Long userId);
 
@@ -19,4 +21,5 @@ public interface UserService {
     public Boolean existsPhoneNumber(String PhoneNumber);
     public Boolean existsSubject(Long userId);
     public Boolean existsSubjectById(Long userId, Long subjectId);
+    public void addSubjectInUser(Long userid, Subject subject);
 }

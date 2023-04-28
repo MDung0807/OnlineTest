@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +27,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class ExceptionHandlerController{
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -113,9 +114,12 @@ public class ExceptionHandlerController{
 
 //    @ExceptionHandler(MethodArgumentNotValidException.class)
 //    public ResponseEntity<Response> validateException(MethodArgumentNotValidException ex){
-//        ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
+//        Map<String, String> errors = new HashMap<>();
+//        for (FieldError error: ex.getFieldErrors()){
+//            errors.put(error.getField(), error.getDefaultMessage());
+//        }
 //        return new ResponseEntity<>(
-//                new Response(true, details),
+//                new Response(true, errors),
 //                HttpStatus.BAD_REQUEST
 //        );
 //    }
@@ -132,12 +136,21 @@ public class ExceptionHandlerController{
         );
     }
 
-    @ExceptionHandler(HttpClientErrorException.UnsupportedMediaType.class)
-    public ResponseEntity<Response> unSupportMediaType(HttpClientErrorException.UnsupportedMediaType ex){
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<Response> unSupportMediaType(HttpMediaTypeNotSupportedException ex){
         ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(
                 new Response(true, details),
                 HttpStatus.UNSUPPORTED_MEDIA_TYPE
+        );
+    }
+
+    @ExceptionHandler(StateUserNotExists.class)
+    public ResponseEntity<Response> accountHasLocked(StateUserNotExists ex){
+        ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(
+                new Response(true, details),
+                HttpStatus.OK
         );
     }
 }
