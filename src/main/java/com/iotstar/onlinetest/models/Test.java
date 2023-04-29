@@ -37,9 +37,9 @@ public class Test {
     @Column(nullable = false)
     private LocalDateTime dateCreate;
 
-    @OneToMany(mappedBy = "test")
-    @JsonIgnore
-    List<Score> scores;
+//    @OneToMany(mappedBy = "test")
+//    @JsonIgnore
+//    List<Score> scores;
 
     @ManyToMany
     @JoinTable(

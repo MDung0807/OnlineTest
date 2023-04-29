@@ -2,6 +2,7 @@ package com.iotstar.onlinetest.services.subject;
 
 import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
 import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface SubjectService {
     public List<SubjectResponse> getAllSubject();
 
     public void delSubject(Long id);
+    public void updateImage(Long id, MultipartFile image, Long userId);
 }

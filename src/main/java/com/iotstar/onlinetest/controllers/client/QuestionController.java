@@ -23,9 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/question")
+//@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -50,8 +51,8 @@ public class QuestionController {
                 HttpStatus.OK
         );
     }
-    @RequestMapping(value = "/add", produces = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> addQuestion(@Valid @ModelAttribute QuestionRequest param1,
+    @PostMapping(value = "/add")
+    public ResponseEntity<Response> addQuestion(@Valid @ModelAttribute QuestionRequest param1,
                                          @ModelAttribute MultipartFile image,
                                          @Valid @RequestPart(value = "question", required = false) QuestionRequest param2){
         QuestionRequest questionRequest;
@@ -64,13 +65,13 @@ public class QuestionController {
         }
         Long userId = authUtils.getAccountDetail().getUserId();
         questionService.createQuestion(questionRequest, userId);
-        return ResponseEntity.ok(
-                new Response(false,
-                        new MessageResponse(AppConstant.SUCCESS))
+        return new ResponseEntity<>(
+                new Response(false, new MessageResponse(AppConstant.SUCCESS)),
+                HttpStatus.OK
         );
     }
 
-    @RequestMapping("/addImg")
+    @PostMapping("/addImg")
     public ResponseEntity<?> addImg( @Valid @ModelAttribute QuestionImageRequest questionImageRequest){
         questionService.updateImg(questionImageRequest);
         return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));

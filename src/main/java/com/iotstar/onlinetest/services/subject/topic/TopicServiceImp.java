@@ -7,7 +7,9 @@ import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Topic;
 import com.iotstar.onlinetest.repositories.subject.SubjectDAO;
 import com.iotstar.onlinetest.repositories.subject.TopicDAO;
+import com.iotstar.onlinetest.services.subject.SubjectServiceImp;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
@@ -26,14 +28,19 @@ public class TopicServiceImp implements TopicService{
     @Autowired
     private ModelMapper mapper;
     @Autowired
-    private SubjectDAO subjectDAO;
+    private SubjectServiceImp subjectServiceImp;
     @Autowired
-    private UserService userService;
+    private UserServiceImp userServiceImp;
 
     @Autowired
     private FileUtils fileUtils;
     private Topic topic;
     private Subject subject;
+
+    public Topic getTopicReturnTopic(Long topicId){
+        return topicDAO.findById(topicId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
+    }
 
     private String uploadImage(MultipartFile fileImage, String fileName){
         String urlImage = null;
@@ -50,8 +57,7 @@ public class TopicServiceImp implements TopicService{
     @Override
     public void create(TopicRequest topicRequest) {
 
-        subject =subjectDAO.findById(topicRequest.getSubjectId()).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.SUBJECT_NOTFOUND+topicRequest.getSubjectId()));
+        subject =subjectServiceImp.getSubjectReturnSubject(topicRequest.getSubjectId());
 
         mapper.typeMap(TopicRequest.class, Topic.class).addMappings(mapper -> mapper.skip(Topic::setImage));
         topic = mapper.map(topicRequest, Topic.class);
@@ -68,9 +74,8 @@ public class TopicServiceImp implements TopicService{
 
     @Override
     public void del(Long topicId, Long userId) {
-        topic = topicDAO.findById(topicId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
-        if (!userService.existsSubjectById(1L, topic.getSubject().getSubjectId()))
+        topic = getTopicReturnTopic(topicId);
+        if (!userServiceImp.existsSubjectById(1L, topic.getSubject().getSubjectId()))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         topic.setStatus(0);
         topic=topicDAO.save(topic);
@@ -78,8 +83,7 @@ public class TopicServiceImp implements TopicService{
 
     @Override
     public void update(TopicRequest topicRequest) {
-        topic = topicDAO.findById(topicRequest.getSubjectId()).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicRequest.getId()));
+        topic = getTopicReturnTopic(topicRequest.getId());
 
         topic = mapper.map(topicRequest, Topic.class);
         topic.setStatus(1);
@@ -88,8 +92,7 @@ public class TopicServiceImp implements TopicService{
 
     @Override
     public List<TopicResponse> getAllBySubject(Long subjectId) {
-        subject = subjectDAO.findById(subjectId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.SUBJECT_NOTFOUND+subjectId));
+        subject = subjectServiceImp.getSubjectReturnSubject(subjectId);
         List<TopicResponse> topicResponses = new ArrayList<>();
         List<Topic> topics = subject.getTopics();
         for (Topic i: topics){
@@ -100,7 +103,6 @@ public class TopicServiceImp implements TopicService{
 
     @Override
     public Topic findTopicById(Long id){
-        return topicDAO.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+        return getTopicReturnTopic(id);
     }
 }

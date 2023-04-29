@@ -6,20 +6,16 @@ import com.iotstar.onlinetest.exceptions.UserNotFoundException;
 import com.iotstar.onlinetest.models.Score;
 import com.iotstar.onlinetest.models.Test;
 import com.iotstar.onlinetest.models.User;
-import com.iotstar.onlinetest.models.UserTest;
 import com.iotstar.onlinetest.repositories.ScoreDAO;
 import com.iotstar.onlinetest.repositories.TestDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
-import com.iotstar.onlinetest.services.test.TestService;
 import com.iotstar.onlinetest.services.test.TestServiceImp;
-import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
 
 import java.time.LocalDateTime;
 

@@ -35,7 +35,7 @@ public class AnswerServiceImp implements AnswerService{
             answer.setQuestion(question);
             answers.add(answer);
         }
-        Iterable<Answer> answers1 = new ArrayList<>();
+        Iterable<Answer> answers1;
         answers1=answers;
             answers = answerDAO.saveAll(answers1);
     }

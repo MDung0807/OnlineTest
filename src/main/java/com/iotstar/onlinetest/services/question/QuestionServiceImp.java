@@ -11,12 +11,15 @@ import com.iotstar.onlinetest.repositories.AnswerDAO;
 import com.iotstar.onlinetest.repositories.QuestionDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.answer.AnswerService;
+import com.iotstar.onlinetest.services.subject.topic.TopicServiceImp;
+import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,12 +40,20 @@ public class QuestionServiceImp implements QuestionService{
     private AnswerService answerService;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private TopicServiceImp topicServiceImp;
+    @Autowired
+    private UserServiceImp userServiceImp;
 
     private Question question;
 
     public Question getQuestionReturnQuestion(Long questionId){
         return questionDAO.findById(questionId).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+questionId));
+    }
+    public List<Question> getQuestionsByTopicReturnList(Long topicId){
+        return questionDAO.findByTopicId(topicId).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
     }
 
     @Override
@@ -53,8 +64,7 @@ public class QuestionServiceImp implements QuestionService{
 
     @Override
     public List<QuestionResponse> getQuestionByTopicId(Long id) {
-        List<Question> questions = questionDAO.findByTopicId(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+id));
+        List<Question> questions = getQuestionsByTopicReturnList(id);
 
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question i: questions){
@@ -95,17 +105,20 @@ public class QuestionServiceImp implements QuestionService{
     }
 
     @Override
+    @Transactional
     public Question createQuestion(QuestionRequest questionRequest, Long userId) {
-        mapper.typeMap(QuestionRequest.class, Question.class).addMappings(mapper->mapper.skip(Question::setImage));
-
         //Get User
-        User user = userDAO.getUserByUserId(userId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
-        question = mapper.map(questionRequest, Question.class);
+        User user = userServiceImp.getUserReturnUser(userId);
+
+        question = new Question();
         question.setStatus(1);
         question.setUser(user);
+        question.setTopic(topicServiceImp.getTopicReturnTopic(questionRequest.getTopicId()));
+        question.setQuestion(questionRequest.getQuestion());
         question = questionDAO.save(question);
+
         question.setImage(getUrlImage(questionRequest.getImage(), question.getQuestionId()));
+
         question = questionDAO.save(question);
         answerService.createAnswers(questionRequest.getAnswers(), question);
         return question;

@@ -81,4 +81,16 @@ public class SubjectController {
         throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
 
     }
+
+    @RequestMapping("/updateImage")
+    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    public ResponseEntity<?> updateImage(@RequestParam Long subjectId, @ModelAttribute MultipartFile image){
+        Long userId = authUtils.getAccountDetail().getUserId();
+        //Check user created the subject
+        subjectService.updateImage(subjectId, image, userId);
+        return ResponseEntity.ok(
+                new Response(false,
+                        new MessageResponse(AppConstant.SUCCESS))
+        );
+    }
 }

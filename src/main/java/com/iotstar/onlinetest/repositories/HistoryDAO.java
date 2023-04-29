@@ -6,9 +6,10 @@ import com.iotstar.onlinetest.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface HistoryDAO extends JpaRepository<History, Long> {
-    public Optional<History> findByTestAndUser(Test test, User user);
+    public Optional<List<History>> findByTestAndUser(Test test, User user);
 }

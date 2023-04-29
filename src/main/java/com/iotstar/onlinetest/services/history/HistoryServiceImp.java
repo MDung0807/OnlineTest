@@ -2,8 +2,10 @@ package com.iotstar.onlinetest.services.history;
 
 import com.iotstar.onlinetest.DTOs.requests.HistoryRequest;
 import com.iotstar.onlinetest.DTOs.responses.HistoryResponse;
+import com.iotstar.onlinetest.DTOs.responses.ScoreResponse;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.*;
+import com.iotstar.onlinetest.repositories.HisItemDAO;
 import com.iotstar.onlinetest.repositories.HistoryDAO;
 import com.iotstar.onlinetest.services.answer.AnswerServiceImp;
 import com.iotstar.onlinetest.services.question.QuestionServiceImp;
@@ -28,6 +30,8 @@ public class HistoryServiceImp implements HistoryService{
     @Autowired
     private HistoryDAO historyDAO;
     @Autowired
+    private HisItemDAO hisItemDAO;
+    @Autowired
     private UserServiceImp userServiceImp;
     @Autowired
     private TestServiceImp testServiceImp;
@@ -37,47 +41,72 @@ public class HistoryServiceImp implements HistoryService{
     private AnswerServiceImp answerServiceImp;
 
     private History history;
-    @Override
-    public HistoryResponse getHistoryByUserId(Long userId, Long testId) {
+
+    public List<History> getHistoryReturnHistory(Long userId, Long testId){
         User user = userServiceImp.getUserReturnUser(userId);
         Test test = testServiceImp.getTestReturnTest(testId);
-        history = historyDAO.findByTestAndUser(test, user).orElseThrow(()->
+        return historyDAO.findByTestAndUser(test, user).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.NOT_FOUND));
-        return mapper.map(history, HistoryResponse.class);
+
+    }
+
+    private List<HisItem> mapToHistoryItem(List<Long> questionIds, List<Long> answerIds){
+        List<HisItem> hisItems = new ArrayList<>();
+        HisItem hisItem;
+        Long questionId, answerId;
+        int size = questionIds.size();
+        for (int i=0; i< size; i++){
+            questionId = questionIds.get(i);
+            answerId = answerIds.get(i);
+            hisItem = new HisItem();
+            if (answerId != 0)
+                hisItem.setAnswer(answerServiceImp.getAnswerReturnAnswer(answerId));
+            hisItem.setQuestion(questionServiceImp.getQuestionReturnQuestion(questionId));
+            hisItems.add(hisItemDAO.save(hisItem));
+        }
+        return hisItems;
+    }
+    @Override
+    public List<HistoryResponse> getHistoryByUserId(Long userId, Long testId) {
+        List<HistoryResponse> historyResponses = new ArrayList<>();
+        List<History> histories = getHistoryReturnHistory(userId, testId);
+        for (History i: histories){
+            historyResponses.add(mapper.map(i, HistoryResponse.class));
+        }
+        return historyResponses;
     }
 
     @Override
     @Transactional
     public String setHistoryByUserId(HistoryRequest request) {
-        List<Question> questions = new ArrayList<>();
-        List<Answer> answers = new ArrayList<>();
-        int size = request.getQuestionIds().size();
-        int count = 0;
-        for (int i=0; i< size; i++){
-            answers.add(
-                    i,
-                    answerServiceImp.getAnswerReturnAnswer(request.getAnswerIds().get(i))
-            );
-            questions.add(
-                    i,
-                    questionServiceImp.getQuestionReturnQuestion(request.getQuestionIds().get(i))
-            );
+        int count = 0, size = request.getQuestionIds().size();
+        List<HisItem> hisItems = new ArrayList<>();
+        hisItems = mapToHistoryItem(request.getQuestionIds(), request.getAnswerIds());
+        for (HisItem i: hisItems){
+            if (i.getAnswer()!= null)
+                if(i.getAnswer().isCorrect())
+                    count++;
         }
+        String score = String.valueOf(count)+ "/" + String.valueOf(size);
 
-        for(int i = 0; i<size; i++){
-            for (Answer answer: questions.get(i).getAnswers()){
-                if (answer.isCorrect())
-                    if (Objects.equals(answer.getAnswerId(), answers.get(i).getAnswerId()))
-                        count ++;
-            }
-        }
         history = new History();
         history.setUser(userServiceImp.getUserReturnUser(request.getUserId()));
         history.setTest(testServiceImp.getTestReturnTest(request.getTestId()));
+        history.setHisItems(hisItems);
         history.setTime(LocalDateTime.now());
-//        history.setQuestion(questions);
-//        history.setAnswer(answers);
+        history.setScore(score);
+
         historyDAO.save(history);
-        return String.valueOf(count)+ "/" + String.valueOf(size);
+        return score;
+    }
+
+    @Override
+    public List<ScoreResponse> getScore(Long userId, Long testId) {
+        List<ScoreResponse> scoreResponses = new ArrayList<>();
+        List<History> histories = getHistoryReturnHistory(userId, testId);
+        for (History i: histories){
+            scoreResponses.add(mapper.map(i, ScoreResponse.class));
+        }
+        return scoreResponses;
     }
 }

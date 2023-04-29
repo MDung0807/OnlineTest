@@ -15,6 +15,7 @@ import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,9 +46,13 @@ public class SubjectServiceImp implements SubjectService{
         return subjectDAO.save(subject);
     }
 
+    public Subject getSubjectReturnSubject(Long id){
+        return subjectDAO.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.SUBJECT_NOTFOUND+id));
+    }
     @Override
     public SubjectResponse getSubject(Long subjectId) {
-        subject = subjectDAO.findById(subjectId).orElseThrow(()-> new ResourceExistException(AppConstant.SUBJECT_NOTFOUND +subjectId));
+        subject = getSubjectReturnSubject(subjectId);
         return mapper.map(subject, SubjectResponse.class);
     }
 
@@ -55,8 +60,7 @@ public class SubjectServiceImp implements SubjectService{
     //deprecated
     @Override
     public boolean existByUserId(Long subjectId, Long userId){
-        subject = subjectDAO.findById(subjectId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.SUBJECT_NOTFOUND+subjectId));
+        subject = getSubjectReturnSubject(subjectId);
         for (User user: subject.getUsers()){
             if(Objects.equals(userId, user.getUserId())){
                 return true;
@@ -96,8 +100,7 @@ public class SubjectServiceImp implements SubjectService{
     @Override
     @Transactional
     public void updateSubject(SubjectRequest subjectRequest) {
-        subject = subjectDAO.findById(subjectRequest.getSubjectId()).orElseThrow(()->
-                new UserNotFoundException(AppConstant.SUBJECT_NOTFOUND+subjectRequest.getSubjectId()));
+        subject = getSubjectReturnSubject(subjectRequest.getSubjectId());
         if(subjectDAO.existsByName(subjectRequest.getName())){
             throw new ResourceExistException(AppConstant.SUBJECT_EXIST);
         }
@@ -109,9 +112,17 @@ public class SubjectServiceImp implements SubjectService{
     @Override
     @Transactional
     public void delSubject(Long id) {
-        subject = subjectDAO.findById(id).orElseThrow(()->
-                new UserNotFoundException(AppConstant.SUBJECT_NOTFOUND+id));
+        subject = getSubjectReturnSubject(id);
         subject.setStatus(0);
         subjectDAO.save(subject);
+    }
+
+    @Override
+    public void updateImage(Long id, MultipartFile image, Long userId) {
+        if (!userService.existsSubjectById(userId, id)){
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        }
+        subject = getSubjectReturnSubject(id);
+        subject = uploadImage(image, subject);
     }
 }

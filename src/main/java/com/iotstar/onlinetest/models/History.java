@@ -9,11 +9,14 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "historis")
+@Table(name = "histories")
 public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = true)
+    private String score;
 
     @ManyToOne
     @JoinColumn(name = "testId")
@@ -21,14 +24,9 @@ public class History {
     private Test test;
 
     @OneToMany
-    @JoinColumn(name = "questionId")
+    @JoinColumn(name = "items")
     @JsonIgnore
-    private List<Question> question;
-
-    @OneToMany
-    @JoinColumn(name = "answerId")
-    @JsonIgnore
-    private List<Answer> answer;
+    private List<HisItem> hisItems;
 
     @ManyToOne
     @JoinColumn(name = "userId")

@@ -112,18 +112,14 @@ public class ExceptionHandlerController{
         );
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<Response> validateException(MethodArgumentNotValidException ex){
-//        Map<String, String> errors = new HashMap<>();
-//        for (FieldError error: ex.getFieldErrors()){
-//            errors.put(error.getField(), error.getDefaultMessage());
-//        }
-//        return new ResponseEntity<>(
-//                new Response(true, errors),
-//                HttpStatus.BAD_REQUEST
-//        );
-//    }
-
+    @ExceptionHandler(UnKnownException.class)
+    public ResponseEntity<Response> unKnownEx(UnKnownException ex){
+        ExceptionDetails details = new ExceptionDetails(ex.message, LocalDateTime.now());
+        return new ResponseEntity<>(
+                new Response(true, details),
+                HttpStatus.OK
+        );
+    }
     @ExceptionHandler(BindException.class)
     public ResponseEntity<Response> bindingException(BindException ex){
         Map<String, String> errors = new HashMap<>();

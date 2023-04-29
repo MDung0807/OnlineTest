@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class SubjectRequest {
     private Long subjectId;
 
-    @Size(max = 50, message = "username have length greater 50")
+    @Size(max = 30, message = "Name have length less then equal 30")
+
     @NotBlank
     private String name;
     private MultipartFile image;
