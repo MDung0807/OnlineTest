@@ -18,8 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
+//@EnableWebSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
     String[] allowURL = {
             "/subject",
@@ -74,8 +74,8 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
-//                .requestMatchers("/**")
-//                .permitAll()
+                .requestMatchers("/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
