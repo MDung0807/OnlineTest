@@ -8,24 +8,20 @@ import com.iotstar.onlinetest.services.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/role")
-@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
-public class RoleController {
+public class RoleControllerImp implements IRoleController{
     @Autowired
     private RoleService roleService;
 
     @Autowired
     private RolePaging paging;
-    private RoleResponse roleResponse;
 
 
-    @GetMapping({"/", ""})
+    @Override
     public ResponseEntity<?> getRoles(@RequestParam(required = false, defaultValue = "0") int index,
                                       @RequestParam(required = false, defaultValue = "20") int size){
         paging.setPageSize(size);
@@ -35,24 +31,24 @@ public class RoleController {
         return ResponseEntity.ok(new Response(false, roleResponses));
     }
 
-    @PostMapping({"", "/"})
+    @Override
     public ResponseEntity<?> getRoleByRoleName(@RequestBody RoleRequest roleRequest){
-        roleResponse = roleService.getRoleByRoleName(roleRequest.getRoleName());
+        RoleResponse roleResponse = roleService.getRoleByRoleName(roleRequest.getRoleName());
 
         return ResponseEntity.ok(new Response(false, roleResponse));
     }
 
-    @PostMapping("/add")
+    @Override
     public void addRole(@RequestBody RoleRequest roleRequest) {
         roleService.createRole(roleRequest);
     }
 
-    @PostMapping("/del")
+    @Override
     public void delRole(@RequestBody RoleRequest roleRequest){
         roleService.deleteRole(roleRequest);
     }
 
-    @PostMapping("/update")
+    @Override
     public ResponseEntity<Response> updateRole(@RequestBody RoleRequest roleRequest){
         Response response = new Response(false, roleService.updateRole(roleRequest));
         return new ResponseEntity<>(response, HttpStatus.OK);
