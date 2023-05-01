@@ -1,15 +1,14 @@
-package com.iotstar.onlinetest.controllers.admin;
+package com.iotstar.onlinetest.controllers.admin.roleEndPoint;
 
 import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
-import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.RoleResponse;
+import com.iotstar.onlinetest.services.role.RolePaging;
 import com.iotstar.onlinetest.services.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +20,23 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private RolePaging paging;
     private RoleResponse roleResponse;
 
 
     @GetMapping({"/", ""})
-    public ResponseEntity<?> getRoles(){
+    public ResponseEntity<?> getRoles(@RequestParam(required = false, defaultValue = "0") int index,
+                                      @RequestParam(required = false, defaultValue = "20") int size){
+        paging.setPageSize(size);
+        paging.setPageIndex(index);
+
         List<RoleResponse> roleResponses = roleService.getAllRole();
         return ResponseEntity.ok(new Response(false, roleResponses));
     }
 
     @PostMapping({"", "/"})
-    public ResponseEntity<?> getRoleByRoleName(@RequestBody RoleRequest roleRequest, BindingResult result){
-        if (result.hasErrors()){
-
-            return ResponseEntity.ok(
-                    new Response(false, new MessageResponse(result.getObjectName()))
-            );
-        }
+    public ResponseEntity<?> getRoleByRoleName(@RequestBody RoleRequest roleRequest){
         roleResponse = roleService.getRoleByRoleName(roleRequest.getRoleName());
 
         return ResponseEntity.ok(new Response(false, roleResponse));

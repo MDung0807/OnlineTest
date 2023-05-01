@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.controllers.client;
+package com.iotstar.onlinetest.controllers.client.questionEndpoint;
 
 import com.iotstar.onlinetest.DTOs.requests.QuestionImageRequest;
 import com.iotstar.onlinetest.DTOs.requests.QuestionRequest;
@@ -25,16 +25,13 @@ import java.util.List;
 
 //@CrossOrigin
 @RestController
-@RequestMapping("/question")
-//@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
-public class QuestionController {
+public class QuestionController implements IQuestionController{
     @Autowired
     private QuestionService questionService;
     @Autowired
     private AuthUtils authUtils;
 
-    @PreAuthorize("hasAnyRole({@environment.getProperty('ROLE_STUDENT'),@environment.getProperty('ROLE_TEACHER')})")
-    @GetMapping("/inTopic")
+    @Override
     public ResponseEntity<Response> getQuestionByTopic(@RequestParam Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
         return new ResponseEntity<>(
@@ -42,7 +39,7 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/inUser")
+    @Override
     public ResponseEntity<Response> getQuestionByUser(){
         Long userId= authUtils.getAccountDetail().getUserId();
         List<QuestionResponse> questionResponses = questionService.getQuestionByUserId(userId);
@@ -51,7 +48,7 @@ public class QuestionController {
                 HttpStatus.OK
         );
     }
-    @PostMapping(value = "/add")
+    @Override
     public ResponseEntity<Response> addQuestion(@Valid @ModelAttribute QuestionRequest param1,
                                          @ModelAttribute MultipartFile image,
                                          @Valid @RequestPart(value = "question", required = false) QuestionRequest param2){
@@ -71,7 +68,7 @@ public class QuestionController {
         );
     }
 
-    @PostMapping("/addImg")
+    @Override
     public ResponseEntity<?> addImg( @Valid @ModelAttribute QuestionImageRequest questionImageRequest){
         questionService.updateImg(questionImageRequest);
         return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));

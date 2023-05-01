@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.controllers.client;
+package com.iotstar.onlinetest.controllers.client.historyEndpoint;
 
 import com.iotstar.onlinetest.DTOs.requests.HistoryRequest;
 import com.iotstar.onlinetest.DTOs.responses.HistoryResponse;
@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/history")
-public class HistoryTestController {
+public class HistoryTestController implements IHistoryController{
     @Autowired
     private HistoryService historyService;
     @Autowired
@@ -27,7 +26,7 @@ public class HistoryTestController {
     @Autowired
     private AuthUtils authUtils;
 
-    @GetMapping({"", "/"})
+    @Override
     public ResponseEntity<Response> getTestHis(@RequestParam Long userId,
                                                @RequestParam Long testId){
         Long id = authUtils.getAccountDetail().getUserId();
@@ -40,7 +39,7 @@ public class HistoryTestController {
         );
     }
 
-    @GetMapping({"/score"})
+    @Override
     public ResponseEntity<Response> getScore(@RequestParam Long userId,
                                              @RequestParam Long testId){
         Long id = authUtils.getAccountDetail().getUserId();
@@ -52,7 +51,7 @@ public class HistoryTestController {
                 HttpStatus.OK
         );
     }
-    @PostMapping ("/finishTest")
+    @Override
     public ResponseEntity<Response> finishTest(@RequestBody HistoryRequest request){
         Long userId = authUtils.getAccountDetail().getUserId();
         if (!userId.equals(request.getUserId()))

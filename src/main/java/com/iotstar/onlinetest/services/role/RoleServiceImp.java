@@ -2,22 +2,21 @@ package com.iotstar.onlinetest.services.role;
 
 import com.iotstar.onlinetest.DTOs.requests.RoleRequest;
 import com.iotstar.onlinetest.DTOs.responses.RoleResponse;
+import com.iotstar.onlinetest.common.paging.PagingRequest;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Role;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.ranges.Range;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RoleServiceImp implements RoleService{
+public class RoleServiceImp extends RolePaging implements RoleService {
 
     @Autowired
     private RoleDAO roleDAO;
@@ -51,8 +50,7 @@ public class RoleServiceImp implements RoleService{
     @Override
     public List<RoleResponse> getAllRole() {
         List<RoleResponse> roleResponses = new ArrayList<>();
-        List<Role> roles = roleDAO.findAll();
-        RoleResponse roleResponse;
+        List<Role> roles  =roleDAO.findAll(pageable()).getContent();
         for (Role i: roles) {
             roleResponses.add(mapper.map(i, RoleResponse.class));
         }

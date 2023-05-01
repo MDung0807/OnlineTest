@@ -1,0 +1,32 @@
+package com.iotstar.onlinetest.controllers.client.subjectEndpoint;
+
+import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
+import com.iotstar.onlinetest.DTOs.responses.Response;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+@RequestMapping("/subject")
+public interface ISubjectController {
+    @RequestMapping("/add")
+    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    ResponseEntity<?> addSubject(@Valid @ModelAttribute SubjectRequest subjectRequest);
+
+    @GetMapping("/id")
+    ResponseEntity<Response> getSubject (@RequestParam Long subjectId);
+
+    @GetMapping({"/", ""})
+    ResponseEntity<Response> getAllSubject();
+
+    @GetMapping("/del")
+    ResponseEntity<Response> delSubject(@RequestParam Long subjectId);
+
+    @RequestMapping("/updateImage")
+    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    ResponseEntity<?> updateImage(@RequestParam Long subjectId, @ModelAttribute MultipartFile image);
+}

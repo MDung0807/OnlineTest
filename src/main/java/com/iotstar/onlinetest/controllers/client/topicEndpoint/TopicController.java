@@ -1,38 +1,35 @@
-package com.iotstar.onlinetest.controllers.client;
+package com.iotstar.onlinetest.controllers.client.topicEndpoint;
 
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
-import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
-import com.iotstar.onlinetest.services.subject.SubjectService;
-import com.iotstar.onlinetest.services.subject.topic.TopicService;
+import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
+import com.iotstar.onlinetest.services.topic.TopicPaging;
+import com.iotstar.onlinetest.services.topic.TopicService;
 import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.AuthUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
-@RequestMapping("/topic")
-public class TopicController {
+import java.util.List;
 
-    @Autowired
-    private SubjectService subjectService;
+@RestController
+public class TopicController implements ITopicEndpoint{
     @Autowired
     private TopicService topicService;
     @Autowired
     private UserService userService;
     @Autowired
+    private TopicPaging paging;
+    @Autowired
     private AuthUtils authUtils;
 
-    @RequestMapping("/add")
-    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    @Override
     public ResponseEntity<?> addTopic (@ModelAttribute TopicRequest param1,
                                        @ModelAttribute MultipartFile image,
                                        @RequestPart(value = "topic", required = false) TopicRequest param2){
@@ -55,16 +52,19 @@ public class TopicController {
         throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
     }
 
-
-    @GetMapping({"", "/"})
-    public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId){
-        SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
+    @Override
+    public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId,
+                                                 @RequestParam(required = false, defaultValue = "0") int index,
+                                                 @RequestParam(required = false, defaultValue = "1") int size){
+        paging.setPageIndex(index);
+        paging.setPageSize(size);
+        List<TopicResponse> topicResponses = topicService.getAllBySubject(subjectId);
         return ResponseEntity.ok(
-                new Response(false, subjectResponse.getTopics())
+                new Response(false, topicResponses)
         );
     }
 
-    @GetMapping("/del")
+    @Override
     public ResponseEntity<Response> delTopicById(@RequestParam Long topicId){
         Long userId = authUtils.getAccountDetail().getUserId();
         topicService.del(topicId, userId);

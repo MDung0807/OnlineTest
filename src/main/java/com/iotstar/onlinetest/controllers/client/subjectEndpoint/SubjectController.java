@@ -1,35 +1,26 @@
-package com.iotstar.onlinetest.controllers.client;
+package com.iotstar.onlinetest.controllers.client.subjectEndpoint;
 
 import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
-import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
-import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
 import com.iotstar.onlinetest.services.subject.SubjectService;
-import com.iotstar.onlinetest.services.subject.topic.TopicService;
 import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.AuthUtils;
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/subject")
-public class SubjectController {
+public class SubjectController implements ISubjectController{
     @Autowired
     private SubjectService subjectService;
     @Autowired
@@ -38,8 +29,7 @@ public class SubjectController {
     private AuthUtils authUtils;
 
 
-    @RequestMapping("/add")
-    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    @Override
     public ResponseEntity<?> addSubject(@Valid @ModelAttribute SubjectRequest subjectRequest){
         Long userId = authUtils.getAccountDetail().getUserId();
         //Check user created the subject
@@ -52,7 +42,7 @@ public class SubjectController {
         );
     }
 
-    @GetMapping("/id")
+    @Override
     public ResponseEntity<Response> getSubject (@RequestParam Long subjectId){
         SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
         return ResponseEntity.ok(
@@ -60,7 +50,7 @@ public class SubjectController {
         );
     }
 
-    @GetMapping({"/", ""})
+    @Override
     public ResponseEntity<Response> getAllSubject(){
         List<SubjectResponse> subjectResponses = subjectService.getAllSubject();
         return ResponseEntity.ok(
@@ -68,7 +58,7 @@ public class SubjectController {
         );
     }
 
-    @GetMapping("/del")
+    @Override
     public ResponseEntity<Response> delSubject(@RequestParam Long subjectId){
         Long userId = authUtils.getAccountDetail().getUserId();
         if (userService.existsSubjectById(userId, subjectId)){
@@ -82,8 +72,7 @@ public class SubjectController {
 
     }
 
-    @RequestMapping("/updateImage")
-    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+    @Override
     public ResponseEntity<?> updateImage(@RequestParam Long subjectId, @ModelAttribute MultipartFile image){
         Long userId = authUtils.getAccountDetail().getUserId();
         //Check user created the subject

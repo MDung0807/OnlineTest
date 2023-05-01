@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class TopicResponse {
     private int id;
     private String name;
-    private Subject subject;
+//    private Subject subject;
     private String image;
     private int status;
 }
