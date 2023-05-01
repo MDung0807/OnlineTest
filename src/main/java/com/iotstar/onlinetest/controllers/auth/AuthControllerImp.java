@@ -14,8 +14,6 @@ import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +29,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
-public class AuthController {
+public class AuthControllerImp implements IAuthController{
     @Autowired
     private UserService userService;
     @Autowired
@@ -44,15 +42,12 @@ public class AuthController {
 
     private UserResponse userResponse;
 
-    @RequestMapping(value = "auth/register")
+
+    @Override
     public ResponseEntity<?> createUser(@Valid @ModelAttribute  UserRequest userParam1,
                                         @ModelAttribute MultipartFile avatar,
                                         @RequestPart(value = "user", required = false) @Valid UserRequest userParam2,
-                                        BindingResult result) throws BindException {
-        if (result.hasErrors()){
-            throw new BindException(result);
-        }
-
+                                        BindingResult result) {
         UserRequest userRequest;
         if(userParam2 ==null){
             userRequest = userParam1;
@@ -67,8 +62,8 @@ public class AuthController {
         return ResponseEntity.ok(new Response(false, messageResponse));
     }
 
-    @PostMapping("auth/login")
-    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest)throws Exception{
+    @Override
+    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
@@ -91,10 +86,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/reset")
-    public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest, BindingResult result) throws Exception{
-        if(result.hasErrors()){
-            return ResponseEntity.ok(result.getFieldError().getDefaultMessage());
-        }
+    public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest){
         accountService.update(accountRequest);
         MessageResponse messageResponse = new MessageResponse( AppConstant.RESET_PASSWORD_SUCCESS);
         return ResponseEntity.ok(new Response(false, messageResponse));

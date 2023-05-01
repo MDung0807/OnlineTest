@@ -2,11 +2,13 @@ package com.iotstar.onlinetest.config;
 
 import com.iotstar.onlinetest.security.jwt.AuthEntryPointJwt;
 import com.iotstar.onlinetest.security.jwt.AuthTokenFilter;
+import com.iotstar.onlinetest.security.services.AccountDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,13 +31,16 @@ public class SecurityConfig {
             "/topic/"
     };
 
-//    @Bean
-//    public DaoAuthenticationProvider authProvider() {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(accountDetailsService);
-//        authProvider.setPasswordEncoder(encoder());
-//        return authProvider;
-//    }
+    @Autowired
+    private AccountDetailsServiceImpl accountDetailsService;
+
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(accountDetailsService);
+        authProvider.setPasswordEncoder(encoder());
+        return authProvider;
+    }
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;

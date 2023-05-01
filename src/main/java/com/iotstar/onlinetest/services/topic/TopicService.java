@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.services.subject.topic;
+package com.iotstar.onlinetest.services.topic;
 
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;

@@ -10,12 +10,11 @@ import com.iotstar.onlinetest.models.Topic;
 import com.iotstar.onlinetest.repositories.TestDAO;
 import com.iotstar.onlinetest.services.question.QuestionService;
 import com.iotstar.onlinetest.services.question.QuestionServiceImp;
-import com.iotstar.onlinetest.services.subject.topic.TopicService;
+import com.iotstar.onlinetest.services.topic.TopicService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

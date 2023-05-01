@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.controllers.client;
+package com.iotstar.onlinetest.controllers.client.userEndpoint;
 
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
@@ -22,12 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
-@RequestMapping("")
-@PreAuthorize("hasAnyRole({" +
-        "@environment.getProperty('ROLE_STUDENT'), " +
-        "@environment.getProperty('ROLE_TEACHER')," +
-        "@environment.getProperty('ROLE_ADMIN')})")
-public class UserController {
+public class UserController implements IUserEndpoint{
 
     @Autowired
     AuthenticationManager authenticationManager;

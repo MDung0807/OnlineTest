@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.controllers.client;
+package com.iotstar.onlinetest.controllers.client.testEndpoint;
 
 
 import com.iotstar.onlinetest.DTOs.requests.TestRequest;
@@ -10,22 +10,18 @@ import com.iotstar.onlinetest.utils.AppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/test")
-
-public class TestController {
+public class TestController implements ITestEndpoint{
 
     @Autowired
     private TestService testService;
 
-    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
-    @PostMapping("/add")
+    @Override
     public ResponseEntity<?> createTest (@RequestBody TestRequest testRequest){
         testService.create(testRequest);
         return ResponseEntity.ok(
@@ -33,7 +29,7 @@ public class TestController {
         );
     }
 
-    @GetMapping({"/", ""})
+    @Override
     public ResponseEntity<?> getTest (@RequestParam Long testId){
         TestResponse testResponse = testService.getById(testId);
         return new ResponseEntity<>(
@@ -41,7 +37,7 @@ public class TestController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/testInTopic")
+    @Override
     public ResponseEntity<Response> getTestInTopic(@RequestParam("topicId") Long topicId){
         List<TestResponse> testResponses = testService.getByTopicId(topicId);
         return new ResponseEntity<>(

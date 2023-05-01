@@ -2,7 +2,6 @@ package com.iotstar.onlinetest.insertData;
 
 
 
-import com.iotstar.onlinetest.controllers.admin.RoleController;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.*;
 import com.iotstar.onlinetest.repositories.AccountDAO;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.annotation.Order;
 import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDateTime;

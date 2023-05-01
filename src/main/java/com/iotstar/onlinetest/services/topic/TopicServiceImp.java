@@ -1,14 +1,12 @@
-package com.iotstar.onlinetest.services.subject.topic;
+package com.iotstar.onlinetest.services.topic;
 
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Topic;
-import com.iotstar.onlinetest.repositories.subject.SubjectDAO;
 import com.iotstar.onlinetest.repositories.subject.TopicDAO;
 import com.iotstar.onlinetest.services.subject.SubjectServiceImp;
-import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TopicServiceImp implements TopicService{
+public class TopicServiceImp extends TopicPaging implements TopicService{
     @Autowired
     private TopicDAO topicDAO;
     @Autowired
@@ -94,7 +92,7 @@ public class TopicServiceImp implements TopicService{
     public List<TopicResponse> getAllBySubject(Long subjectId) {
         subject = subjectServiceImp.getSubjectReturnSubject(subjectId);
         List<TopicResponse> topicResponses = new ArrayList<>();
-        List<Topic> topics = subject.getTopics();
+        List<Topic> topics = topicDAO.findBySubject(subject, pageable());
         for (Topic i: topics){
             topicResponses.add(mapper.map(i, TopicResponse.class));
         }

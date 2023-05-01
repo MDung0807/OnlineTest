@@ -1,26 +1,22 @@
 package com.iotstar.onlinetest.services.question;
 
-import com.iotstar.onlinetest.DTOs.AnswerDTO;
 import com.iotstar.onlinetest.DTOs.requests.QuestionImageRequest;
 import com.iotstar.onlinetest.DTOs.requests.QuestionRequest;
 import com.iotstar.onlinetest.DTOs.responses.QuestionResponse;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.User;
-import com.iotstar.onlinetest.repositories.AnswerDAO;
 import com.iotstar.onlinetest.repositories.QuestionDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.answer.AnswerService;
-import com.iotstar.onlinetest.services.subject.topic.TopicServiceImp;
+import com.iotstar.onlinetest.services.topic.TopicServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
