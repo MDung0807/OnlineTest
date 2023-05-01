@@ -30,9 +30,7 @@ public class TopicController implements ITopicEndpoint{
     private AuthUtils authUtils;
 
     @Override
-    public ResponseEntity<?> addTopic (@ModelAttribute TopicRequest param1,
-                                       @ModelAttribute MultipartFile image,
-                                       @RequestPart(value = "topic", required = false) TopicRequest param2){
+    public ResponseEntity<?> addTopic (TopicRequest param1, MultipartFile image, TopicRequest param2){
         Long userId = authUtils.getAccountDetail().getUserId();
         TopicRequest topicRequest;
         if(param2 == null)
@@ -53,9 +51,7 @@ public class TopicController implements ITopicEndpoint{
     }
 
     @Override
-    public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId,
-                                                 @RequestParam(required = false, defaultValue = "0") int index,
-                                                 @RequestParam(required = false, defaultValue = "1") int size){
+    public ResponseEntity<?> getTopicBySubjectId(Long subjectId, int index, int size){
         paging.setPageIndex(index);
         paging.setPageSize(size);
         List<TopicResponse> topicResponses = topicService.getAllBySubject(subjectId);
@@ -65,7 +61,7 @@ public class TopicController implements ITopicEndpoint{
     }
 
     @Override
-    public ResponseEntity<Response> delTopicById(@RequestParam Long topicId){
+    public ResponseEntity<Response> delTopicById(Long topicId){
         Long userId = authUtils.getAccountDetail().getUserId();
         topicService.del(topicId, userId);
         return new ResponseEntity<>(

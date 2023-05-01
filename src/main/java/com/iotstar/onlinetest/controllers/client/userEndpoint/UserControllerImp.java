@@ -15,14 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
-public class UserController implements IUserEndpoint{
+public class UserControllerImp implements IUserEndpoint{
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -48,7 +47,7 @@ public class UserController implements IUserEndpoint{
 
 
     @GetMapping("/delAcc")
-    public ResponseEntity<Response> delAcc(@RequestParam("userId") Long userId){
+    public ResponseEntity<Response> delAcc(Long userId){
         Long id = authUtils.getAccountDetail().getAccountId();
         if (!id.equals(userId))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
@@ -60,8 +59,7 @@ public class UserController implements IUserEndpoint{
     }
 
     @PostMapping("/updateProfile")
-    public ResponseEntity<Response> updateProfile(@Valid @RequestBody UserProfileRequest userParam1,
-                              @Valid @RequestPart(value = "user", required = false)UserProfileRequest userParam2) {
+    public ResponseEntity<Response> updateProfile(UserProfileRequest userParam1, UserProfileRequest userParam2) {
         Long userId = authUtils.getAccountDetail().getUserId();
         UserProfileRequest userProfileRequest = null;
         if(userParam2== null){
@@ -83,14 +81,14 @@ public class UserController implements IUserEndpoint{
     }
 
     @PostMapping("/updateAvatar")
-    public ResponseEntity<Response> updateAvatar(@ModelAttribute MultipartFile avatar){
+    public ResponseEntity<Response> updateAvatar(MultipartFile avatar){
         Long id = authUtils.getAccountDetail().getAccountId();
         userResponse = userService.updateAvatar(id, avatar);
         return ResponseEntity.ok(new Response(false, userResponse));
 
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @Override
     public ResponseEntity<?> logout(HttpServletRequest request) {
         String token = jwtUtils.parseJwt(request);
         if (token != null){

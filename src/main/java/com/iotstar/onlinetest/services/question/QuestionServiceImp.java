@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class QuestionServiceImp implements QuestionService{
+public class QuestionServiceImp extends QuestionPaging implements QuestionService{
 
 
     @Autowired
@@ -48,7 +48,7 @@ public class QuestionServiceImp implements QuestionService{
                 new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+questionId));
     }
     public List<Question> getQuestionsByTopicReturnList(Long topicId){
-        return questionDAO.findByTopicId(topicId).orElseThrow(()->
+        return questionDAO.findByTopicId(topicId, pageable()).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
     }
 
