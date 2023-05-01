@@ -16,5 +16,7 @@ public interface ITestEndpoint {
     ResponseEntity<?> getTest (@RequestParam Long testId);
 
     @GetMapping("/testInTopic")
-    ResponseEntity<Response> getTestInTopic(@RequestParam("topicId") Long topicId);
+    ResponseEntity<Response> getTestInTopic(@RequestParam("topicId") Long topicId,
+                                            @RequestParam(required = false, defaultValue = "0") int index,
+                                            @RequestParam(required = false, defaultValue = "10") int size);
 }

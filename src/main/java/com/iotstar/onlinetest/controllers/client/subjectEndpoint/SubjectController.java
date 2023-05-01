@@ -4,6 +4,7 @@ import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
+import com.iotstar.onlinetest.common.paging.extend.Paging;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.services.subject.SubjectService;
 import com.iotstar.onlinetest.services.user.UserService;
@@ -27,10 +28,11 @@ public class SubjectController implements ISubjectController{
     private UserService userService;
     @Autowired
     private AuthUtils authUtils;
-
+    @Autowired
+    private Paging paging;
 
     @Override
-    public ResponseEntity<?> addSubject(@Valid @ModelAttribute SubjectRequest subjectRequest){
+    public ResponseEntity<?> addSubject(SubjectRequest subjectRequest){
         Long userId = authUtils.getAccountDetail().getUserId();
         //Check user created the subject
         if (userService.existsSubject(userId))
@@ -43,7 +45,7 @@ public class SubjectController implements ISubjectController{
     }
 
     @Override
-    public ResponseEntity<Response> getSubject (@RequestParam Long subjectId){
+    public ResponseEntity<Response> getSubject (Long subjectId){
         SubjectResponse subjectResponse = subjectService.getSubject(subjectId);
         return ResponseEntity.ok(
                 new Response(false, subjectResponse)
@@ -51,7 +53,9 @@ public class SubjectController implements ISubjectController{
     }
 
     @Override
-    public ResponseEntity<Response> getAllSubject(){
+    public ResponseEntity<Response> getAllSubject(int index, int size){
+        paging.setPageSize(size);
+        paging.setPageIndex(index);
         List<SubjectResponse> subjectResponses = subjectService.getAllSubject();
         return ResponseEntity.ok(
                 new Response(false, subjectResponses)
@@ -59,7 +63,7 @@ public class SubjectController implements ISubjectController{
     }
 
     @Override
-    public ResponseEntity<Response> delSubject(@RequestParam Long subjectId){
+    public ResponseEntity<Response> delSubject(Long subjectId){
         Long userId = authUtils.getAccountDetail().getUserId();
         if (userService.existsSubjectById(userId, subjectId)){
             subjectService.delSubject(subjectId);
@@ -73,7 +77,7 @@ public class SubjectController implements ISubjectController{
     }
 
     @Override
-    public ResponseEntity<?> updateImage(@RequestParam Long subjectId, @ModelAttribute MultipartFile image){
+    public ResponseEntity<?> updateImage(Long subjectId, MultipartFile image){
         Long userId = authUtils.getAccountDetail().getUserId();
         //Check user created the subject
         subjectService.updateImage(subjectId, image, userId);

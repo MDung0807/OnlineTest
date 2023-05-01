@@ -5,7 +5,6 @@ import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
 import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
-import com.iotstar.onlinetest.exceptions.UserNotFoundException;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.UserDAO;
@@ -20,13 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.channels.MulticastChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
-public class SubjectServiceImp implements SubjectService{
+public class SubjectServiceImp extends SubjectPaging implements SubjectService{
 
     @Autowired
     private SubjectDAO subjectDAO;
@@ -73,7 +71,7 @@ public class SubjectServiceImp implements SubjectService{
 
     @Override
     public List<SubjectResponse> getAllSubject() {
-        List<Subject> subjects= subjectDAO.findAll();
+        List<Subject> subjects= subjectDAO.findAll(pageable()).getContent();
         List<SubjectResponse> subjectResponses = new ArrayList<>();
         for (Subject i: subjects){
             subjectResponses.add(mapper.map(i, SubjectResponse.class));

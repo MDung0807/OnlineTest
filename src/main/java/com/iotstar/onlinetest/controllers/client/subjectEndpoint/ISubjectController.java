@@ -21,7 +21,8 @@ public interface ISubjectController {
     ResponseEntity<Response> getSubject (@RequestParam Long subjectId);
 
     @GetMapping({"/", ""})
-    ResponseEntity<Response> getAllSubject();
+    ResponseEntity<Response> getAllSubject(@RequestParam(required = false, defaultValue = "0") int index,
+                                           @RequestParam(required = false, defaultValue = "10")int size);
 
     @GetMapping("/del")
     ResponseEntity<Response> delSubject(@RequestParam Long subjectId);

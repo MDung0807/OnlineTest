@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class TestServiceImp implements TestService{
+public class TestServiceImp extends TestPaging implements TestService{
 
     @Autowired
     private TestDAO testDAO;
@@ -115,7 +115,7 @@ public class TestServiceImp implements TestService{
         Topic topic = topicService.findTopicById(topicId);
         List<Topic> topics = new ArrayList<>();
         topics.add(topic);
-       List<Test> tests= testDAO.findByTopics(topic);
+       List<Test> tests= testDAO.findByTopics(topic, pageable());
         List<TestResponse> responses = new ArrayList<>();
         for (Test i: tests){
             responses.add(mapper.map(i, TestResponse.class));
