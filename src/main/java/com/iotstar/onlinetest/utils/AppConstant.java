@@ -4,10 +4,8 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
 public class AppConstant {
-    public static final String NOT_ENOUGH_QUESTION="Not enough question in database";
     public static final String USER_ERRORS = "User errors";
     public static final String NOT_FOUND = "Not Found";
-    public static final String BAD_REQUEST = "Bad Request";
     public static final String SQL_EXCEPTION = "Sql query Error";
     public static final String INVALID_REQUEST = "Invalid Request";
     public static final String INTERNAL_VALID = "Internal error";
