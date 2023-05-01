@@ -11,6 +11,7 @@ import com.iotstar.onlinetest.repositories.TestDAO;
 import com.iotstar.onlinetest.services.question.QuestionService;
 import com.iotstar.onlinetest.services.question.QuestionServiceImp;
 import com.iotstar.onlinetest.services.topic.TopicService;
+import com.iotstar.onlinetest.statval.ETest;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +42,11 @@ public class TestServiceImp extends TestPaging implements TestService{
 
     public Test getTestReturnTest(Long testId){
         return testDAO.findById(testId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TEST_NOTFOUND+testId));
+                new ResourceNotFoundException(ETest.TEST_NOTFOUND.getDes(testId)));
     }
     public List<Question> randomQuestion(List<Question>questionsSelected, List<Question> questions, int quantity){
         if (quantity> questions.size())
-            throw new UnKnownException(AppConstant.NOT_ENOUGH_QUESTION);
+            throw new UnKnownException(ETest.NOT_ENOUGH_QUESTION.getDes());
         Random random = new Random();
         int index = 0;
         while(quantity > questionsSelected.size()){
@@ -104,9 +105,7 @@ public class TestServiceImp extends TestPaging implements TestService{
 
     @Override
     public TestResponse getById(Long testId){
-        test = testDAO.findById(testId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TEST_NOTFOUND+testId));
-
+        test = getTestReturnTest(testId);
         return mapper.map(test, TestResponse.class);
     }
 

@@ -11,13 +11,12 @@ import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.answer.AnswerService;
 import com.iotstar.onlinetest.services.topic.TopicServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
-import com.iotstar.onlinetest.utils.AppConstant;
+import com.iotstar.onlinetest.statval.EQuestion;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,6 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
     @Autowired
     private AnswerService answerService;
     @Autowired
-    private UserDAO userDAO;
-    @Autowired
     private TopicServiceImp topicServiceImp;
     @Autowired
     private UserServiceImp userServiceImp;
@@ -45,11 +42,10 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
 
     public Question getQuestionReturnQuestion(Long questionId){
         return questionDAO.findById(questionId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.QUESTION_NOTFOUND+questionId));
+                new ResourceNotFoundException(EQuestion.QUESTION_NOTFOUND.getDes(questionId)));
     }
     public List<Question> getQuestionsByTopicReturnList(Long topicId){
-        return questionDAO.findByTopicId(topicId, pageable()).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
+        return topicServiceImp.getQuestionsInTopic(topicId);
     }
 
     @Override
@@ -71,8 +67,7 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
 
     @Override
     public List<QuestionResponse>  getQuestionByUserId(Long id) {
-        List<Question> questions = questionDAO.findByUserUserId(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+id));
+        List<Question> questions = userServiceImp.getQuestionsInUser(id);
 
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question i: questions){
@@ -88,15 +83,16 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
         return question;
     }
 
-    private String getUrlImage(MultipartFile fileInput, Long id){
-
-        return fileUtils.upload(fileInput, AppConstant.IMG_NAME_QUESTION+id);
-    }
+//    private String getUrlImage(MultipartFile fileInput, Long id){
+//
+//        return fileUtils.upload(fileInput, AppConstant.IMG_NAME_QUESTION+id);
+//    }
 
     @Override
     public Question updateImg(QuestionImageRequest questionImageRequest){
         question = findById(question.getQuestionId());
-        question.setImage(getUrlImage(questionImageRequest.getImage(), questionImageRequest.getQuestionId()));
+        question.setImage(fileUtils.upload(questionImageRequest.getImage(),
+                EQuestion.IMG_NAME_QUESTION.getDes(questionImageRequest.getQuestionId())));
         return questionDAO.save(question);
     }
 
@@ -113,7 +109,8 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
         question.setQuestion(questionRequest.getQuestion());
         question = questionDAO.save(question);
 
-        question.setImage(getUrlImage(questionRequest.getImage(), question.getQuestionId()));
+        question.setImage(fileUtils.upload(questionRequest.getImage(),
+                EQuestion.IMG_NAME_QUESTION.getDes(questionRequest.getQuestionId())));
 
         question = questionDAO.save(question);
         answerService.createAnswers(questionRequest.getAnswers(), question);

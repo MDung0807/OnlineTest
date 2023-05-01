@@ -3,18 +3,19 @@ package com.iotstar.onlinetest.services.topic;
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
+import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Topic;
 import com.iotstar.onlinetest.repositories.subject.TopicDAO;
 import com.iotstar.onlinetest.services.subject.SubjectServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
+import com.iotstar.onlinetest.statval.ETopic;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,20 +38,11 @@ public class TopicServiceImp extends TopicPaging implements TopicService{
 
     public Topic getTopicReturnTopic(Long topicId){
         return topicDAO.findById(topicId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.TOPIC_NOTFOUND+topicId));
+                new ResourceNotFoundException(ETopic.TOPIC_NOTFOUND.getDes(topicId)));
     }
 
-    private String uploadImage(MultipartFile fileImage, String fileName){
-        String urlImage = null;
-        if(fileImage !=  null){
-            urlImage = fileUtils.upload(fileImage, AppConstant.IMG_NAME_TOPIC+fileName);
-        }
-        return urlImage;
-    }
-
-    private Topic uploadImage(MultipartFile fileInput, Topic topic){
-        topic.setImage(uploadImage(fileInput, topic.getName()));
-        return topicDAO.save(topic);
+    public List<Question> getQuestionsInTopic(Long topicId){
+        return getTopicReturnTopic(topicId).getQuestions();
     }
     @Override
     public void create(TopicRequest topicRequest) {
@@ -64,11 +56,11 @@ public class TopicServiceImp extends TopicPaging implements TopicService{
         topic.setSubject(subject);
         topic.setStatus(1);
         topic =topicDAO.save(topic);
-        if(topicRequest.getImage()!=null){
-            topic = uploadImage(topicRequest.getImage(), topic);
-        }
+        topic.setImage(
+                fileUtils.upload(topicRequest.getImage(),
+                        ETopic.IMG_NAME_TOPIC.getDes(topic.getId())));
+        topic = topicDAO.save(topic);
     }
-
 
     @Override
     public void del(Long topicId, Long userId) {

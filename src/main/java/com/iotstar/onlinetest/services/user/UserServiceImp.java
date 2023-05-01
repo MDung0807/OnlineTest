@@ -7,23 +7,23 @@ import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
-import com.iotstar.onlinetest.exceptions.UserNotFoundException;
+import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.account.AccountService;
-import com.iotstar.onlinetest.utils.AppConstant;
+import com.iotstar.onlinetest.statval.EUser;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -44,16 +44,21 @@ public class UserServiceImp implements UserService {
     @Value("${ROLE_STUDENT}")
     private String roleStudent;
 
-    private String uploadImage(MultipartFile fileImage, String fileName){
-        String urlImage = null;
-        if(fileImage !=  null){
-            urlImage = fileUtils.upload(fileImage, AppConstant.IMG_NAME_USER+fileName);
-        }
-        return urlImage;
-    }
+//    private String uploadImage(MultipartFile fileImage, String fileName){
+//        String urlImage = null;
+//        if(fileImage !=  null){
+//            urlImage = fileUtils.upload(fileImage, fileName);
+//        }
+//        return urlImage;
+//    }
 
     public User getUserReturnUser(Long userId){
-        return userDAO.findById(userId).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
+        return userDAO.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException(EUser.USER_NOT_FOUND.getDescription(userId)));
+    }
+
+    public List<Question> getQuestionsInUser(Long userId) {
+        return getUserReturnUser(userId).getQuestions();
     }
 
     @Override
@@ -68,16 +73,17 @@ public class UserServiceImp implements UserService {
     @Transactional
     public void createUser(UserRequest userRequest) {
         if (existsEmail(userRequest.getEmail()))
-            throw new ResourceExistException(AppConstant.EMAIL_EXISTS);
+            throw new ResourceExistException(EUser.EMAIL_EXISTS.getDescription());
         if(existsPhoneNumber(userRequest.getPhoneNumber()))
-            throw new ResourceExistException(AppConstant.PHONE_NUMBER_EXISTS);
+            throw new ResourceExistException(EUser.PHONE_NUMBER_EXISTS.getDescription());
 
         // skip map avatar
         mapper.typeMap(UserRequest.class, User.class).addMappings(mapper-> mapper.skip(User::setAvatar));
         // Get user
         user = mapper.map(userRequest, User.class);
         //Create user
-        String urlImage = uploadImage(userRequest.getAvatar(), AppConstant.IMG_NAME_USER+userRequest.getUsername());
+        String urlImage = fileUtils.upload(userRequest.getAvatar(),
+                EUser.IMG_NAME_USER.getDescription(userRequest.getUsername()));
         user.setAvatar(urlImage);
 
         user.setDateCreate(LocalDateTime.now());
@@ -112,7 +118,7 @@ public class UserServiceImp implements UserService {
     @Transactional
     public UserResponse updateAvatar(Long id, MultipartFile avatar){
         user = getUserReturnUser(id);
-        String url = uploadImage(avatar, AppConstant.IMG_NAME_USER+id);
+        String url = fileUtils.upload(avatar, EUser.IMG_NAME_USER.getDescription(id));
         user.setAvatar(url);
         user = userDAO.save(user);
         return mapper.map(user, UserResponse.class);
@@ -126,11 +132,11 @@ public class UserServiceImp implements UserService {
         //email input != email old => check email input exists??
         if(!user.getEmail().equals(userProfileRequest.getEmail()))
             if (existsEmail(userProfileRequest.getEmail()))
-                throw new ResourceExistException(AppConstant.EMAIL_EXISTS);
+                throw new ResourceExistException(EUser.EMAIL_EXISTS.getDescription());
 
         if (!user.getPhoneNumber().equals(userProfileRequest.getPhoneNumber()))
             if(existsPhoneNumber(userProfileRequest.getPhoneNumber()))
-                throw new ResourceExistException(AppConstant.PHONE_NUMBER_EXISTS);
+                throw new ResourceExistException(EUser.PHONE_NUMBER_EXISTS.getDescription());
         // change data
         user.setGender(userProfileRequest.getGender());
         user.setFirstName(userProfileRequest.getFirstName());
