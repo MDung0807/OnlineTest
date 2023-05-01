@@ -11,6 +11,7 @@ import com.iotstar.onlinetest.repositories.TestDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.test.TestServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
+import com.iotstar.onlinetest.statval.EHistory;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,10 @@ public class ScoreServiceImp implements ScoreService{
 
     @Override
     public ScoreResponse getScore(Long userId, Long testId) {
-        User user = userDAO.getUserByUserId(userId).orElseThrow(()-> new UserNotFoundException(AppConstant.USER_NOTFOUND+userId));
-        Test test = testDAO.findById(testId).orElseThrow(()-> new ResourceNotFoundException("not found"));
-        score = scoreDAO.findByTestAndUser(test, user).orElseThrow(()-> new ResourceNotFoundException("notFound"));
+        User user = userServiceImp.getUserReturnUser(userId);
+        Test test = testServiceImp.getTestReturnTest(testId);
+        score = scoreDAO.findByTestAndUser(test, user).orElseThrow(()->
+                new ResourceNotFoundException(EHistory.NOT_FOUND.getDes()));
         return mapper.map(score, ScoreResponse.class);
     }
 }

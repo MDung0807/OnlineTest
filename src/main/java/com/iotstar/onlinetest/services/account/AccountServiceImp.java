@@ -10,6 +10,10 @@ import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.RoleDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
+import com.iotstar.onlinetest.services.role.RoleServiceImp;
+import com.iotstar.onlinetest.services.user.UserServiceImp;
+import com.iotstar.onlinetest.statval.EAccount;
+import com.iotstar.onlinetest.statval.EUser;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
@@ -34,16 +38,11 @@ public class AccountServiceImp implements AccountService{
     private AccountDTO accountDTO;
     private Account account;
     private Role role;
-    private User user;
     @Autowired
-    private RoleDAO roleDAO;
-    @Autowired
-    private UserDAO userDAO;
+    private RoleServiceImp roleServiceImp;
 
     @Autowired
     private PasswordEncoder encoder;
-    @Autowired
-    private FileUtils fileUtils;
 
 
     @Override
@@ -71,10 +70,9 @@ public class AccountServiceImp implements AccountService{
     @Transactional
     public void createAccount(AccountDTO accountDTO){
         if (existsByUsername(accountDTO.getUsername()))
-            throw new ResourceExistException(AppConstant.USERNAME_EXISTS);
+            throw new ResourceExistException(EAccount.ACCOUNT_EXIST.getDes());
         account = mapper.map(accountDTO, Account.class);
-        role = roleDAO.getByRoleName(accountDTO.getRoleName()).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND + accountDTO.getRoleName()));
+        role = roleServiceImp.getRoleReturnRole(accountDTO.getRoleName()) ;
         account.setRole(role);
         account.setPassword(encoder.encode(accountDTO.getPassword()));
         account.setStatus(1);
@@ -84,7 +82,7 @@ public class AccountServiceImp implements AccountService{
         }
         catch (Exception ex){
 
-          throw new ResourceExistException(AppConstant.ACCOUNT_EXIST);
+          throw new ResourceExistException(EAccount.ACCOUNT_EXIST.getDes());
         }
     }
 
@@ -92,7 +90,7 @@ public class AccountServiceImp implements AccountService{
     @Transactional
     public void update(AccountRequest accountRequest){
         account = accountDAO.findByUsername(accountRequest.getUsername()).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.INFO_ACC_NOTFOUND + accountRequest.getUsername()));
+                new ResourceNotFoundException(EAccount.INFO_ACC_NOTFOUND.getDes(accountRequest.getUsername())));
 
         if (account.getUser().getEmail().equals(accountRequest.getEmail())
         && account.getUser().getPhoneNumber().equals(accountRequest.getPhoneNumber())) {
@@ -103,13 +101,9 @@ public class AccountServiceImp implements AccountService{
 
     @Override
     public AccountDTO updateRole(Long userId, String roleName){
-        user = userDAO.findById(userId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
         account = accountDAO.findByUser_UserId(userId).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.USER_NOTFOUND+userId));
-
-        role = roleDAO.getByRoleName(roleName).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.ROLE_NOTFOUND+roleName));
+                new ResourceNotFoundException(EUser.USER_NOT_FOUND.getDescription(userId)));
+        role = roleServiceImp.getRoleReturnRole(roleName);
         account.setRole(role);
         account = accountDAO.save(account);
         accountDTO = new AccountDTO();

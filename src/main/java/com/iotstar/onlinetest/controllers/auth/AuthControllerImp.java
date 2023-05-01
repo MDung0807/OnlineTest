@@ -11,6 +11,8 @@ import com.iotstar.onlinetest.security.jwt.JwtUtils;
 import com.iotstar.onlinetest.security.services.AccountDetailsImpl;
 import com.iotstar.onlinetest.services.account.AccountService;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.statval.EAccount;
+import com.iotstar.onlinetest.statval.EUser;
 import com.iotstar.onlinetest.utils.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +60,7 @@ public class AuthControllerImp implements IAuthController{
         }
         userRequest.setAvatar(avatar);
         userService.createUser(userRequest);
-        MessageResponse messageResponse = new MessageResponse(AppConstant.USER_REGISTER_SUCCESS);
+        MessageResponse messageResponse = new MessageResponse(EUser.USER_REGISTER_SUCCESS.getDescription());
         return ResponseEntity.ok(new Response(false, messageResponse));
     }
 
@@ -88,7 +90,7 @@ public class AuthControllerImp implements IAuthController{
     @PostMapping("/auth/reset")
     public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest){
         accountService.update(accountRequest);
-        MessageResponse messageResponse = new MessageResponse( AppConstant.RESET_PASSWORD_SUCCESS);
+        MessageResponse messageResponse = new MessageResponse(EAccount.RESET_PASSWORD_SUCCESS.getDes());
         return ResponseEntity.ok(new Response(false, messageResponse));
     }
 

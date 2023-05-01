@@ -10,6 +10,7 @@ import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.repositories.subject.SubjectDAO;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.statval.ESubject;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
@@ -33,20 +34,13 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
     @Autowired
     private ModelMapper mapper;
     @Autowired
-    private UserDAO userDAO;
-    @Autowired
     private FileUtils fileUtils;
 
     private Subject subject;
 
-    private Subject uploadImage(MultipartFile fileInput, Subject subject){
-        subject.setImage(fileUtils.upload(fileInput, AppConstant.IMG_NAME_SUBJECT+subject.getSubjectId()));
-        return subjectDAO.save(subject);
-    }
-
     public Subject getSubjectReturnSubject(Long id){
         return subjectDAO.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(AppConstant.SUBJECT_NOTFOUND+id));
+                new ResourceNotFoundException(ESubject.SUBJECT_NOTFOUND.getDes(id)));
     }
     @Override
     public SubjectResponse getSubject(Long subjectId) {
@@ -91,7 +85,10 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
         subject = mapper.map(subjectRequest, Subject.class);
         subject.setStatus(1);
         subject = subjectDAO.save(subject);
-        subject = uploadImage(subjectRequest.getImage(), subject);
+        subject.setImage(
+                fileUtils.upload(subjectRequest.getImage(),
+                        ESubject.IMG_NAME_SUBJECT.getDes(subject.getSubjectId())));
+        subject = subjectDAO.save(subject);
         userService.addSubjectInUser(userId, subject);
     }
 
@@ -100,7 +97,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
     public void updateSubject(SubjectRequest subjectRequest) {
         subject = getSubjectReturnSubject(subjectRequest.getSubjectId());
         if(subjectDAO.existsByName(subjectRequest.getName())){
-            throw new ResourceExistException(AppConstant.SUBJECT_EXIST);
+            throw new ResourceExistException(ESubject.SUBJECT_EXIST.getDes());
         }
         subject= mapper.map(subjectRequest, Subject.class);
         subject.setStatus(1);
@@ -121,6 +118,9 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         }
         subject = getSubjectReturnSubject(id);
-        subject = uploadImage(image, subject);
+        subject.setImage(
+                fileUtils.upload(image,
+                        ESubject.IMG_NAME_SUBJECT.getDes(subject.getSubjectId())));
+        subject = subjectDAO.save(subject);
     }
 }
