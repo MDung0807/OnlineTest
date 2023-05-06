@@ -110,7 +110,7 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
         question = questionDAO.save(question);
 
         question.setImage(fileUtils.upload(questionRequest.getImage(),
-                EQuestion.IMG_NAME_QUESTION.getDes(questionRequest.getQuestionId())));
+                EQuestion.IMG_NAME_QUESTION.getDes(question.getQuestionId())));
 
         question = questionDAO.save(question);
         answerService.createAnswers(questionRequest.getAnswers(), question);
