@@ -65,4 +65,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Question> questions;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private WishList wishList;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Review review;
 }

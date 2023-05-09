@@ -87,7 +87,7 @@ public class AuthControllerImp implements IAuthController{
         );
     }
 
-    @PostMapping("/auth/reset")
+    @Override
     public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest){
         accountService.update(accountRequest);
         MessageResponse messageResponse = new MessageResponse(EAccount.RESET_PASSWORD_SUCCESS.getDes());

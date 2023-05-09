@@ -10,9 +10,12 @@ import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
+import com.iotstar.onlinetest.models.WishList;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.account.AccountService;
+import com.iotstar.onlinetest.services.review.ReviewServiceImp;
+import com.iotstar.onlinetest.services.wishList.WishListServiceImp;
 import com.iotstar.onlinetest.statval.EUser;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
@@ -37,6 +40,10 @@ public class UserServiceImp implements UserService {
     private AccountDAO accountDAO;
     @Autowired
     private FileUtils fileUtils;
+    @Autowired
+    private WishListServiceImp wishListServiceImp;
+    @Autowired
+    private ReviewServiceImp reviewServiceImp;
     @Autowired
     private ModelMapper mapper;
     private User user;
@@ -96,6 +103,12 @@ public class UserServiceImp implements UserService {
         //Create acc
         accountDTO.setUser(user);
         accountService.createAccount(accountDTO);
+
+        //Create WishList
+        wishListServiceImp.createWishList(user);
+
+        //Create Review
+        reviewServiceImp.createReview(user);
     }
 
     @Override

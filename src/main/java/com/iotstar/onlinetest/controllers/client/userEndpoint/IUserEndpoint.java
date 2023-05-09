@@ -16,18 +16,18 @@ import org.springframework.web.multipart.MultipartFile;
         "@environment.getProperty('ROLE_ADMIN')})")
 public interface IUserEndpoint {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public ResponseEntity<?> logout(HttpServletRequest request);
+    ResponseEntity<?> logout(HttpServletRequest request);
 
     @PostMapping("/updateAvatar")
-    public ResponseEntity<Response> updateAvatar(@ModelAttribute MultipartFile avatar);
+    ResponseEntity<Response> updateAvatar(@ModelAttribute MultipartFile avatar);
 
     @PostMapping("/updateProfile")
-    public ResponseEntity<Response> updateProfile(@Valid @RequestBody UserProfileRequest userParam1,
+    ResponseEntity<Response> updateProfile(@Valid @RequestBody UserProfileRequest userParam1,
                                                   @Valid @RequestPart(value = "user", required = false)UserProfileRequest userParam2);
 
     @GetMapping("/delAcc")
-    public ResponseEntity<Response> delAcc(@RequestParam("userId") Long userId);
+    ResponseEntity<Response> delAcc(@RequestParam("userId") Long userId);
 
     @GetMapping("/profile")
-    public ResponseEntity<Response> getUser();
+    ResponseEntity<Response> getUser();
 }

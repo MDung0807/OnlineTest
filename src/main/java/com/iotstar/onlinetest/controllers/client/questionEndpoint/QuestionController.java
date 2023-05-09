@@ -32,7 +32,7 @@ public class QuestionController implements IQuestionController{
     private AuthUtils authUtils;
 
     @Override
-    public ResponseEntity<Response> getQuestionByTopic(@RequestParam Long topicId){
+    public ResponseEntity<Response> getQuestionByTopic(Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
         return new ResponseEntity<>(
                 new Response(false, questionResponses),
@@ -49,9 +49,7 @@ public class QuestionController implements IQuestionController{
         );
     }
     @Override
-    public ResponseEntity<Response> addQuestion(@Valid @ModelAttribute QuestionRequest param1,
-                                         @ModelAttribute MultipartFile image,
-                                         @Valid @RequestPart(value = "question", required = false) QuestionRequest param2){
+    public ResponseEntity<Response> addQuestion(QuestionRequest param1, MultipartFile image, QuestionRequest param2){
         QuestionRequest questionRequest;
         if (param2 == null){
             questionRequest = param1;

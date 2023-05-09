@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -38,4 +37,8 @@ public class Topic {
     @ManyToMany(mappedBy = "topics")
     @JsonIgnore
     private List<Test> tests;
+
+    @OneToMany(mappedBy = "topic")
+    @JsonIgnore
+    private List<WishItem> wishItems;
 }

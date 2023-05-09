@@ -6,7 +6,7 @@ import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Topic;
-import com.iotstar.onlinetest.repositories.subject.TopicDAO;
+import com.iotstar.onlinetest.repositories.TopicDAO;
 import com.iotstar.onlinetest.services.subject.SubjectServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.statval.ETopic;

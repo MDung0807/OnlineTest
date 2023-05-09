@@ -36,7 +36,7 @@ public class UserControllerImp implements IUserEndpoint{
     private AuthUtils authUtils;
 
     private UserResponse userResponse;
-    @GetMapping("/profile")
+    @Override
     public ResponseEntity<Response> getUser(){
         Long userId = authUtils.getAccountDetail().getUserId();
         userResponse = userService.getUser(userId);
@@ -46,7 +46,7 @@ public class UserControllerImp implements IUserEndpoint{
     }
 
 
-    @GetMapping("/delAcc")
+    @Override
     public ResponseEntity<Response> delAcc(Long userId){
         Long id = authUtils.getAccountDetail().getAccountId();
         if (!id.equals(userId))
@@ -58,7 +58,7 @@ public class UserControllerImp implements IUserEndpoint{
                 HttpStatus.OK);
     }
 
-    @PostMapping("/updateProfile")
+    @Override
     public ResponseEntity<Response> updateProfile(UserProfileRequest userParam1, UserProfileRequest userParam2) {
         Long userId = authUtils.getAccountDetail().getUserId();
         UserProfileRequest userProfileRequest = null;
@@ -80,7 +80,7 @@ public class UserControllerImp implements IUserEndpoint{
 
     }
 
-    @PostMapping("/updateAvatar")
+    @Override
     public ResponseEntity<Response> updateAvatar(MultipartFile avatar){
         Long id = authUtils.getAccountDetail().getAccountId();
         userResponse = userService.updateAvatar(id, avatar);

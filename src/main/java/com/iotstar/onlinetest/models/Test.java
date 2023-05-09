@@ -59,4 +59,8 @@ public class Test {
     @JsonIgnore
     private List<Question> questions;
 
+    @OneToMany(mappedBy = "test")
+    @JsonIgnore
+    private List<ReviewItem> reviewItems;
+
 }

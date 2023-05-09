@@ -1,4 +1,4 @@
-package com.iotstar.onlinetest.repositories.subject;
+package com.iotstar.onlinetest.repositories;
 
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Test;
