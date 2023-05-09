@@ -2,12 +2,11 @@ package com.iotstar.onlinetest.controllers.client.wishEndpoint;
 
 import com.iotstar.onlinetest.DTOs.requests.WishItemRequest;
 import com.iotstar.onlinetest.DTOs.responses.Response;
-import com.iotstar.onlinetest.DTOs.responses.WishListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/wish")
-public interface WishController {
+public interface IWishController {
 
     @GetMapping({"", "/"})
     ResponseEntity<Response> getWishListByUserId(@RequestParam Long userId,

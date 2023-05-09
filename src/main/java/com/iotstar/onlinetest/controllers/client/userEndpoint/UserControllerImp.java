@@ -45,7 +45,6 @@ public class UserControllerImp implements IUserEndpoint{
                 HttpStatus.OK);
     }
 
-
     @Override
     public ResponseEntity<Response> delAcc(Long userId){
         Long id = authUtils.getAccountDetail().getAccountId();

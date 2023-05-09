@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-public class WishListControllerImp implements WishController{
+public class WishListController implements IWishController {
     @Autowired
     private WishListService wishListService;
     @Autowired
