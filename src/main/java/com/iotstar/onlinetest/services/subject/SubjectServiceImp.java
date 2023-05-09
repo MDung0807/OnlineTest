@@ -9,11 +9,13 @@ import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
 import com.iotstar.onlinetest.repositories.SubjectDAO;
 import com.iotstar.onlinetest.services.user.UserService;
+import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.statval.ESubject;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,8 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
     @Autowired
     private SubjectDAO subjectDAO;
     @Autowired
-    private UserService userService;
+    @Lazy
+    private UserServiceImp userServiceImp;
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -76,7 +79,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
     @Transactional
     public void createSubject(SubjectRequest subjectRequest, Long userId) {
         if (subjectDAO.existsByName(subjectRequest.getName())){
-            userService.addSubjectInUser(userId, subjectDAO.findByName(subjectRequest.getName()));
+            userServiceImp.addSubjectInUser(userId, subjectDAO.findByName(subjectRequest.getName()));
             return;
         }
 
@@ -88,7 +91,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
                 fileUtils.upload(subjectRequest.getImage(),
                         ESubject.IMG_NAME_SUBJECT.getDes(subject.getSubjectId())));
         subject = subjectDAO.save(subject);
-        userService.addSubjectInUser(userId, subject);
+        userServiceImp.addSubjectInUser(userId, subject);
     }
 
     @Override
@@ -113,7 +116,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
 
     @Override
     public void updateImage(Long id, MultipartFile image, Long userId) {
-        if (!userService.existsSubjectById(userId, id)){
+        if (!userServiceImp.existsSubjectById(userId, id)){
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         }
         subject = getSubjectReturnSubject(id);
@@ -121,5 +124,10 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
                 fileUtils.upload(image,
                         ESubject.IMG_NAME_SUBJECT.getDes(subject.getSubjectId())));
         subject = subjectDAO.save(subject);
+    }
+    @Override
+    public SubjectResponse getSubjectByUserId(Long userId) {
+        subject = userServiceImp.getSubjectInUser(userId);
+        return mapper.map(subject, SubjectResponse.class);
     }
 }

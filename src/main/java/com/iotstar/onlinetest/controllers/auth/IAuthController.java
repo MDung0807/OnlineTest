@@ -14,12 +14,11 @@ public interface IAuthController {
     @RequestMapping(value = "auth/register")
     ResponseEntity<?> createUser(@Valid @ModelAttribute UserRequest userParam1,
                                  @ModelAttribute MultipartFile avatar,
-                                 @RequestPart(value = "user", required = false) @Valid UserRequest userParam2,
-                                 BindingResult result);
+                                 @RequestPart(value = "user", required = false) @Valid UserRequest userParam2);
 
     @PostMapping("auth/login")
     ResponseEntity<?> login (@RequestBody LoginRequest loginRequest);
 
     @PostMapping("/auth/reset")
-    public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest);
+    ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest);
 }

@@ -22,8 +22,7 @@ public class RoleControllerImp implements IRoleController{
 
 
     @Override
-    public ResponseEntity<?> getRoles(@RequestParam(required = false, defaultValue = "0") int index,
-                                      @RequestParam(required = false, defaultValue = "20") int size){
+    public ResponseEntity<?> getRoles(int index, int size){
         paging.setPageSize(size);
         paging.setPageIndex(index);
 
@@ -32,24 +31,24 @@ public class RoleControllerImp implements IRoleController{
     }
 
     @Override
-    public ResponseEntity<?> getRoleByRoleName(@RequestBody RoleRequest roleRequest){
+    public ResponseEntity<?> getRoleByRoleName( RoleRequest roleRequest){
         RoleResponse roleResponse = roleService.getRoleByRoleName(roleRequest.getRoleName());
 
         return ResponseEntity.ok(new Response(false, roleResponse));
     }
 
     @Override
-    public void addRole(@RequestBody RoleRequest roleRequest) {
+    public void addRole(RoleRequest roleRequest) {
         roleService.createRole(roleRequest);
     }
 
     @Override
-    public void delRole(@RequestBody RoleRequest roleRequest){
+    public void delRole(RoleRequest roleRequest){
         roleService.deleteRole(roleRequest);
     }
 
     @Override
-    public ResponseEntity<Response> updateRole(@RequestBody RoleRequest roleRequest){
+    public ResponseEntity<Response> updateRole(RoleRequest roleRequest){
         Response response = new Response(false, roleService.updateRole(roleRequest));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

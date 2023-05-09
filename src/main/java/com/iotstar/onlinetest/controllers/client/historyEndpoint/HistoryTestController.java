@@ -27,8 +27,7 @@ public class HistoryTestController implements IHistoryController{
     private AuthUtils authUtils;
 
     @Override
-    public ResponseEntity<Response> getTestHis(@RequestParam Long userId,
-                                               @RequestParam Long testId){
+    public ResponseEntity<Response> getTestHis(Long userId, Long testId){
         Long id = authUtils.getAccountDetail().getUserId();
         if (!id.equals(userId))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
@@ -40,8 +39,7 @@ public class HistoryTestController implements IHistoryController{
     }
 
     @Override
-    public ResponseEntity<Response> getScore(@RequestParam Long userId,
-                                             @RequestParam Long testId){
+    public ResponseEntity<Response> getScore(Long userId, Long testId){
         Long id = authUtils.getAccountDetail().getUserId();
         if (!id.equals(userId))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
@@ -52,7 +50,7 @@ public class HistoryTestController implements IHistoryController{
         );
     }
     @Override
-    public ResponseEntity<Response> finishTest(@RequestBody HistoryRequest request){
+    public ResponseEntity<Response> finishTest(HistoryRequest request){
         Long userId = authUtils.getAccountDetail().getUserId();
         if (!userId.equals(request.getUserId()))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);

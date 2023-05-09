@@ -19,4 +19,5 @@ public interface SubjectService {
 
     public void delSubject(Long id);
     public void updateImage(Long id, MultipartFile image, Long userId);
+    public SubjectResponse getSubjectByUserId(Long userId);
 }

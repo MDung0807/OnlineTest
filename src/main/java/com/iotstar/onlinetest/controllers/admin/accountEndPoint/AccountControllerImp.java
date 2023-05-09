@@ -24,8 +24,7 @@ public class AccountControllerImp implements IAccountController {
 
 
     @Override
-    public ResponseEntity<Response> updateRole(@Valid @RequestParam("userId") Long userId,
-                                               @RequestParam("roleName") String roleName){
+    public ResponseEntity<Response> updateRole(Long userId, String roleName){
         AccountDTO accountDTO = accountService.updateRole(userId, roleName);
         return new ResponseEntity<>(
                 new Response(false, accountDTO),

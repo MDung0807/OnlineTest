@@ -87,4 +87,17 @@ public class SubjectController implements ISubjectController{
                         new MessageResponse(AppConstant.SUCCESS))
         );
     }
+
+    @Override
+    public ResponseEntity<Response> getSubjectByUserId(Long userId){
+        Long id = authUtils.getAccountDetail().getUserId();
+        if (!id.equals(userId))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        //Check user created the subject
+        SubjectResponse subjectResponse = subjectService.getSubjectByUserId(userId);
+        return ResponseEntity.ok(
+                new Response(false,
+                        new MessageResponse(AppConstant.SUCCESS))
+        );
+    }
 }

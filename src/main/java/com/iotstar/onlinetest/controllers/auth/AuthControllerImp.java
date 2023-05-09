@@ -46,10 +46,7 @@ public class AuthControllerImp implements IAuthController{
 
 
     @Override
-    public ResponseEntity<?> createUser(@Valid @ModelAttribute  UserRequest userParam1,
-                                        @ModelAttribute MultipartFile avatar,
-                                        @RequestPart(value = "user", required = false) @Valid UserRequest userParam2,
-                                        BindingResult result) {
+    public ResponseEntity<?> createUser(UserRequest userParam1, MultipartFile avatar, UserRequest userParam2) {
         UserRequest userRequest;
         if(userParam2 ==null){
             userRequest = userParam1;
@@ -65,7 +62,7 @@ public class AuthControllerImp implements IAuthController{
     }
 
     @Override
-    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login (LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
@@ -88,7 +85,7 @@ public class AuthControllerImp implements IAuthController{
     }
 
     @Override
-    public ResponseEntity<?> resetPass(@RequestBody @Valid AccountRequest accountRequest){
+    public ResponseEntity<?> resetPass(AccountRequest accountRequest){
         accountService.update(accountRequest);
         MessageResponse messageResponse = new MessageResponse(EAccount.RESET_PASSWORD_SUCCESS.getDes());
         return ResponseEntity.ok(new Response(false, messageResponse));

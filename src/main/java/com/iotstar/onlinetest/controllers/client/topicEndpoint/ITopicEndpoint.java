@@ -10,15 +10,15 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ITopicEndpoint {
     @RequestMapping("/add")
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
-    public ResponseEntity<?> addTopic (@ModelAttribute TopicRequest param1,
+    ResponseEntity<?> addTopic (@ModelAttribute TopicRequest param1,
                                        @ModelAttribute MultipartFile image,
                                        @RequestPart(value = "topic", required = false) TopicRequest param2);
 
     @GetMapping({"", "/"})
-    public ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId,
+    ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId,
                                                  @RequestParam(required = false, defaultValue = "0") int index,
                                                  @RequestParam(required = false, defaultValue = "1") int size);
 
     @GetMapping("/del")
-    public ResponseEntity<Response> delTopicById(@RequestParam Long topicId);
+    ResponseEntity<Response> delTopicById(@RequestParam Long topicId);
 }

@@ -67,7 +67,7 @@ public class QuestionController implements IQuestionController{
     }
 
     @Override
-    public ResponseEntity<?> addImg( @Valid @ModelAttribute QuestionImageRequest questionImageRequest){
+    public ResponseEntity<?> addImg( QuestionImageRequest questionImageRequest){
         questionService.updateImg(questionImageRequest);
         return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));
     }

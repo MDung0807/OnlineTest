@@ -14,8 +14,8 @@ import java.util.List;
 @PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
 public interface IAccountController {
     @GetMapping({"/", ""})
-    public List<AccountDTO> getAllAcc ();
+    List<AccountDTO> getAllAcc ();
     @GetMapping("/updateRole")
-    public ResponseEntity<Response> updateRole(@Valid @RequestParam("userId") Long userId,
+    ResponseEntity<Response> updateRole(@Valid @RequestParam("userId") Long userId,
                                                @RequestParam("roleName") String roleName);
 }

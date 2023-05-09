@@ -183,4 +183,8 @@ public class UserServiceImp implements UserService {
         user.setSubject(subject);
         userDAO.save(user);
     }
+
+    public Subject getSubjectInUser(Long userId){
+        return getUserReturnUser(userId).getSubject();
+    }
 }

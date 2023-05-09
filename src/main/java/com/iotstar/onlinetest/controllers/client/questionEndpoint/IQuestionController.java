@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/question")
-//@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public interface IQuestionController {
     @PreAuthorize("hasAnyRole({@environment.getProperty('ROLE_STUDENT'),@environment.getProperty('ROLE_TEACHER')})")
     @GetMapping("/inTopic")
@@ -25,5 +24,5 @@ public interface IQuestionController {
                                                 @Valid @RequestPart(value = "question", required = false) QuestionRequest param2);
 
     @PostMapping("/addImg")
-    public ResponseEntity<?> addImg( @Valid @ModelAttribute QuestionImageRequest questionImageRequest);
+    ResponseEntity<?> addImg( @Valid @ModelAttribute QuestionImageRequest questionImageRequest);
 }
