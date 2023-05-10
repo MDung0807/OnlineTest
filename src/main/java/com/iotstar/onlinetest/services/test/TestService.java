@@ -7,8 +7,9 @@ import com.iotstar.onlinetest.models.Test;
 import java.util.List;
 
 public interface TestService {
-    public Test create(TestRequest testRequest);
-    public TestResponse getById(Long id);
-    public List<TestResponse> getByTopicId(Long topicId);
+    Test create(TestRequest testRequest);
+    TestResponse getById(Long id);
+    List<TestResponse> getByTopicId(Long topicId);
+
 
 }

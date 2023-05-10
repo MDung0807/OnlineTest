@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,13 @@ public class HistoryServiceImp implements HistoryService{
         User user = userServiceImp.getUserReturnUser(userId);
         Test test = testServiceImp.getTestReturnTest(testId);
         return historyDAO.findByTestAndUser(test, user).orElseThrow(()->
+                new ResourceNotFoundException(AppConstant.NOT_FOUND));
+
+    }
+
+    public List<History> getHistoryReturnHistory(Long userId){
+        User user = userServiceImp.getUserReturnUser(userId);
+        return historyDAO.findByUser(user).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.NOT_FOUND));
 
     }
@@ -87,17 +95,18 @@ public class HistoryServiceImp implements HistoryService{
                 if(i.getAnswer().isCorrect())
                     count++;
         }
-        String score = String.valueOf(count)+ "/" + String.valueOf(size);
-
+        String totalCorrect = String.valueOf(count)+ "/" + String.valueOf(size);
+        float score = returnScore(size, count);
         history = new History();
         history.setUser(userServiceImp.getUserReturnUser(request.getUserId()));
         history.setTest(testServiceImp.getTestReturnTest(request.getTestId()));
         history.setHisItems(hisItems);
         history.setTime(LocalDateTime.now());
+        history.setTotalCorrect(totalCorrect);
         history.setScore(score);
 
         historyDAO.save(history);
-        return score;
+        return null;
     }
 
     @Override
@@ -108,5 +117,20 @@ public class HistoryServiceImp implements HistoryService{
             scoreResponses.add(mapper.map(i, ScoreResponse.class));
         }
         return scoreResponses;
+    }
+
+    @Override
+    public List<ScoreResponse> getHistoryByUserId(Long userId) {
+        List<ScoreResponse> scoreResponses = new ArrayList<>();
+        List<History> histories = getHistoryReturnHistory(userId);
+        for (History i: histories){
+            scoreResponses.add(mapper.map(i, ScoreResponse.class));
+        }
+        return scoreResponses;
+    }
+
+    private float returnScore(int size, int totalCorrect){
+        DecimalFormat format = new DecimalFormat("#.###");
+        return Float.parseFloat(format.format((float) totalCorrect/size));
     }
 }

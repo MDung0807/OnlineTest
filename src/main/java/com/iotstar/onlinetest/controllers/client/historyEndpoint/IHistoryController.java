@@ -15,4 +15,8 @@ public interface IHistoryController {
                                              @RequestParam Long testId);
     @PostMapping("/finishTest")
     ResponseEntity<Response> finishTest(@RequestBody HistoryRequest request);
+
+    @GetMapping("/inUser")
+    ResponseEntity<Response> getTestHisInUser(@RequestParam Long userId);
+
 }

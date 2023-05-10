@@ -48,10 +48,6 @@ public class User {
     @JsonIgnore
     private Account account;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Score> scores;
-
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore

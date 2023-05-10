@@ -37,8 +37,6 @@ public class UserServiceImp implements UserService {
     @Autowired
     private AccountService accountService;
     @Autowired
-    private AccountDAO accountDAO;
-    @Autowired
     private FileUtils fileUtils;
     @Autowired
     private WishListServiceImp wishListServiceImp;

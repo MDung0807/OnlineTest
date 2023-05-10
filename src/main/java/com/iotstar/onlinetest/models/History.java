@@ -16,7 +16,10 @@ public class History {
     private Long id;
 
     @Column(nullable = true)
-    private String score;
+    private String totalCorrect;
+
+    @Column(nullable = false)
+    private float score;
 
     @ManyToOne
     @JoinColumn(name = "testId")

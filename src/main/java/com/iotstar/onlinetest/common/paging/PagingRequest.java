@@ -1,11 +1,17 @@
 package com.iotstar.onlinetest.common.paging;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class PagingRequest implements Pageable {
-    public int pageIndex;
-    public int pageSize;
+    private int pageIndex=0;
+    private int pageSize=10;
+    private Sort sort;
+
+    public Pageable pageable(){
+        return PageRequest.of(getPageNumber(), getPageSize());
+    }
 
     public void setPageIndex(int pageIndex) {
         this.pageIndex = pageIndex;

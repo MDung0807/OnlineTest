@@ -8,12 +8,12 @@ public class TopicPaging extends PagingRequest {
     private int pageIndex, pageSize;
     @Override
     public int getPageNumber() {
-        return pageIndex;
+        return super.getPageNumber();
     }
 
     @Override
     public int getPageSize() {
-        return pageSize;
+        return super.getPageSize();
     }
 
     @Override
@@ -27,6 +27,6 @@ public class TopicPaging extends PagingRequest {
     }
 
     public Pageable pageable (){
-        return PageRequest.of(getPageNumber(), getPageSize());
+        return PageRequest.of(pageIndex, pageSize);
     }
 }

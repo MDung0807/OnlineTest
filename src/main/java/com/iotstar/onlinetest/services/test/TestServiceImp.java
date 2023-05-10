@@ -111,14 +111,19 @@ public class TestServiceImp extends TestPaging implements TestService{
 
     @Override
     public List<TestResponse> getByTopicId(Long topicId){
-        Topic topic = topicService.findTopicById(topicId);
-        List<Topic> topics = new ArrayList<>();
-        topics.add(topic);
-       List<Test> tests= testDAO.findByTopics(topic, pageable());
+
+//        List<Topic> topics = new ArrayList<>();
+//        topics.add(topic);
+       List<Test> tests= getTestsByTopicId(topicId);
         List<TestResponse> responses = new ArrayList<>();
         for (Test i: tests){
             responses.add(mapper.map(i, TestResponse.class));
         }
         return responses;
+    }
+
+    public List<Test> getTestsByTopicId(Long topicId){
+        Topic topic = topicService.findTopicById(topicId);
+        return testDAO.findByTopics(topic, pageable());
     }
 }

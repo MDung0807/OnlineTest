@@ -2,6 +2,7 @@ package com.iotstar.onlinetest.services.topic;
 
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
+import com.iotstar.onlinetest.common.paging.PagingRequest;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TopicServiceImp extends TopicPaging implements TopicService{
+public class TopicServiceImp extends PagingRequest implements TopicService{
     @Autowired
     private TopicDAO topicDAO;
     @Autowired

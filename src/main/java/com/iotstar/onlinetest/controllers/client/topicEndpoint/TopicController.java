@@ -4,12 +4,14 @@ import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
+import com.iotstar.onlinetest.common.paging.PagingRequest;
 import com.iotstar.onlinetest.services.topic.TopicPaging;
 import com.iotstar.onlinetest.services.topic.TopicService;
 import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,8 +26,11 @@ public class TopicController implements ITopicEndpoint{
     private TopicService topicService;
     @Autowired
     private UserService userService;
+//    @Autowired
+//    private TopicPaging paging;
+    @Qualifier("topicServiceImp")
     @Autowired
-    private TopicPaging paging;
+    private PagingRequest pagingRequest;
     @Autowired
     private AuthUtils authUtils;
 
@@ -52,8 +57,10 @@ public class TopicController implements ITopicEndpoint{
 
     @Override
     public ResponseEntity<?> getTopicBySubjectId(Long subjectId, int index, int size){
-        paging.setPageIndex(index);
-        paging.setPageSize(size);
+//        paging.setPageIndex(index);
+//        paging.setPageSize(size);
+        pagingRequest.setPageIndex(index);
+        pagingRequest.setPageSize(size);
         List<TopicResponse> topicResponses = topicService.getAllBySubject(subjectId);
         return ResponseEntity.ok(
                 new Response(false, topicResponses)

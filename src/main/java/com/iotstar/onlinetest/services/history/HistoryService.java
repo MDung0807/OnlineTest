@@ -7,7 +7,8 @@ import com.iotstar.onlinetest.DTOs.responses.ScoreResponse;
 import java.util.List;
 
 public interface HistoryService {
-    public List<ScoreResponse> getScore(Long userId, Long testId);
-    public List<HistoryResponse> getHistoryByUserId(Long userId, Long testId);
-    public String setHistoryByUserId(HistoryRequest request);
+    List<ScoreResponse> getScore(Long userId, Long testId);
+    List<HistoryResponse> getHistoryByUserId(Long userId, Long testId);
+    List<ScoreResponse> getHistoryByUserId(Long userId);
+    String setHistoryByUserId(HistoryRequest request);
 }
