@@ -40,7 +40,7 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
     }
 
     public List<WishItem> getWishItems(Long wishListId){
-        return wishItemDAO.findByWishList_WishListId(wishListId, pageable()).orElseThrow(()->
+        return wishItemDAO.findWishItemsByWishListId(wishListId, pageable()).orElseThrow(()->
                 new ResourceNotFoundException(EWish.WISHLIST_NOT_FOUND.getDescription()));
     }
 
