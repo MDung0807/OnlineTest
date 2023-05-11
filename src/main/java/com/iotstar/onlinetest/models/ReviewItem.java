@@ -7,8 +7,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reviewItems",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"testId", "reviewId"}))
+//@Table(name = "reviewItems",
+//        uniqueConstraints = @UniqueConstraint(columnNames = {"testId", "reviewId"}))
+
+@Table(name = "reviewItems")
 @Data
 public class ReviewItem {
     @Id

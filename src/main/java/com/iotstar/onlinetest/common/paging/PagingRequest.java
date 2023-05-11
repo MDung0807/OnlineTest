@@ -9,6 +9,10 @@ public class PagingRequest implements Pageable {
     private int pageSize=10;
     private Sort sort;
 
+    public void setSort(Sort sort) {
+        this.sort = sort;
+    }
+
     public Pageable pageable(){
         return PageRequest.of(getPageNumber(), getPageSize());
     }
@@ -38,7 +42,7 @@ public class PagingRequest implements Pageable {
 
     @Override
     public Sort getSort() {
-        return null;
+        return sort;
     }
 
     @Override

@@ -117,7 +117,7 @@ public class ExceptionHandlerController{
         ExceptionDetails details = new ExceptionDetails(ex.message, LocalDateTime.now());
         return new ResponseEntity<>(
                 new Response(true, details),
-                HttpStatus.OK
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
     @ExceptionHandler(BindException.class)
@@ -146,7 +146,7 @@ public class ExceptionHandlerController{
         ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(
                 new Response(true, details),
-                HttpStatus.OK
+                HttpStatus.CONFLICT
         );
     }
 }

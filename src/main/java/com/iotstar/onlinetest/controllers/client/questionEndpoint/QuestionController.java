@@ -35,7 +35,7 @@ public class QuestionController implements IQuestionController{
     public ResponseEntity<Response> getQuestionByTopic(Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
         return new ResponseEntity<>(
-                new Response(false, questionResponses),
+                new Response(false, null),
                 HttpStatus.OK);
     }
 
@@ -69,6 +69,12 @@ public class QuestionController implements IQuestionController{
     @Override
     public ResponseEntity<?> addImg( QuestionImageRequest questionImageRequest){
         questionService.updateImg(questionImageRequest);
+        return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));
+    }
+
+    @Override
+    public ResponseEntity<Response> delQues(Long questionId) {
+        questionService.deleteQuestion(questionId);
         return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));
     }
 }

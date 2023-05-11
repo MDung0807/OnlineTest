@@ -2,7 +2,8 @@ package com.iotstar.onlinetest.statval;
 
 public enum ETopic {
     TOPIC_NOTFOUND("Not found topicId: "),
-    IMG_NAME_TOPIC("topic_img_");
+    IMG_NAME_TOPIC("topic_img_"),
+    TOPIC_DEPRECATED ("Topic Deprecated");
 
     public final String des;
     ETopic(String des){

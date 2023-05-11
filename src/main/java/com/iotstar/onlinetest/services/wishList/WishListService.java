@@ -6,5 +6,5 @@ import com.iotstar.onlinetest.DTOs.responses.WishListResponse;
 public interface WishListService {
     void addWishItem (WishItemRequest wishItemRequest);
     WishListResponse getWishListByUserId(Long userId);
-    WishListResponse delWishItem(WishItemRequest wishItemRequest);
+    void delWishItem(WishItemRequest wishItemRequest);
 }

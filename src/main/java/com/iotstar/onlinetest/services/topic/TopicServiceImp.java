@@ -3,6 +3,7 @@ package com.iotstar.onlinetest.services.topic;
 import com.iotstar.onlinetest.DTOs.requests.TopicRequest;
 import com.iotstar.onlinetest.DTOs.responses.TopicResponse;
 import com.iotstar.onlinetest.common.paging.PagingRequest;
+import com.iotstar.onlinetest.exceptions.DeprecatedException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
@@ -10,6 +11,7 @@ import com.iotstar.onlinetest.models.Topic;
 import com.iotstar.onlinetest.repositories.TopicDAO;
 import com.iotstar.onlinetest.services.subject.SubjectServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
+import com.iotstar.onlinetest.statval.EQuestion;
 import com.iotstar.onlinetest.statval.ETopic;
 import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
@@ -43,7 +45,10 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
     }
 
     public List<Question> getQuestionsInTopic(Long topicId){
-        return getTopicReturnTopic(topicId).getQuestions();
+        topic = getTopicReturnTopic(topicId);
+        if (topic.getStatus()==0)
+            throw new DeprecatedException(ETopic.TOPIC_DEPRECATED.getDes());
+        return topic.getQuestions();
     }
     @Override
     public void create(TopicRequest topicRequest) {
@@ -87,7 +92,8 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
         List<TopicResponse> topicResponses = new ArrayList<>();
         List<Topic> topics = topicDAO.findBySubject(subject, pageable());
         for (Topic i: topics){
-            topicResponses.add(mapper.map(i, TopicResponse.class));
+            if (i.getStatus()!= 0)
+                topicResponses.add(mapper.map(i, TopicResponse.class));
         }
         return topicResponses;
     }

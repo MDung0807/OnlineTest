@@ -63,4 +63,30 @@ public class ReviewController implements IReviewController {
                 HttpStatus.OK
         );
     }
+
+    @Override
+    public ResponseEntity<Response> inUser(Long userId, int index, int size) {
+        paging.setPageSize(size);
+        paging.setPageIndex(index);
+        Long id = authUtils.getAccountDetail().getUserId();
+        if (!id.equals(userId))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        List<ReviewItemResponse> responses = reviewService.getAllReviewByUser(userId);
+        return new ResponseEntity<>(
+                new Response(false, responses),
+                HttpStatus.OK
+        );
+    }
+
+    @Override
+    public ResponseEntity<Response> update(ReviewItemRequest request) {
+        Long id = authUtils.getAccountDetail().getUserId();
+        if (!id.equals(request.getUserId()))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        ReviewItemResponse itemResponse = reviewService.updateReview(request);
+        return new ResponseEntity<>(
+                new Response(false, itemResponse),
+                HttpStatus.OK
+        );
+    }
 }

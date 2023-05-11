@@ -48,7 +48,8 @@ public class AccountServiceImp implements AccountService{
     @Override
     @Transactional
     public void delAcc(AccountDTO accountDTO){
-
+        account = accountDAO.findById(accountDTO.getAccountId()).orElseThrow(()->
+                new ResourceNotFoundException(EAccount.INFO_ACC_NOTFOUND.getDes()));
     }
 
     @Override

@@ -47,7 +47,9 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
     @Override
     public SubjectResponse getSubject(Long subjectId) {
         subject = getSubjectReturnSubject(subjectId);
-        return mapper.map(subject, SubjectResponse.class);
+        if (subject.getStatus()!= 0)
+            return mapper.map(subject, SubjectResponse.class);
+        return null;
     }
 
 
@@ -70,7 +72,8 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
         List<Subject> subjects= subjectDAO.findAll(pageable()).getContent();
         List<SubjectResponse> subjectResponses = new ArrayList<>();
         for (Subject i: subjects){
-            subjectResponses.add(mapper.map(i, SubjectResponse.class));
+            if (i.getStatus()!=0)
+                subjectResponses.add(mapper.map(i, SubjectResponse.class));
         }
         return subjectResponses;
     }
@@ -106,6 +109,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
         subject = subjectDAO.save(subject);
     }
 
+    //deprecated
     @Override
     @Transactional
     public void delSubject(Long id) {

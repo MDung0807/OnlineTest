@@ -75,7 +75,7 @@ public class AuthControllerImp implements IAuthController{
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok( new Response(false, new JwtResponse(
-                accountDetails.getAccountId(),
+                accountDetails.getUserId(),
                 jwt,
                 accountDetails.getEmail(),
                 accountDetails.getPhoneNumber(),

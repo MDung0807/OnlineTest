@@ -38,6 +38,10 @@ public class ReviewServiceImp extends ReviewPaging implements ReviewService {
         reviewDAO.saveAndFlush(review);
     }
 
+    private ReviewItem getReviewItem(Long userId, Long testId){
+        return reviewItemDAO.findByUserIdAndTestId(userId, testId).orElseThrow(()->
+                new ResourceNotFoundException(EReview.E_REVIEW_NOTFOUND.getDescription()));
+    }
     public Review getReviewByUserId(Long userId){
         return reviewDAO.findByUser_UserId(userId).orElseThrow(()->
                 new ResourceNotFoundException(EReview.E_REVIEW_NOTFOUND.getDescription()));
@@ -64,17 +68,42 @@ public class ReviewServiceImp extends ReviewPaging implements ReviewService {
                 new ResourceNotFoundException(EReview.E_REVIEW_IN_TEST_NOTFOUND.getDescription()));
         List<ReviewItemResponse> responses = new ArrayList<>();
         for (ReviewItem i: reviewItems){
-            responses.add(mapper.map(i, ReviewItemResponse.class));
+            if (i.getStatus()!=0)
+                responses.add(mapper.map(i, ReviewItemResponse.class));
         }
         return responses;
     }
 
     @Override
     public void deleteReview(Long userId, Long testId) {
-        ReviewItem reviewItem = reviewItemDAO.findByUserIdAndTestId(userId, testId).orElseThrow(()->
-                new ResourceNotFoundException(EReview.E_REVIEW_NOTFOUND.getDescription()));
+        ReviewItem reviewItem = getReviewItem(userId, testId);
         reviewItem.setStatus(0);
         reviewItem.setDateUpdate(LocalDateTime.now());
         reviewItemDAO.saveAndFlush(reviewItem);
+    }
+
+    @Override
+    public List<ReviewItemResponse> getAllReviewByUser(Long userId) {
+        Review review = getReviewByUserId(userId);
+        List<ReviewItem> reviewItems= reviewItemDAO.findByReviewId(review.getReivewId()).orElseThrow(()->
+                new ResourceNotFoundException(EReview.E_REVIEW_NOTFOUND.getDescription()));
+        List<ReviewItemResponse> responses= new ArrayList<>();
+        for (ReviewItem i: reviewItems){
+            if(i.getStatus()!= 0)
+                responses.add(mapper.map(i, ReviewItemResponse.class));
+        }
+        return responses;
+    }
+
+    @Override
+    public ReviewItemResponse updateReview(ReviewItemRequest request) {
+        mapper.getConfiguration().setAmbiguityIgnored(true);
+
+        ReviewItem reviewItem = getReviewItem(request.getUserId(), request.getTestId());
+        reviewItem.setComment(request.getComment());
+        reviewItem.setRating(reviewItem.getRating());
+        reviewItem.setDateUpdate(LocalDateTime.now());
+        reviewItemDAO.save(reviewItem);
+        return mapper.map(reviewItem, ReviewItemResponse.class);
     }
 }

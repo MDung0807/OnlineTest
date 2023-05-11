@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface SubjectService {
 
-    public boolean existByUserId(Long subjectId, Long userId);
-    public void createSubject(SubjectRequest subjectDTO, Long userId);
+    boolean existByUserId(Long subjectId, Long userId);
+    void createSubject(SubjectRequest subjectDTO, Long userId);
 
-    public void updateSubject(SubjectRequest subjectDTO);
+    void updateSubject(SubjectRequest subjectDTO);
 
-    public SubjectResponse getSubject(Long id);
+    SubjectResponse getSubject(Long id);
 
-    public List<SubjectResponse> getAllSubject();
+    List<SubjectResponse> getAllSubject();
 
-    public void delSubject(Long id);
-    public void updateImage(Long id, MultipartFile image, Long userId);
-    public SubjectResponse getSubjectByUserId(Long userId);
+    void delSubject(Long id);
+    void updateImage(Long id, MultipartFile image, Long userId);
+    SubjectResponse getSubjectByUserId(Long userId);
 }

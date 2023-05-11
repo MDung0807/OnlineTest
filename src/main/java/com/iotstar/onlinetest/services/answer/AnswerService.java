@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface AnswerService {
-    public void createAnswers(List<AnswerDTO> answerDTOs, Question question);
+    void createAnswers(List<AnswerDTO> answerDTOs, Question question);
 }

@@ -58,10 +58,10 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
 
         wishItemDAO.save(wishItem);
     }
-    public WishList createWishList(User user){
+    public void createWishList(User user){
         WishList wishList = new WishList();
         wishList.setUser(user);
-        return wishListDAO.save(wishList);
+        wishListDAO.save(wishList);
     }
 
     @Override
@@ -79,10 +79,9 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
     }
 
     @Override
-    public WishListResponse delWishItem(WishItemRequest wishItemRequest) {
+    public void delWishItem(WishItemRequest wishItemRequest) {
         WishList wishList = getWishListReturnWishList(wishItemRequest.getUserId());
         WishItem wishITem = getWishItem(wishItemRequest.getTopicId(), wishList.getWishListId());
         wishItemDAO.delete(wishITem);
-        return getWishListByUserId(wishItemRequest.getUserId());
     }
 }

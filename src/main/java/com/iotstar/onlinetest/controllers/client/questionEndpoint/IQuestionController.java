@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/question")
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public interface IQuestionController {
     @PreAuthorize("hasAnyRole({@environment.getProperty('ROLE_STUDENT'),@environment.getProperty('ROLE_TEACHER')})")
     @GetMapping("/inTopic")
     ResponseEntity<Response> getQuestionByTopic(@RequestParam Long topicId);
 
     @GetMapping("/inUser")
+
     ResponseEntity<Response> getQuestionByUser();
 
     @PostMapping(value = "/add")
@@ -25,4 +27,7 @@ public interface IQuestionController {
 
     @PostMapping("/addImg")
     ResponseEntity<?> addImg( @Valid @ModelAttribute QuestionImageRequest questionImageRequest);
+
+    @GetMapping("/del")
+    ResponseEntity<Response> delQues(@RequestParam Long questionId);
 }

@@ -10,14 +10,14 @@ import java.util.Optional;
 
 public interface AccountService{
 
-    public List<AccountDTO> getAllAcc();
-    public Optional<AccountDTO> getAccByUsername(String username);
+    List<AccountDTO> getAllAcc();
+    Optional<AccountDTO> getAccByUsername(String username);
 
-    public void createAccount(AccountDTO accountDTO);
+    void createAccount(AccountDTO accountDTO);
 
-    public void update(AccountRequest accountRequest);
+    void update(AccountRequest accountRequest);
 
-    public void delAcc(AccountDTO accountDTO);
-    public AccountDTO updateRole(Long userId, String roleName);
-    public Boolean existsByUsername(String username);
+    void delAcc(AccountDTO accountDTO);
+    AccountDTO updateRole(Long userId, String roleName);
+    Boolean existsByUsername(String username);
 }

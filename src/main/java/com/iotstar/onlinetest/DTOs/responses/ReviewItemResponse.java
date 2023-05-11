@@ -14,7 +14,7 @@ public class ReviewItemResponse {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime dateReview;
+    private LocalDateTime dateUpdate;
     private int rating;
     private String comment;
     private Long testId;

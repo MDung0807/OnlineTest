@@ -67,9 +67,9 @@ public class SubjectController implements ISubjectController{
     public ResponseEntity<Response> delSubject(Long subjectId){
         Long userId = authUtils.getAccountDetail().getUserId();
         if (userService.existsSubjectById(userId, subjectId)){
-            subjectService.delSubject(subjectId);
+//            subjectService.delSubject(subjectId);
             return new ResponseEntity<>(
-                    new Response(false, new MessageResponse(AppConstant.SUCCESS)),
+                    new Response(false, new MessageResponse(AppConstant.NOT_SUPPORT)),
                     HttpStatus.OK
             );
         }

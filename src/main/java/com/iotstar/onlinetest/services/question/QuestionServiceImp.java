@@ -116,4 +116,11 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
         answerService.createAnswers(questionRequest.getAnswers(), question);
         return question;
     }
+
+    @Override
+    public void deleteQuestion(Long questionId) {
+        question = getQuestionReturnQuestion(questionId);
+        question.setStatus(0);
+        questionDAO.save(question);
+    }
 }

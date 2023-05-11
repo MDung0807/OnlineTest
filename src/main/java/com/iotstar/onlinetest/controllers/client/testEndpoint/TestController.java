@@ -8,19 +8,24 @@ import com.iotstar.onlinetest.DTOs.responses.TestResponse;
 import com.iotstar.onlinetest.services.test.TestPaging;
 import com.iotstar.onlinetest.services.test.TestService;
 import com.iotstar.onlinetest.utils.AppConstant;
+import com.iotstar.onlinetest.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin
 @RestController
+@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public class TestController implements ITestEndpoint{
 
     @Autowired
     private TestService testService;
+    @Autowired
+    private AuthUtils authUtils;
     @Autowired
     private TestPaging paging;
 
@@ -51,4 +56,12 @@ public class TestController implements ITestEndpoint{
         );
     }
 
+    @Override
+    public ResponseEntity<?> delTest(Long testId) {
+        testService.delTest(testId);
+        return new ResponseEntity<>(
+                new Response(false, AppConstant.SUCCESS),
+                HttpStatus.OK
+        );
+    }
 }

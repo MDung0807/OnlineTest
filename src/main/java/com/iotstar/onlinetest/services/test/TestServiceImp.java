@@ -2,6 +2,7 @@ package com.iotstar.onlinetest.services.test;
 
 import com.iotstar.onlinetest.DTOs.requests.TestRequest;
 import com.iotstar.onlinetest.DTOs.responses.TestResponse;
+import com.iotstar.onlinetest.exceptions.DeprecatedException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.exceptions.UnKnownException;
 import com.iotstar.onlinetest.models.Question;
@@ -57,7 +58,7 @@ public class TestServiceImp extends TestPaging implements TestService{
         return questionsSelected;
     }
 
-    private List<Question> getQuestionInTest(int quantity, List<Long>topicIds, List<Long>questionIds){
+    private List<Question> createQuestionInTest(int quantity, List<Long>topicIds, List<Long>questionIds){
         List<Question> questionsSelected = new ArrayList<>();
         List<Question> questions = new ArrayList<>();
         Question question;
@@ -88,7 +89,7 @@ public class TestServiceImp extends TestPaging implements TestService{
             if (topics.get(0).getSubject().getSubjectId()!= topics.get(count++).getSubject().getSubjectId())
                 throw new UnKnownException(AppConstant.USER_ERRORS);
         }
-        List<Question> questions = getQuestionInTest(
+        List<Question> questions = createQuestionInTest(
                 testRequest.getQuantity(),
                 testRequest.getTopicIds(),
                 testRequest.getQuestionIds());
@@ -106,6 +107,9 @@ public class TestServiceImp extends TestPaging implements TestService{
     @Override
     public TestResponse getById(Long testId){
         test = getTestReturnTest(testId);
+        if (test.getStatus()== 0){
+            throw new DeprecatedException(ETest.TEST_IS_DEPRECATED.getDes());
+        }
         return mapper.map(test, TestResponse.class);
     }
 
@@ -117,7 +121,8 @@ public class TestServiceImp extends TestPaging implements TestService{
        List<Test> tests= getTestsByTopicId(topicId);
         List<TestResponse> responses = new ArrayList<>();
         for (Test i: tests){
-            responses.add(mapper.map(i, TestResponse.class));
+            if(i.getStatus()!=0)
+                responses.add(mapper.map(i, TestResponse.class));
         }
         return responses;
     }
@@ -125,5 +130,12 @@ public class TestServiceImp extends TestPaging implements TestService{
     public List<Test> getTestsByTopicId(Long topicId){
         Topic topic = topicService.findTopicById(topicId);
         return testDAO.findByTopics(topic, pageable());
+    }
+
+    @Override
+    public void delTest(Long testId) {
+        test = getTestReturnTest(testId);
+        test.setStatus(0);
+        testDAO.save(test);
     }
 }

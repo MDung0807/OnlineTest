@@ -7,13 +7,13 @@ import com.iotstar.onlinetest.models.Topic;
 import java.util.List;
 
 public interface TopicService {
-    public void create(TopicRequest topicResponse);
+    void create(TopicRequest topicResponse);
 
     void del(Long topicId, Long userId);
 
-    public void update(TopicRequest topicResponse);
+    void update(TopicRequest topicResponse);
 
-    public List<TopicResponse> getAllBySubject(Long subjectId);
+    List<TopicResponse> getAllBySubject(Long subjectId);
 
-    public Topic findTopicById(Long id);
+    Topic findTopicById(Long id);
 }

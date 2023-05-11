@@ -19,4 +19,12 @@ public interface IReviewController {
     @GetMapping("/del")
     ResponseEntity<Response> delReview(@RequestParam Long userId,
                                        @RequestParam Long testId);
+
+    @GetMapping("/inUser")
+    ResponseEntity<Response> inUser(@RequestParam Long userId,
+                                    @RequestParam(required = false, defaultValue = "0") int index,
+                                    @RequestParam(required = false, defaultValue = "10")int size);
+
+    @PostMapping("/update")
+    ResponseEntity<Response> update(@RequestBody ReviewItemRequest request);
 }

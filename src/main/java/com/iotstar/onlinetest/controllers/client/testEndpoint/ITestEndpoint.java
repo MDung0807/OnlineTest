@@ -19,4 +19,7 @@ public interface ITestEndpoint {
     ResponseEntity<Response> getTestInTopic(@RequestParam("topicId") Long topicId,
                                             @RequestParam(required = false, defaultValue = "0") int index,
                                             @RequestParam(required = false, defaultValue = "10") int size);
+
+    @GetMapping({"/del"})
+    ResponseEntity<?> delTest (@RequestParam Long testId);
 }

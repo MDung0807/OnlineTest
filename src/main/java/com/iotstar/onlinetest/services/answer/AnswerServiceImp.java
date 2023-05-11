@@ -20,8 +20,6 @@ public class AnswerServiceImp implements AnswerService{
     @Autowired
     private AnswerDAO answerDAO;
 
-    private Answer answer;
-
     public Answer getAnswerReturnAnswer(Long answerId){
         return answerDAO.findById(answerId).orElseThrow(()->
                 new ResourceNotFoundException(AppConstant.NOT_FOUND));
@@ -31,12 +29,12 @@ public class AnswerServiceImp implements AnswerService{
         List<Answer> answers = new ArrayList<>();
 
         for (AnswerDTO i: answerDTOs){
-            answer = mapper.map(i, Answer.class);
+            Answer answer = mapper.map(i, Answer.class);
             answer.setQuestion(question);
             answers.add(answer);
         }
         Iterable<Answer> answers1;
         answers1=answers;
-            answers = answerDAO.saveAll(answers1);
+            answerDAO.saveAll(answers1);
     }
 }

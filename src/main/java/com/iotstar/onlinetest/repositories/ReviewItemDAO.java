@@ -16,4 +16,6 @@ public interface ReviewItemDAO extends JpaRepository<ReviewItem, Long> {
     Optional<ReviewItem> findByUserIdAndTestId(Long userId, Long testId);
 
     Optional<List<ReviewItem>> findByTest_TestId(Long testId, Pageable pageable);
+    @Query("select u from ReviewItem u where u.review.reivewId=?1")
+    Optional<List<ReviewItem>> findByReviewId(Long reviewId);
 }

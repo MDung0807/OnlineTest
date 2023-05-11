@@ -5,25 +5,24 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 public class QuestionPaging extends PagingRequest {
-    private int pageIndex, pageSize;
-    @Override
-    public int getPageNumber() {
-        return pageIndex;
-    }
-
-    @Override
-    public int getPageSize() {
-        return pageSize;
-    }
-
     @Override
     public void setPageIndex(int pageIndex) {
-        this.pageIndex = pageIndex;
+        super.setPageIndex(pageIndex);
     }
 
     @Override
     public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+        super.setPageSize(pageSize);
+    }
+
+    @Override
+    public int getPageNumber() {
+        return super.getPageNumber();
+    }
+
+    @Override
+    public int getPageSize() {
+        return super.getPageSize();
     }
 
     public Pageable pageable (){
