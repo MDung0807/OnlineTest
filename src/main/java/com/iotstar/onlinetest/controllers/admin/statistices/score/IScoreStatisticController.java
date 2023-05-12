@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/statistic/score")
-@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
+//@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
 public interface IScoreStatisticController {
     @GetMapping({"/inSubject"})
     ResponseEntity<Response> getScoreStatisticInSubject(@RequestParam(required = false, defaultValue = "0") int index,

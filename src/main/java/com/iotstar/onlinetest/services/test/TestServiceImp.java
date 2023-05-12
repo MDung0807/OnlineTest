@@ -33,9 +33,6 @@ public class TestServiceImp extends TestPaging implements TestService{
 
     @Autowired
     private TopicService topicService;
-
-    @Autowired
-    private QuestionService questionService;
     @Autowired
     private QuestionServiceImp questionServiceImp;
 

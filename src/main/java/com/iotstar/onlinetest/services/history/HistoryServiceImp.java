@@ -132,7 +132,7 @@ public class HistoryServiceImp implements HistoryService{
 
     private float returnScore(int size, int totalCorrect){
         DecimalFormat format = new DecimalFormat("#.###");
-        return Float.parseFloat(format.format((float) totalCorrect/size));
+        return  Float.parseFloat(format.format((float) totalCorrect/size))*10;
     }
 
     @Override

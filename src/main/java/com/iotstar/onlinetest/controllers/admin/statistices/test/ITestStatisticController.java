@@ -8,10 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/statistic/test")
-@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
+//@PreAuthorize("hasRole(@environment.getProperty('ROLE_ADMIN'))")
 public interface ITestStatisticController {
     @GetMapping({"", "/"})
     ResponseEntity<Response> getTestStatistic(@RequestParam(required = false, defaultValue = "0") int index,
                                               @RequestParam(required = false, defaultValue = "10") int size,
-                                              @RequestParam(required = false, defaultValue = "increase") String sort);
+                                              @RequestParam(required = false, defaultValue = "decrease") String sort);
+
+    @GetMapping({"/inTest"})
+    ResponseEntity<Response> getTestStatisticUser (@RequestParam(required = false, defaultValue = "0") int index,
+                                                   @RequestParam(required = false, defaultValue = "10") int size,
+                                                    @RequestParam(required = false, defaultValue = "decrease") String sort,
+                                                   @RequestParam Long testId);
 }

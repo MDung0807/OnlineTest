@@ -1,6 +1,7 @@
 package com.iotstar.onlinetest.services.statistices.test;
 
 import com.iotstar.onlinetest.DTOs.responses.statistices.TestStatisticResponse;
+import com.iotstar.onlinetest.DTOs.responses.statistices.TestStatisticResponseUser;
 import com.iotstar.onlinetest.models.Test;
 import com.iotstar.onlinetest.models.statistics.TestStatistic;
 import com.iotstar.onlinetest.repositories.HistoryDAO;
@@ -19,6 +20,8 @@ public class TestStatisticServiceImp extends TestStatisticPaging implements Test
 
     @Autowired
     private TestServiceImp testServiceImp;
+    @Autowired
+    private HistoryDAO historyDAO;
     @Autowired
     private Converter converter;
     @Autowired
@@ -49,5 +52,15 @@ public class TestStatisticServiceImp extends TestStatisticPaging implements Test
             testStatistics.add(converter.converterTestStatistic(i));
         }
         return testStatistics;
+    }
+
+    @Override
+    public List<TestStatisticResponseUser> getUserFinishTest(Long testId) {
+        List<Map<String,Object>> data =historyDAO.getTestStatistic(testId, pageable());
+        List<TestStatisticResponseUser> responses = new ArrayList<>();
+        for (Map<String,Object>i: data){
+            responses.add(converter.converterTestStatisticUser(i));
+        }
+        return responses;
     }
 }
