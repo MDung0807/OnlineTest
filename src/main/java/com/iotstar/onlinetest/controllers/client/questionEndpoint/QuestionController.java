@@ -35,7 +35,7 @@ public class QuestionController implements IQuestionController{
     public ResponseEntity<Response> getQuestionByTopic(Long topicId){
         List<QuestionResponse> questionResponses = questionService.getQuestionByTopicId(topicId);
         return new ResponseEntity<>(
-                new Response(false, null),
+                new Response(false, questionResponses),
                 HttpStatus.OK);
     }
 
