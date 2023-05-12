@@ -3,6 +3,7 @@ package com.iotstar.onlinetest.services.subject;
 
 import com.iotstar.onlinetest.DTOs.requests.SubjectRequest;
 import com.iotstar.onlinetest.DTOs.responses.SubjectResponse;
+import com.iotstar.onlinetest.exceptions.DeprecatedException;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
 import com.iotstar.onlinetest.models.Subject;
@@ -49,7 +50,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
         subject = getSubjectReturnSubject(subjectId);
         if (subject.getStatus()!= 0)
             return mapper.map(subject, SubjectResponse.class);
-        return null;
+        throw new DeprecatedException(ESubject.SUBJECT_DEPRECATED.getDes());
     }
 
 

@@ -44,6 +44,16 @@ public class AccountServiceImp implements AccountService{
     @Autowired
     private PasswordEncoder encoder;
 
+    private Account getAccountByUserId(Long userId){
+        return accountDAO.findByUser_UserId(userId).orElseThrow(()->
+                new ResourceNotFoundException(EUser.USER_NOT_FOUND.getDescription(userId)));
+    }
+
+    public void updatePassword(Long userid, String password){
+        account = getAccountByUserId(userid);
+        account.setPassword(encoder.encode(password));
+        accountDAO.save(account);
+    }
 
     @Override
     @Transactional
@@ -102,8 +112,7 @@ public class AccountServiceImp implements AccountService{
 
     @Override
     public AccountDTO updateRole(Long userId, String roleName){
-        account = accountDAO.findByUser_UserId(userId).orElseThrow(()->
-                new ResourceNotFoundException(EUser.USER_NOT_FOUND.getDescription(userId)));
+        account = getAccountByUserId(userId);
         role = roleServiceImp.getRoleReturnRole(roleName);
         account.setRole(role);
         account = accountDAO.save(account);

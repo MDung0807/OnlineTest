@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.services.user;
 
+import com.iotstar.onlinetest.DTOs.requests.ResetPassword;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
@@ -8,18 +9,19 @@ import com.iotstar.onlinetest.models.User;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-    public void createUser(UserRequest userRequest);
+    void createUser(UserRequest userRequest);
 
-    public void deleteUser(Long userId);
+    void deleteUser(Long userId);
 
-    public UserResponse getUser(Long userId);
+    UserResponse getUser(Long userId);
 
-    public UserResponse updateAvatar(Long id, MultipartFile avatar);
+    UserResponse updateAvatar(Long id, MultipartFile avatar);
 
-    public UserResponse updateUser(UserProfileRequest userProfileRequest);
-    public Boolean existsEmail (String email);
-    public Boolean existsPhoneNumber(String PhoneNumber);
-    public Boolean existsSubject(Long userId);
-    public Boolean existsSubjectById(Long userId, Long subjectId);
-    public void addSubjectInUser(Long userid, Subject subject);
+    UserResponse updateUser(UserProfileRequest userProfileRequest);
+    Boolean existsEmail (String email);
+    Boolean existsPhoneNumber(String PhoneNumber);
+    Boolean existsSubject(Long userId);
+    Boolean existsSubjectById(Long userId, Long subjectId);
+    void addSubjectInUser(Long userid, Subject subject);
+    void updatePassword(ResetPassword resetPassword, Long userId);
 }

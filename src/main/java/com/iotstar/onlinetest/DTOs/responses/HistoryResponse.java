@@ -14,16 +14,16 @@ import java.util.List;
 
 @Data
 public class HistoryResponse {
-    private Long idHis;
+    private Long hisId;
     private Long userId;
     private Long testId;
 //    private List<QuestionResponse> questionResponses;
     private String score;
     private String totalCorrect;
 //    private List<Long> answers;
-    private LocalDateTime time;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime time;
     private List<HisItem> hisItems;
 }

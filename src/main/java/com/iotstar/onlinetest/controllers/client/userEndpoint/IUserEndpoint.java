@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.controllers.client.userEndpoint;
 
+import com.iotstar.onlinetest.DTOs.requests.ResetPassword;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.responses.Response;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,4 +31,7 @@ public interface IUserEndpoint {
 
     @GetMapping("/profile")
     ResponseEntity<Response> getUser();
+
+    @PostMapping("/resetPassword")
+    ResponseEntity<Response> updatePass(ResetPassword resetPassword);
 }

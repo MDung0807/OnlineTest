@@ -12,6 +12,7 @@ import com.iotstar.onlinetest.services.question.QuestionServiceImp;
 import com.iotstar.onlinetest.services.test.TestServiceImp;
 import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
+import com.iotstar.onlinetest.statval.EHistory;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +133,12 @@ public class HistoryServiceImp implements HistoryService{
     private float returnScore(int size, int totalCorrect){
         DecimalFormat format = new DecimalFormat("#.###");
         return Float.parseFloat(format.format((float) totalCorrect/size));
+    }
+
+    @Override
+    public HistoryResponse getHistoryById(Long hisId) {
+        History historiy = historyDAO.findById(hisId).orElseThrow(()->
+                new ResourceNotFoundException(EHistory.NOT_FOUND.getDes()));
+        return (mapper.map(historiy, HistoryResponse.class));
     }
 }

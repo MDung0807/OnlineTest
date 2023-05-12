@@ -1,5 +1,6 @@
 package com.iotstar.onlinetest.controllers.client.userEndpoint;
 
+import com.iotstar.onlinetest.DTOs.requests.ResetPassword;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.responses.MessageResponse;
 import com.iotstar.onlinetest.DTOs.responses.Response;
@@ -94,5 +95,13 @@ public class UserControllerImp implements IUserEndpoint{
             blackListService.save(token);
         }
         return ResponseEntity.ok(new Response(false, new MessageResponse(AppConstant.SUCCESS)));
+    }
+
+    @Override
+    public ResponseEntity<Response> updatePass(ResetPassword resetPassword) {
+        Long userId = authUtils.getAccountDetail().getUserId();
+        userService.updatePassword(resetPassword, userId);
+        return ResponseEntity.ok(
+                new Response(false, new MessageResponse(AppConstant.SUCCESS)));
     }
 }

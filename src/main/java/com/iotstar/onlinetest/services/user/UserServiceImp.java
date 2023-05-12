@@ -2,11 +2,13 @@ package com.iotstar.onlinetest.services.user;
 
 
 import com.iotstar.onlinetest.DTOs.AccountDTO;
+import com.iotstar.onlinetest.DTOs.requests.ResetPassword;
 import com.iotstar.onlinetest.DTOs.requests.UserProfileRequest;
 import com.iotstar.onlinetest.DTOs.requests.UserRequest;
 import com.iotstar.onlinetest.DTOs.responses.UserResponse;
 import com.iotstar.onlinetest.exceptions.ResourceExistException;
 import com.iotstar.onlinetest.exceptions.ResourceNotFoundException;
+import com.iotstar.onlinetest.exceptions.UnKnownException;
 import com.iotstar.onlinetest.models.Question;
 import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.User;
@@ -14,6 +16,7 @@ import com.iotstar.onlinetest.models.WishList;
 import com.iotstar.onlinetest.repositories.AccountDAO;
 import com.iotstar.onlinetest.repositories.UserDAO;
 import com.iotstar.onlinetest.services.account.AccountService;
+import com.iotstar.onlinetest.services.account.AccountServiceImp;
 import com.iotstar.onlinetest.services.review.ReviewServiceImp;
 import com.iotstar.onlinetest.services.wishList.WishListServiceImp;
 import com.iotstar.onlinetest.statval.EUser;
@@ -35,7 +38,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     private UserDAO userDAO;
     @Autowired
-    private AccountService accountService;
+    private AccountServiceImp accountServiceImp;
     @Autowired
     private FileUtils fileUtils;
     @Autowired
@@ -57,6 +60,9 @@ public class UserServiceImp implements UserService {
 //        return urlImage;
 //    }
 
+    public Subject getSubjectInUser(Long userId){
+        return getUserReturnUser(userId).getSubject();
+    }
     public User getUserReturnUser(Long userId){
         return userDAO.findById(userId).orElseThrow(()->
                 new ResourceNotFoundException(EUser.USER_NOT_FOUND.getDescription(userId)));
@@ -100,7 +106,7 @@ public class UserServiceImp implements UserService {
         accountDTO.setRoleName(roleStudent);
         //Create acc
         accountDTO.setUser(user);
-        accountService.createAccount(accountDTO);
+        accountServiceImp.createAccount(accountDTO);
 
         //Create WishList
         wishListServiceImp.createWishList(user);
@@ -182,7 +188,10 @@ public class UserServiceImp implements UserService {
         userDAO.save(user);
     }
 
-    public Subject getSubjectInUser(Long userId){
-        return getUserReturnUser(userId).getSubject();
+    @Override
+    public void updatePassword(ResetPassword resetPassword, Long userId) {
+        if (!resetPassword.getNewPassword().equals(resetPassword.getConfirmPassword()))
+            throw new UnKnownException(EUser.PASSWORD_NOT_CORRECT.getDescription());
+        accountServiceImp.updatePassword(userId, resetPassword.getNewPassword());
     }
 }

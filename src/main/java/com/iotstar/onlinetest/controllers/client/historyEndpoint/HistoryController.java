@@ -70,4 +70,16 @@ public class HistoryController implements IHistoryController{
                 HttpStatus.OK
         );
     }
+
+    @Override
+    public ResponseEntity<Response> getHistoryItem(Long userId, Long hisId) {
+        Long id = authUtils.getAccountDetail().getUserId();
+        if (!id.equals(userId))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        HistoryResponse response = historyService.getHistoryById(hisId);
+        return new ResponseEntity<>(
+                new Response(false, response),
+                HttpStatus.OK
+        );
+    }
 }

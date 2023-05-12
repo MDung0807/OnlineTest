@@ -17,7 +17,6 @@ public interface IQuestionController {
     ResponseEntity<Response> getQuestionByTopic(@RequestParam Long topicId);
 
     @GetMapping("/inUser")
-
     ResponseEntity<Response> getQuestionByUser();
 
     @PostMapping(value = "/add")

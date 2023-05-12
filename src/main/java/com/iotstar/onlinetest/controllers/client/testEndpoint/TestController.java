@@ -19,7 +19,6 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
 public class TestController implements ITestEndpoint{
 
     @Autowired

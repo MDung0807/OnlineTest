@@ -13,7 +13,7 @@ import java.util.List;
 public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idHis;
+    private Long hisId;
 
     @Column(nullable = true)
     private String totalCorrect;

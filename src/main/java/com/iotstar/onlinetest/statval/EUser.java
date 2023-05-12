@@ -8,7 +8,8 @@ public enum EUser {
     IMG_NAME_USER("image_user_"),
     EMAIL_EXISTS("Email already exists"),
     PHONE_NUMBER_EXISTS ("Phone Number already exists"),
-    USER_HAVEN_SUBJECT("User haven subject");
+    USER_HAVEN_SUBJECT("User haven subject"),
+    PASSWORD_NOT_CORRECT("Password confirm is not correct");
     private final String description;
     EUser(String des){
 

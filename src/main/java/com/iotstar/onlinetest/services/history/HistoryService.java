@@ -11,4 +11,5 @@ public interface HistoryService {
     List<HistoryResponse> getHistoryByUserId(Long userId, Long testId);
     List<ScoreResponse> getHistoryByUserId(Long userId);
     String setHistoryByUserId(HistoryRequest request);
+    HistoryResponse getHistoryById(Long hisId);
 }
