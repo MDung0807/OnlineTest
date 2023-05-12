@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
-@RequestMapping("")
 public class UserControllerImp implements IUserEndpoint{
 
     @Autowired
