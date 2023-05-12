@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ScoreResponse {
-    private Long id;
+    private Long idHis;
     private Long userId;
     private Long testId;
     private String score;
