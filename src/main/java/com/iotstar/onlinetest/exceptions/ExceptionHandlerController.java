@@ -149,4 +149,13 @@ public class ExceptionHandlerController{
                 HttpStatus.CONFLICT
         );
     }
+
+    @ExceptionHandler(DeprecatedException.class)
+    public ResponseEntity<Response> deprecated(DeprecatedException ex){
+        ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(
+                new Response(true, details),
+                HttpStatus.CONFLICT
+        );
+    }
 }

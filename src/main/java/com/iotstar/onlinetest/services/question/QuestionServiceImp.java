@@ -60,7 +60,8 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
 
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question i: questions){
-            questionResponses.add(mapper.map(i, QuestionResponse.class));
+            if (i.getStatus()!= 0)
+                questionResponses.add(mapper.map(i, QuestionResponse.class));
         }
         return questionResponses;
     }

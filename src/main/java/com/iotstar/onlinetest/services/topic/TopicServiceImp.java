@@ -46,8 +46,9 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
 
     public List<Question> getQuestionsInTopic(Long topicId){
         topic = getTopicReturnTopic(topicId);
-        if (topic.getStatus()==0)
+        if (topic.getStatus()==0) {
             throw new DeprecatedException(ETopic.TOPIC_DEPRECATED.getDes());
+        }
         return topic.getQuestions();
     }
     @Override
@@ -71,7 +72,7 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
     @Override
     public void del(Long topicId, Long userId) {
         topic = getTopicReturnTopic(topicId);
-        if (!userServiceImp.existsSubjectById(1L, topic.getSubject().getSubjectId()))
+        if (!userServiceImp.existsSubjectById(userId, topic.getSubject().getSubjectId()))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         topic.setStatus(0);
         topic=topicDAO.save(topic);
