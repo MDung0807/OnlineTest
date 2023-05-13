@@ -19,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
         return topic.getQuestions();
     }
     @Override
+    @Transactional
     public void create(TopicRequest topicRequest) {
 
         subject =subjectServiceImp.getSubjectReturnSubject(topicRequest.getSubjectId());

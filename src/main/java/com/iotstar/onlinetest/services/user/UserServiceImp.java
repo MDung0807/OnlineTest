@@ -189,6 +189,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional
     public void updatePassword(ResetPassword resetPassword, Long userId) {
         if (!resetPassword.getNewPassword().equals(resetPassword.getConfirmPassword()))
             throw new UnKnownException(EUser.PASSWORD_NOT_CORRECT.getDescription());

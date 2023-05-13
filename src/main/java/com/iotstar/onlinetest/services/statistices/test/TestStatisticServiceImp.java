@@ -8,6 +8,7 @@ import com.iotstar.onlinetest.repositories.HistoryDAO;
 import com.iotstar.onlinetest.repositories.TestDAO;
 import com.iotstar.onlinetest.services.test.TestServiceImp;
 import com.iotstar.onlinetest.utils.Converter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,8 @@ public class TestStatisticServiceImp extends TestStatisticPaging implements Test
     @Autowired
     private HistoryDAO historyDAO;
     @Autowired
+    private ModelMapper mapper;
+    @Autowired
     private Converter converter;
     @Autowired
     private TestDAO testDAO;
@@ -37,10 +40,7 @@ public class TestStatisticServiceImp extends TestStatisticPaging implements Test
 
         for (TestStatistic i: testStatistics) {
            TestStatisticResponse response = new TestStatisticResponse();
-           response.setNumberUserTest(i.getNumberUserTest());
-           Test test = testServiceImp.getTestReturnTest(i.getTestId());
-           response.setTestName(test.getTestName());
-           response.setTestId(test.getTestId());
+           response = mapper.map(i, TestStatisticResponse.class);
            responses.add(response);
        }
         return responses;

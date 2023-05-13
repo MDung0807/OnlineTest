@@ -17,6 +17,7 @@ import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class TestServiceImp extends TestPaging implements TestService{
         return questionsSelected;
     }
     @Override
+    @Transactional
     public Test create(TestRequest testRequest) {
         List<Topic> topics = new ArrayList<>();
         //Get topic
@@ -112,9 +114,6 @@ public class TestServiceImp extends TestPaging implements TestService{
 
     @Override
     public List<TestResponse> getByTopicId(Long topicId){
-
-//        List<Topic> topics = new ArrayList<>();
-//        topics.add(topic);
        List<Test> tests= getTestsByTopicId(topicId);
         List<TestResponse> responses = new ArrayList<>();
         for (Test i: tests){

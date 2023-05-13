@@ -90,6 +90,7 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
 //    }
 
     @Override
+    @Transactional
     public Question updateImg(QuestionImageRequest questionImageRequest){
         question = findById(question.getQuestionId());
         question.setImage(fileUtils.upload(questionImageRequest.getImage(),
@@ -119,6 +120,7 @@ public class QuestionServiceImp extends QuestionPaging implements QuestionServic
     }
 
     @Override
+    @Transactional
     public void deleteQuestion(Long questionId) {
         question = getQuestionReturnQuestion(questionId);
         question.setStatus(0);

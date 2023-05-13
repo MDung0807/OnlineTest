@@ -72,7 +72,7 @@ public class HistoryController implements IHistoryController{
     }
 
     @Override
-    public ResponseEntity<Response> getHistoryItem(Long userId, Long hisId) {
+    public ResponseEntity<Response> getHistoryInTest(Long userId, Long hisId) {
         Long id = authUtils.getAccountDetail().getUserId();
         if (!id.equals(userId))
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);

@@ -18,8 +18,10 @@ public interface IHistoryController {
 
     @GetMapping("/inUser")
     ResponseEntity<Response> getTestHisInUser(@RequestParam Long userId);
+
+    //Get history for user if history id = hisId
     @GetMapping("/hisItem")
-    ResponseEntity<Response> getHistoryItem(@RequestParam Long userId,
+    ResponseEntity<Response> getHistoryInTest(@RequestParam Long userId,
                                             @RequestParam Long hisId);
 
 }

@@ -56,9 +56,9 @@ public class ScoreStatisticController implements IScoreStatisticController {
 //        paging.setPageIndex(index);
         Sort sort ;
         if (param.equals("increase"))
-            sort = Sort.by(Sort.Direction.ASC, "numberScore");
+            sort = Sort.by(Sort.Direction.ASC, "score");
         else
-            sort = Sort.by(Sort.Direction.DESC, "numberScore");
+            sort = Sort.by(Sort.Direction.DESC, "score");
         paging.setSort(sort);
         pagingRequest.setPageSize(size);
         pagingRequest.setPageIndex(index);

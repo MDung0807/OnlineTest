@@ -120,6 +120,7 @@ public class SubjectServiceImp extends SubjectPaging implements SubjectService{
     }
 
     @Override
+    @Transactional
     public void updateImage(Long id, MultipartFile image, Long userId) {
         if (!userServiceImp.existsSubjectById(userId, id)){
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);

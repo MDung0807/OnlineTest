@@ -25,6 +25,6 @@ public interface IScoreStatisticController {
     @GetMapping({"/inTest"})
     ResponseEntity<Response> getScoreStatisticInTest (@RequestParam(required = false, defaultValue = "0") int index,
                                                       @RequestParam(required = false, defaultValue = "10") int size,
-                                                      @RequestParam(required = false, defaultValue = "increase") String sort,
+                                                      @RequestParam(required = false, defaultValue = "decrease") String sort,
                                                       @RequestParam Long testId);
 }

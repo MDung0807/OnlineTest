@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class ReviewServiceImp extends ReviewPaging implements ReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewItemResponse addReview(ReviewItemRequest request) {
         Test test = testServiceImp.getTestReturnTest(request.getTestId());
         Review review = getReviewByUserId(request.getUserId());
@@ -75,6 +77,7 @@ public class ReviewServiceImp extends ReviewPaging implements ReviewService {
     }
 
     @Override
+    @Transactional
     public void deleteReview(Long userId, Long testId) {
         ReviewItem reviewItem = getReviewItem(userId, testId);
         reviewItem.setStatus(0);
@@ -96,6 +99,7 @@ public class ReviewServiceImp extends ReviewPaging implements ReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewItemResponse updateReview(ReviewItemRequest request) {
         mapper.getConfiguration().setAmbiguityIgnored(true);
 

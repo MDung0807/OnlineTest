@@ -24,6 +24,7 @@ public interface ISubjectController {
     ResponseEntity<Response> getAllSubject(@RequestParam(required = false, defaultValue = "0") int index,
                                            @RequestParam(required = false, defaultValue = "10")int size);
 
+    //deprecated
     @GetMapping("/del")
     ResponseEntity<Response> delSubject(@RequestParam Long subjectId);
 
@@ -31,7 +32,7 @@ public interface ISubjectController {
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     ResponseEntity<?> updateImage(@RequestParam Long subjectId, @ModelAttribute MultipartFile image);
 
-    @GetMapping("/getSubjectByUserId")
+    @GetMapping("/getSubjectzByUserId")
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     ResponseEntity<Response> getSubjectByUserId(@RequestParam Long userId);
 }

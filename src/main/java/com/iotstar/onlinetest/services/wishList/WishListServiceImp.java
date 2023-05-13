@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,8 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
                 new ResourceNotFoundException(AppConstant.NOT_FOUND));
     }
 
+    @Override
+    @Transactional
     public void addWishItem(WishItemRequest wishItemRequest){
         WishList wishList = getWishListReturnWishList(wishItemRequest.getUserId());
         Topic topic = topicServiceImp.getTopicReturnTopic(wishItemRequest.getTopicId());
@@ -79,6 +82,7 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
     }
 
     @Override
+    @Transactional
     public void delWishItem(WishItemRequest wishItemRequest) {
         WishList wishList = getWishListReturnWishList(wishItemRequest.getUserId());
         WishItem wishITem = getWishItem(wishItemRequest.getTopicId(), wishList.getWishListId());

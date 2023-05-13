@@ -63,6 +63,7 @@ public class SubjectController implements ISubjectController{
         );
     }
 
+    //deprecated
     @Override
     public ResponseEntity<Response> delSubject(Long subjectId){
         Long userId = authUtils.getAccountDetail().getUserId();

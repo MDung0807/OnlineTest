@@ -57,8 +57,6 @@ public class TopicController implements ITopicEndpoint{
 
     @Override
     public ResponseEntity<?> getTopicBySubjectId(Long subjectId, int index, int size){
-//        paging.setPageIndex(index);
-//        paging.setPageSize(size);
         pagingRequest.setPageIndex(index);
         pagingRequest.setPageSize(size);
         List<TopicResponse> topicResponses = topicService.getAllBySubject(subjectId);

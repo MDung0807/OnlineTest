@@ -20,8 +20,10 @@ import java.util.Optional;
 public interface TestDAO extends JpaRepository<Test, Long> {
     List<Test> findByTopics(Topic topic, Pageable pageable);
 
-    @Query("select t.testId as testId, count(t.testId) as numberUserTest, t.testName as testName" +
+    @Query("select t.testId as testId, count(t.testId) as numberUserTest, " +
+            "t.testName as testName, t.dateCreate as dateCreate, t.time as time " +
             " from Test t join History h " +
-            "on t.testId=h.test.testId group by t.testId")
+            " on t.testId=h.test.testId " +
+            " group by t.testId")
     List<Map<String, Object>> TestStatistics (Pageable pageable);
 }
