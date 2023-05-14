@@ -39,6 +39,13 @@ public class TestServiceImp extends TestPaging implements TestService{
 
     private Test test;
 
+    public void deleteTestInTopic(Long topicId){
+        List<Test> tests = getTestsByTopicId(topicId);
+        for(Test i: tests){
+            delTest(i.getTestId());
+        }
+    }
+
     public Test getTestReturnTest(Long testId){
         return testDAO.findById(testId).orElseThrow(()->
                 new ResourceNotFoundException(ETest.TEST_NOTFOUND.getDes(testId)));

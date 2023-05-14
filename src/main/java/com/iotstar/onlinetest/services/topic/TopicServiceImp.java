@@ -10,6 +10,7 @@ import com.iotstar.onlinetest.models.Subject;
 import com.iotstar.onlinetest.models.Topic;
 import com.iotstar.onlinetest.repositories.TopicDAO;
 import com.iotstar.onlinetest.services.subject.SubjectServiceImp;
+import com.iotstar.onlinetest.services.test.TestServiceImp;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.statval.EQuestion;
 import com.iotstar.onlinetest.statval.ETopic;
@@ -17,6 +18,7 @@ import com.iotstar.onlinetest.utils.AppConstant;
 import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,9 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
     private SubjectServiceImp subjectServiceImp;
     @Autowired
     private UserServiceImp userServiceImp;
+    @Autowired
+    @Lazy
+    private TestServiceImp testServiceImp;
 
     @Autowired
     private FileUtils fileUtils;
@@ -78,6 +83,7 @@ public class TopicServiceImp extends PagingRequest implements TopicService{
             throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
         topic.setStatus(0);
         topic=topicDAO.save(topic);
+        testServiceImp.deleteTestInTopic(topicId);
     }
 
     @Override
