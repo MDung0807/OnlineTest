@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class ScoreResponse {
     private Long hisId;
+    private int status;
     private Long testId;
     private String firstName;
     private String lastName;

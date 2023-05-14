@@ -42,6 +42,7 @@ public class Converter {
 
     public ScoreResponse converterScoreResponse(History param){
         ScoreResponse scoreResponse = new ScoreResponse();
+        scoreResponse.setStatus(param.getTest().getStatus());
         scoreResponse.setTestId(param.getTest().getTestId());
         scoreResponse.setScore(param.getScore());
         scoreResponse.setFirstName(param.getUser().getFirstName());
