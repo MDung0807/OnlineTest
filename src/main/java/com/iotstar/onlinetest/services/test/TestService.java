@@ -10,6 +10,5 @@ public interface TestService {
     Test create(TestRequest testRequest);
     TestResponse getById(Long id);
     List<TestResponse> getByTopicId(Long topicId);
-    void delTest(Long testId);
-
+    void delTest(Long userId, Long testId);
 }

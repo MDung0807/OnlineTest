@@ -57,7 +57,8 @@ public class TestController implements ITestEndpoint{
 
     @Override
     public ResponseEntity<?> delTest(Long testId) {
-        testService.delTest(testId);
+        Long userId = authUtils.getAccountDetail().getUserId();
+        testService.delTest(testId, userId);
         return new ResponseEntity<>(
                 new Response(false, AppConstant.SUCCESS),
                 HttpStatus.OK

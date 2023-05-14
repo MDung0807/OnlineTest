@@ -12,10 +12,12 @@ import com.iotstar.onlinetest.repositories.TestDAO;
 import com.iotstar.onlinetest.services.question.QuestionService;
 import com.iotstar.onlinetest.services.question.QuestionServiceImp;
 import com.iotstar.onlinetest.services.topic.TopicService;
+import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.statval.ETest;
 import com.iotstar.onlinetest.utils.AppConstant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,13 +38,15 @@ public class TestServiceImp extends TestPaging implements TestService{
     private TopicService topicService;
     @Autowired
     private QuestionServiceImp questionServiceImp;
+    @Autowired
+    private UserServiceImp userServiceImp;
 
     private Test test;
 
     public void deleteTestInTopic(Long topicId){
         List<Test> tests = getTestsByTopicId(topicId);
         for(Test i: tests){
-            delTest(i.getTestId());
+            delTest(test);
         }
     }
 
@@ -135,10 +139,17 @@ public class TestServiceImp extends TestPaging implements TestService{
         return testDAO.findByTopics(topic, pageable());
     }
 
-    @Override
-    public void delTest(Long testId) {
-        test = getTestReturnTest(testId);
-        test.setStatus(0);
+    public void delTest(Test request) {
+        request.setStatus(0);
         testDAO.save(test);
+    }
+
+    @Override
+    public void delTest(Long userId, Long testId){
+        test = getTestReturnTest(testId);
+        testDAO.save(test);
+        if (!userServiceImp.existsSubjectById(userId, test.getTopics().get(0).getSubject().getSubjectId()))
+            throw new AccessDeniedException(AppConstant.ACCESS_DENIED);
+        delTest(test);
     }
 }
