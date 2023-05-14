@@ -116,13 +116,13 @@ public class AccountServiceImp implements AccountService{
         role = roleServiceImp.getRoleReturnRole(roleName);
         account.setRole(role);
         account = accountDAO.save(account);
-        accountDTO = new AccountDTO();
-        accountDTO.setAccountId(account.getAccountId());
-        accountDTO.setRoleName(account.getRole().getRoleName());
-        accountDTO.setUsername(account.getUsername());
-        accountDTO.setUser(account.getUser());
-        accountDTO.setPassword(account.getPassword());
-        return accountDTO;
+//        accountDTO = new AccountDTO();
+//        accountDTO.setAccountId(account.getAccountId());
+//        accountDTO.setRoleName(account.getRole().getRoleName());
+//        accountDTO.setUsername(account.getUsername());
+//        accountDTO.setUser(account.getUser());
+//        accountDTO.setPassword(account.getPassword());
+        return null;
     }
 
     @Override
