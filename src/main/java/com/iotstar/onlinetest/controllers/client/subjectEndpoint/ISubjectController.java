@@ -32,7 +32,7 @@ public interface ISubjectController {
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     ResponseEntity<?> updateImage(@RequestParam Long subjectId, @ModelAttribute MultipartFile image);
 
-    @GetMapping("/getSubjectzByUserId")
+    @GetMapping("/getSubjectByUserId")
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     ResponseEntity<Response> getSubjectByUserId(@RequestParam Long userId);
 }

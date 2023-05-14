@@ -98,7 +98,7 @@ public class SubjectController implements ISubjectController{
         SubjectResponse subjectResponse = subjectService.getSubjectByUserId(userId);
         return ResponseEntity.ok(
                 new Response(false,
-                        new MessageResponse(AppConstant.SUCCESS))
+                        subjectResponse)
         );
     }
 }
