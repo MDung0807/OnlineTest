@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 @Data
 public class ScoreResponse {
     private Long hisId;
-    private Long userId;
-    private Long testId;
-    private String score;
+    private String firstName;
+    private String lastName;
+    private String testName;
+    private int timeInTest;
+    private float score;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

@@ -1,6 +1,9 @@
 package com.iotstar.onlinetest.utils;
 
+import com.iotstar.onlinetest.DTOs.responses.HistoryResponse;
+import com.iotstar.onlinetest.DTOs.responses.ScoreResponse;
 import com.iotstar.onlinetest.DTOs.responses.statistices.TestStatisticResponseUser;
+import com.iotstar.onlinetest.models.History;
 import com.iotstar.onlinetest.models.statistics.ScoreStatistic;
 import com.iotstar.onlinetest.models.statistics.TestStatistic;
 import org.springframework.stereotype.Component;
@@ -35,5 +38,17 @@ public class Converter {
         response.setFullName(firstName+ " "+lastName);
         response.setScore((float) param.get("score"));
         return response;
+    }
+
+    public ScoreResponse converterScoreResponse(History param){
+        ScoreResponse scoreResponse = new ScoreResponse();
+        scoreResponse.setScore(param.getScore());
+        scoreResponse.setFirstName(param.getUser().getFirstName());
+        scoreResponse.setLastName(param.getUser().getLastName());
+        scoreResponse.setHisId(param.getHisId());
+        scoreResponse.setTime(param.getTime());
+        scoreResponse.setTestName(param.getTest().getTestName());
+        scoreResponse.setTimeInTest(param.getTest().getTime());
+        return scoreResponse;
     }
 }

@@ -14,7 +14,9 @@ import com.iotstar.onlinetest.services.user.UserService;
 import com.iotstar.onlinetest.services.user.UserServiceImp;
 import com.iotstar.onlinetest.statval.EHistory;
 import com.iotstar.onlinetest.utils.AppConstant;
+import com.iotstar.onlinetest.utils.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,8 @@ public class HistoryServiceImp implements HistoryService{
     private QuestionServiceImp questionServiceImp;
     @Autowired
     private AnswerServiceImp answerServiceImp;
+    @Autowired
+    private Converter converter;
 
     private History history;
 
@@ -115,17 +119,18 @@ public class HistoryServiceImp implements HistoryService{
         List<ScoreResponse> scoreResponses = new ArrayList<>();
         List<History> histories = getHistoryReturnHistory(userId, testId);
         for (History i: histories){
-            scoreResponses.add(mapper.map(i, ScoreResponse.class));
+            scoreResponses.add(converter.converterScoreResponse(i));
         }
         return scoreResponses;
     }
 
     @Override
     public List<ScoreResponse> getHistoryByUserId(Long userId) {
+//        Configuration config =  mapper.getConfiguration().setFieldMatchingEnabled(true);
         List<ScoreResponse> scoreResponses = new ArrayList<>();
         List<History> histories = getHistoryReturnHistory(userId);
         for (History i: histories){
-            scoreResponses.add(mapper.map(i, ScoreResponse.class));
+            scoreResponses.add(converter.converterScoreResponse(i));
         }
         return scoreResponses;
     }
