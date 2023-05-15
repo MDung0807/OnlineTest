@@ -24,6 +24,7 @@ import com.iotstar.onlinetest.utils.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +48,8 @@ public class UserServiceImp implements UserService {
     private ReviewServiceImp reviewServiceImp;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private PasswordEncoder encoder;
     private User user;
     private AccountDTO accountDTO;
     @Value("${ROLE_STUDENT}")
@@ -191,7 +194,7 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void updatePassword(ResetPassword resetPassword, Long userId) {
-        if (!resetPassword.getNewPassword().equals(resetPassword.getConfirmPassword()))
+        if (!encoder.encode(resetPassword.getNewPassword()).equals(encoder.encode(resetPassword.getConfirmPassword())))
             throw new UnKnownException(EUser.PASSWORD_NOT_CORRECT.getDescription());
         accountServiceImp.updatePassword(userId, resetPassword.getNewPassword());
     }

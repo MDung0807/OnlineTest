@@ -81,9 +81,9 @@ public class UserControllerImp implements IUserEndpoint{
     }
 
     @Override
-    public ResponseEntity<Response> updateAvatar(MultipartFile avatar){
-        Long id = authUtils.getAccountDetail().getAccountId();
-        userResponse = userService.updateAvatar(id, avatar);
+    public ResponseEntity<Response> updateAvatar(MultipartFile image){
+        Long id = authUtils.getAccountDetail().getUserId();
+        userResponse = userService.updateAvatar(id, image);
         return ResponseEntity.ok(new Response(false, userResponse));
 
     }

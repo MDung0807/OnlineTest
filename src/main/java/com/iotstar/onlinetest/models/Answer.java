@@ -20,6 +20,8 @@ public class Answer {
 
     @Column(nullable = false)
     private String content;
+    @Column
+    private String image;
 
     @Column(nullable = false)
     private boolean correct;

@@ -20,7 +20,7 @@ public interface IUserEndpoint {
     ResponseEntity<?> logout(HttpServletRequest request);
 
     @PostMapping("/updateAvatar")
-    ResponseEntity<Response> updateAvatar(@ModelAttribute MultipartFile avatar);
+    ResponseEntity<Response> updateAvatar(@ModelAttribute MultipartFile image);
 
     @PostMapping("/updateProfile")
     ResponseEntity<Response> updateProfile(@Valid @RequestBody UserProfileRequest userParam1,
