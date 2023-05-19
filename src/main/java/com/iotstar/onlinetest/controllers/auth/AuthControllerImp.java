@@ -46,7 +46,7 @@ public class AuthControllerImp implements IAuthController{
 
 
     @Override
-    public ResponseEntity<?> createUser(UserRequest userParam1, MultipartFile avatar, UserRequest userParam2) {
+    public ResponseEntity<?> createUser(UserRequest userParam1, MultipartFile image, UserRequest userParam2) {
         UserRequest userRequest;
         if(userParam2 ==null){
             userRequest = userParam1;
@@ -55,7 +55,7 @@ public class AuthControllerImp implements IAuthController{
             userRequest = userParam2;
 
         }
-        userRequest.setAvatar(avatar);
+        userRequest.setAvatar(image);
         userService.createUser(userRequest);
         MessageResponse messageResponse = new MessageResponse(EUser.USER_REGISTER_SUCCESS.getDescription());
         return ResponseEntity.ok(new Response(false, messageResponse));

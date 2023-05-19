@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface IAuthController {
     @RequestMapping(value = "auth/register")
     ResponseEntity<?> createUser(@Valid @ModelAttribute UserRequest userParam1,
-                                 @ModelAttribute MultipartFile avatar,
+                                 @ModelAttribute MultipartFile image,
                                  @RequestPart(value = "user", required = false) @Valid UserRequest userParam2);
 
     @PostMapping("auth/login")
