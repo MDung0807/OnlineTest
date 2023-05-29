@@ -61,6 +61,8 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
 
         wishItemDAO.save(wishItem);
     }
+
+    @Transactional
     public void createWishList(User user){
         WishList wishList = new WishList();
         wishList.setUser(user);
