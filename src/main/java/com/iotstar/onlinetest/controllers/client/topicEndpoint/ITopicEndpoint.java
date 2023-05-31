@@ -17,7 +17,7 @@ public interface ITopicEndpoint {
     @GetMapping({"", "/"})
     ResponseEntity<?> getTopicBySubjectId(@RequestParam Long subjectId,
                                                  @RequestParam(required = false, defaultValue = "0") int index,
-                                                 @RequestParam(required = false, defaultValue = "1") int size);
+                                                 @RequestParam(required = false, defaultValue = "10") int size);
 
     @GetMapping("/del")
     ResponseEntity<Response> delTopicById(@RequestParam Long topicId);
