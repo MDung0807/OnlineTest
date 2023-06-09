@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin
 public interface ISubjectController {
     @RequestMapping("/add")
-    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
+//    @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")
     ResponseEntity<?> addSubject(@Valid @ModelAttribute SubjectRequest subjectRequest);
 
     @GetMapping("/id")
