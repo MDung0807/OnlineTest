@@ -55,7 +55,8 @@ public class AuthControllerImp implements IAuthController{
             userRequest = userParam2;
 
         }
-        userRequest.setAvatar(image);
+        if (image!= null)
+            userRequest.setAvatar(image);
         userService.createUser(userRequest);
         MessageResponse messageResponse = new MessageResponse(EUser.USER_REGISTER_SUCCESS.getDescription());
         return ResponseEntity.ok(new Response(false, messageResponse));

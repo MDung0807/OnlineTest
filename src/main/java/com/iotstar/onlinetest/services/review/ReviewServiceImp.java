@@ -33,6 +33,8 @@ public class ReviewServiceImp extends ReviewPaging implements ReviewService {
     @Autowired
     @Lazy
     private TestServiceImp testServiceImp;
+
+    @Transactional
     public void createReview (User user){
         Review review = new Review();
         review.setUser(user);

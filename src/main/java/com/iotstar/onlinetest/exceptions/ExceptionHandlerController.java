@@ -91,7 +91,9 @@ public class ExceptionHandlerController{
                 AppConstant.USERNAME_OR_PASSWORD_INCORRECT,
                 LocalDateTime.now()
         );
-        return ResponseEntity.ok(new Response(true, details));
+        return new ResponseEntity<>(
+                new Response(true, details),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
@@ -146,7 +148,7 @@ public class ExceptionHandlerController{
         ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(
                 new Response(true, details),
-                HttpStatus.CONFLICT
+                HttpStatus.NOT_FOUND
         );
     }
 
@@ -155,7 +157,7 @@ public class ExceptionHandlerController{
         ExceptionDetails details = new ExceptionDetails(ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(
                 new Response(true, details),
-                HttpStatus.CONFLICT
+                HttpStatus.METHOD_NOT_ALLOWED
         );
     }
 }

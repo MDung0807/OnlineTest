@@ -119,6 +119,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long userId) {
         user = getUserReturnUser(userId);
         user.setStatus(0);
@@ -185,6 +186,7 @@ public class UserServiceImp implements UserService {
 
     //Insert into user value subject
     @Override
+    @Transactional
     public void addSubjectInUser(Long userId, Subject subject){
         user = getUserReturnUser(userId);
         user.setSubject(subject);

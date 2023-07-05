@@ -111,6 +111,7 @@ public class AccountServiceImp implements AccountService{
     }
 
     @Override
+    @Transactional
     public AccountDTO updateRole(Long userId, String roleName){
         account = getAccountByUserId(userId);
         role = roleServiceImp.getRoleReturnRole(roleName);

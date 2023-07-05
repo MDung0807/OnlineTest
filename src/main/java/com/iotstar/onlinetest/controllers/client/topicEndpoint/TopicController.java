@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class TopicController implements ITopicEndpoint{
     @Autowired

@@ -40,7 +40,7 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
                 new ResourceNotFoundException(EWish.WISHLIST_NOT_FOUND.getDescription()));
     }
 
-    public List<WishItem> getWishItems(Long wishListId){
+    public List<WishItem> getWishItems(Long  wishListId){
         return wishItemDAO.findWishItemsByWishListId(wishListId, pageable()).orElseThrow(()->
                 new ResourceNotFoundException(EWish.WISHLIST_NOT_FOUND.getDescription()));
     }
@@ -61,6 +61,8 @@ public class WishListServiceImp extends WishListPaging  implements WishListServi
 
         wishItemDAO.save(wishItem);
     }
+
+    @Transactional
     public void createWishList(User user){
         WishList wishList = new WishList();
         wishList.setUser(user);
