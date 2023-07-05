@@ -22,7 +22,7 @@
         <jwtJackson>0.11.1</jwtJackson>
         <jakatar_validation.version>3.0.2</jakatar_validation.version>
         <googleAPI.version>2.2.0</googleAPI.version>
-        <json.version>2.14.2</json.version>
+        <json.version>2.15.2</json.version>
     </properties>
     <dependencies>
 
