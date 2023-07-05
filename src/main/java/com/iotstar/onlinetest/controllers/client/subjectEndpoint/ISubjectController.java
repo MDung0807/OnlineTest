@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/subject")
+@CrossOrigin
 public interface ISubjectController {
     @RequestMapping("/add")
     @PreAuthorize("hasRole(@environment.getProperty('ROLE_TEACHER'))")

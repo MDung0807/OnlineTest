@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class SubjectController implements ISubjectController{
     @Autowired
     private SubjectService subjectService;
