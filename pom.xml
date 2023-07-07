@@ -24,7 +24,6 @@
         <googleAPI.version>2.2.0</googleAPI.version>
         <json.version>2.14.2</json.version>
         <socket.version>6.0.9</socket.version>
-        <websocket.version>1.5.3</websocket.version>
     </properties>
     <dependencies>
 
@@ -205,13 +204,10 @@
             <version>${socket.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
         <dependency>
-            <groupId>org.java-websocket</groupId>
-            <artifactId>Java-WebSocket</artifactId>
-            <version>${websocket.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
