@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
         "@environment.getProperty('ROLE_STUDENT'), " +
         "@environment.getProperty('ROLE_TEACHER')," +
         "@environment.getProperty('ROLE_ADMIN')})")
+
 public interface IUserEndpoint {
     @RequestMapping(value = "/logoutAcc", method = RequestMethod.GET)
     ResponseEntity<?> logout(HttpServletRequest request);

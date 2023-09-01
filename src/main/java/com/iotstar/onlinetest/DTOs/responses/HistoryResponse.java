@@ -17,6 +17,7 @@ public class HistoryResponse {
     private Long hisId;
     private Long userId;
     private Long testId;
+    private String testName;
 //    private List<QuestionResponse> questionResponses;
     private String score;
     private String totalCorrect;
