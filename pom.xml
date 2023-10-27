@@ -18,7 +18,7 @@
         <modelmapper>3.0.0</modelmapper>
         <C3P0.version>0.9.5.5</C3P0.version>
         <jwt.version>0.9.1</jwt.version>
-        <jwtApi.version>0.11.5</jwtApi.version>
+        <jwtApi.version>0.12.1</jwtApi.version>
         <jwtJackson>0.11.1</jwtJackson>
         <jakatar_validation.version>3.0.2</jakatar_validation.version>
         <googleAPI.version>2.2.0</googleAPI.version>
