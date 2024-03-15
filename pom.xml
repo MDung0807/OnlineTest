@@ -23,7 +23,7 @@
         <jakatar_validation.version>3.0.2</jakatar_validation.version>
         <googleAPI.version>2.2.0</googleAPI.version>
         <json.version>2.14.2</json.version>
-        <socket.version>6.0.9</socket.version>
+        <socket.version>6.0.18</socket.version>
     </properties>
     <dependencies>
 
